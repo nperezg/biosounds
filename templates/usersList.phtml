@@ -1,0 +1,51 @@
+<div id="hiddenForm" class="hidden-form" hidden>
+	<form action="user/save" method="POST" id="addUserForm">
+		<div class="form-group input-group-sm">			
+			<label for="userName">Username</label>
+			<input type="text" name="<?php echo $this->usernameLabel;?>" class="form-control" maxlength="20" required>
+		</div>	
+		<div class="form-group input-group-sm">
+			<label for="userFullName">Full Name</label>
+			<input type="text" name="<?php echo $this->userFullNameLabel;?>" class="form-control" maxlength="100" required>
+		</div>	
+		<div class="form-group input-group-sm">
+			<label for="userEmail">Email Address</label>
+			<input type="email" name="<?php echo $this->userEmailLabel;?>" class="form-control" maxlength="100" required>
+		</div>
+		<div class="form-group input-group-sm">		
+			<label for="newpassword1">User Password</label>
+			<input type="password" id="newpassword1" class="form-control" maxlength="20" required>
+		</div>
+		<div class="form-group input-group-sm">
+			<label for="newpassword2">Please Retype Password</label>
+			<input type="password" name="<?php echo $this->userPwdLabel;?>" id="newpassword2" class="form-control" maxlength="20" required>
+		</div>
+		<div class="form-group input-group-sm">
+			<label for="userRole">User Role</label>
+			<select name="<?php echo $this->userRoleLabel;?>" class="form-control" required>
+				<?php echo $this->rolesList;?>
+			</select>
+		</div>
+		<div class="form-group text-right">	
+			<button type="button" class="btn btn-primary open-form">Close</button>
+			<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Save</button>
+		</div>
+	</form>		
+</div>	
+<div class="row">
+	<div class="col-md-12 text-right">
+		<button type="button" id="add_user_btn" class="btn btn-primary btn-sm open-form"><span class="glyphicon glyphicon-plus"></span> Add User</button>
+	</div>	
+</div>
+<table class="table table-condensed table-hover save-user">
+	<thead><tr><th>Name</th><th>Username</th><th>Email</th><th>Role</th><th>Active</th><th></th><th></th><th></th></tr></thead>
+	<tbody><?php echo $this->listUsers;?></tbody>
+</table>
+
+<script>
+    $(function() {
+        $(".colorpicker-component").colorpicker().on("changeColor", function(e) {
+			$(this).prev().val(e.color.toString("rgba")).trigger('change'); 
+        });
+    });
+</script>

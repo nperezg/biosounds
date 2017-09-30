@@ -1,0 +1,35 @@
+<form action="ajaxcallmanager.php?class=settings&action=save" class="async_form">
+	<input type="hidden" name="settings" value="top">
+	<input type="hidden" name="settings" value="image">
+	
+	<div class="form-group input-group-sm">
+		<label for="app_custom_name">Project Name:</label>
+		<input type="text" name="projectName" value="<?php echo $this->projectName;?>" class="form-control" autofocus>
+	</div>
+
+	<div class="form-group input-group-sm">
+		<label for="app_custom_text">Short description of the project:</label>
+		<input type="text" name="projectDescription" value="<?php echo $this->projectDescription;?>" class="form-control">
+	</div>
+	
+	<div class="form-group input-group-sm">
+		<label for="lic1">Retain copyright or share with a <a href="http://creativecommons.org/licenses/" target=_blank>Creative Commons</a> license?</label>
+		<div class="form-inline input-group-sm">
+			<select name="filesLicense" id ="lic1" class="form-control">
+				<?php echo $this->filesLicense;?>			
+			</select>
+			<input type="text" class="form-control" name="filesLicenseDetail" maxlength="250" value="<?php echo $this->filesLicenseDetail;?>">
+		</div>
+	</div>
+	
+	<div class="form-group input-group-sm">	
+		<label for="fft">FFT window size</label>
+		<select name="fft" class="form-control">
+			<?php echo $this->fftOptions;?>
+		</select>
+	</div>
+	
+	<div class="form-group text-right">
+		<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Save</button>
+	</div>
+</form>

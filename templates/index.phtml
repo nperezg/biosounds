@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html lang='en'>
+<head>
+	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+	<title><?php echo $this->title;?></title>
+	<?php echo $this->header;?>
+</head>
+<body>
+	<div class="wrapper">
+		<?php echo $this->top;?>
+		<div id="messageBox" class="alert alert-dismissible alert-right" role="alert" <?php echo $this->displayError;?>>
+		  <button type="button" class="close" data-hide="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		  <div id="message"><?php echo $this->error;?></div>
+		</div>
+		<div class="collapse login" id="collapseExample">
+		  <?php include "templates/login.phtml"; ?>
+		</div>
+		<?php echo $this->content;?>
+		<?php echo $this->bottom;?>
+	</div>
+	<?php require_once("templates/scripts.phtml");?>
+	<div id='modalWindows'></div>
+	<?php require_once("templates/loading_page.php");?>
+</body>
+</html>

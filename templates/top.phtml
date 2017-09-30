@@ -1,0 +1,20 @@
+<header>
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class='navbar-brand' href="<?php echo APP_URL?>" alt='BioSounds' title="BioSounds"><img src="<?php echo LOGO?>"></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+		    <li><a href="collection/show/1">Demo</a></li>
+		    <?php echo $this->extraMenu;?>
+            <li><a href="project">Project</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">   
+			  <li><a><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</a></li> 
+			  <?php echo $this->topRightMenu;?> 	
+          </ul>
+        </div>
+      </div>
+    </nav>
+</header>

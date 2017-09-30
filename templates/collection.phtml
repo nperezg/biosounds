@@ -1,0 +1,32 @@
+<div class="page-header">
+  <h1><?php echo $this->collectionName;?> <small><?php echo $this->numSounds;?> sounds</small></h1>
+</div>
+
+<div class="row">
+	<div class="col-md-5">
+		<p><strong>Notes: </strong><?php echo $this->notes;?></p>		
+	</div>
+	<div class="col-md-3">
+		<p>Name <a href="$db_browse_link&ColID=$ColID&order_by=SoundName&order_dir=ASC&show_tags=$show_tags"><span class='glyphicon glyphicon-chevron-down'></span></a> 
+		<a href="$db_browse_link&ColID=$ColID&order_by=SoundName&order_dir=DESC"><span class='glyphicon glyphicon-chevron-up'></span></a></p>
+	</div>
+	<div class="col-md-2">
+		<?php
+		#Order by sound date
+		echo "<p>Date <a href=\"$db_browse_link&ColID=$ColID&order_by=Date&order_dir=ASC&show_tags=$show_tags\"><span class='glyphicon glyphicon-chevron-down'></span></a> <a href=\"$db_browse_link&ColID=$ColID&order_by=Date&order_dir=DESC\"><span class='glyphicon glyphicon-chevron-up'></span></a></p>";
+		?>
+	</div>
+	<div class="col-md-2 text-right"><?php echo $this->extraTop;?></div>
+</div>
+<hr>
+<div class='row'>
+	<?php echo $this->soundList;?>
+</div>
+
+<div class="row">
+	<div class="col-md-12 text-center">
+		<ul class="pagination">
+			<?php echo $this->paginator;?>
+		</ul>
+	</div>
+</div>

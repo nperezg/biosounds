@@ -1,0 +1,112 @@
+<div class="page-header">	
+	<h4><?php echo $this->soundName;?></h4>
+</div>
+
+<div class="row">
+	<div class="col-md-2 text-center">	
+		<ul class="nav nav-pills nav-stacked" style="margin-top:0.6em;">
+			<li><a id="add-tag-btn" title="Add Tag" href="ajaxcallmanager.php?class=soundtag&action=addNew" class="tag"><span class="glyphicon glyphicon-tag"></span></a></li>
+			<li><?php echo $this->toggleTagsIcon;?></li>
+			<li><a class="readingMode" href="sound/show/<?php echo $this->soundID;?>" title="Reading Mode"><span class="glyphicon glyphicon-cd"></span></a></li>
+		    <li><a href="#" id="shift-left" title="Shift Left"><span class="glyphicon glyphicon-arrow-left"></span></a></li>
+            <li><a href="#" id="shift-right" title="Shift Right"><span class="glyphicon glyphicon-arrow-right"></span></a></li>
+		</ul>	
+		<hr>
+		<div><?php echo $this->channels;?></div>
+		<hr>
+		<a href="#" class="viewport" title="Overall View"><img src="<?php echo $this->viewPort;?>"></a>
+		<hr>
+		<!--<select class="form-control input-sm" id="playerSpeed" name="playerSpeed">
+			<option value="1">Normal Speed</option>
+			<option value="0.7">x0.7</option>
+			<option value="0.5">x0.5</option>
+		</select>-->
+	</div>
+	<div class="col-md-9">		
+		<div class="row timescale">
+			<h6><?php echo $this->timeScale;?></h6>
+		</div>
+
+		<div id="myCanvas" class="canvas">
+			<?php echo $this->soundTags;?>
+			<div id="myLine" class="player-line"></div>
+			<img src="<?php echo $this->imageFilePath;?>" id="cropbox" />
+		</div>
+		<audio id="mp3player" src="<?php echo $this->soundFilePath;?>"></audio>
+
+		<div class="row" style="margin-top:7px;">
+			<div class="col-md-3">
+				<div>
+					<button type="button" id="playPause" class="btn btn-link"><span class="glyphicon glyphicon-play"></span></button>
+					<button type="button" id="stop" class="btn btn-link"><span class="glyphicon glyphicon-stop"></span></button>
+					<h8><span id="time_sec_div"><?php echo $this->playerSeconds;?></span> / <span id="duration"><?php echo $this->playerDuration;?></span></h8>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<form class="form-inline text-right" id="soundForm" action="sound/show/<?php echo $this->soundID;?>" method="POST">
+					<input type="hidden" name="channel" value="<?php echo $this->channel;?>">
+					<input type='hidden' name='showTags' value="<?php echo $this->showTags;?>">
+					<input type='hidden' name='estimateDistID' value="<?php echo $this->estimateDistID;?>">
+					<input type="hidden" name="sound_id" value="<?php echo $this->soundID;?>">
+					<input type="hidden" name="sound_name" value="<?php echo $this->soundName;?>">
+					<input type="hidden" name="specWidth" value="<?php echo $this->specWidth;?>">
+					<input type="hidden" name="specHeight" value="<?php echo $this->specHeight;?>">
+					<input type="hidden" name="timeMinView" value="<?php echo $this->timeMin;?>">
+					<input type="hidden" name="timeMaxView" value="<?php echo $this->timeMax;?>">
+					<input type="hidden" name="freqMinView" value="<?php echo $this->freqMin;?>">
+					<input type="hidden" name="freqMaxView" value="<?php echo $this->freqMax;?>">
+
+					<div class="form-group">
+						<div class="input-group input-group-sm">
+						  <span class="input-group-addon" id="basic-addon1">Time From</span>
+						  <input type="text" class="form-control" aria-describedby="basic-addon1" size="4" id="x" name="t_min" value="<?php echo $this->timeMin;?>" title="Minimum time of selection">
+						  <span class="input-group-addon" id="basic-addon1">To</span>
+						  <input type="text" class="form-control" aria-describedby="basic-addon1" size="4" id="w" name="t_max" value="<?php echo $this->timeMax;?>" title="Maximum time of selection">
+						</div>
+						<div class="input-group input-group-sm">
+						  <span class="input-group-addon" id="basic-addon1">Freq From</span>
+						  <input type="text" class="form-control" aria-describedby="basic-addon1" size="4" id="y" name="f_min" value="<?php echo $this->freqMin;?>" title="Minimum frequency of selection">
+						  <span class="input-group-addon" id="basic-addon1">To</span>
+						  <input type="text" class="form-control" aria-describedby="basic-addon1" size="4" id="h" name="f_max" value="<?php echo $this->freqMax;?>" title="Maximum frequency of selection">
+						</div>
+					</div>	
+					<div class="form-group">
+						<div class="input-group input-group-sm">
+							<input type="checkbox" name="continuous_play" title="Continuous Playback" <?php echo $this->continuousPlay;?>><span class="glyphicon glyphicon-repeat"></span>
+							<input type="checkbox" name="filter" title="Filter" disabled><span class="glyphicon glyphicon-filter"></span>
+							<button type="button" id="zoom_submit" class="btn btn-link" disabled><span class="glyphicon glyphicon-zoom-in"></span></button>
+						</div>
+						<div class="btn-group dropup input-group-sm">
+						  <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						  <span class="glyphicon glyphicon-cog"></span>
+						  </button>
+							  <ul class="dropdown-menu">
+								<li><a href="<?php echo $this->soundFilePath;?>" download><span class='glyphicon glyphicon-save-file'></span> Download Sound</a></li>
+									
+								<li><a href="<?php echo $this->imageFilePath;?>" download><span class='glyphicon glyphicon-picture'></span> Download Spectrogram</a></li>
+
+								<li><a href='convert.php?'><span class='glyphicon glyphicon-equalizer'></span> Convert File</a></li>
+
+								<li><a href='ajaxcallmanager.php?class=sound&action=details&id=<?php echo $this->soundID;?>' class="open-modal"><span class='glyphicon glyphicon-list-alt'></span> File Details</a></li>
+
+								<!--<li><a href='#' class="open-modal"><span class='glyphicon glyphicon-wrench'></span> Settings</a></li>-->
+
+								<li><a href='collection/show/<?php echo $this->colID;?>'><span class="glyphicon glyphicon-remove-circle"></span> Back to Collection</a></li>
+							</ul>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-1" style="background:transparent; margin-top:7px;">
+		<table class="table-responsive" cellpadding="0"  border="0">
+			<tr height="<?php echo $this->freqMaxHeight;?>" style="vertical-align:top;"><td><h6><?php echo $this->freqMax;?> Hz</h6></td></tr>
+			<tr><td>&nbsp;</td></tr>
+			<tr height="<?php echo $this->freqMid2Height;?>" style="vertical-align:bottom;"><td><h6><?php echo $this->freqMid2;?> Hz</h6></td></tr>
+			<tr height="<?php echo $this->freqMid1Height;?>" style="vertical-align:bottom;"><td><h6><?php echo $this->freqMid1;?> Hz</h6></td></tr>
+			<tr height="<?php echo $this->freqMinHeight;?>" style="vertical-align:bottom;"><td><h6><?php echo $this->freqMin;?> Hz</h6></td></tr>
+		</table>
+	</div>
+</div>		
+<?php require "scripts/playerscripts.js.php";?>

@@ -1,0 +1,18 @@
+<div class="modal fade" id="modal-div" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">File Details</h4>
+			</div>
+			<div class="modal-body">
+				<h5>Name: <?php echo $this->soundName;?></h5>
+				<h5>Format: <?php echo $this->format;?></h5>
+				<h5>Size: <?php echo $this->fileSize;?> bytes</h5>
+				<h5>Channels: <?php echo $this->numChannels;?></h5>
+				<h5>Duration: <?php echo $this->duration;?> sec</h5>
+				<h5>Sampling Rate: <?php echo $this->samplingRate;?> Hz</h5>
+			</div>
+		</div>
+	</div>
+</div>

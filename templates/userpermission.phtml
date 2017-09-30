@@ -1,0 +1,72 @@
+<div class="modal fade" id="modal-div" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Permissions for user <?php echo $this->username;?></h4>
+			</div>
+			<div class="modal-body">
+				<form id="userPermissionForm">
+					<input id="<?php echo $this->userLabel;?>" type="hidden" value="<?php echo $this->userID;?>">
+					<table id="user-perm" class="table table-condensed table-hover">
+						<thead><tr><th>ID</th><th>Collection</th><th>View</th><th>Review</th></tr></thead>
+						<tbody><?php echo $this->collectionsList;?></tbody>
+					</table>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" id="btn-save">Save changes</button>		
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function(){
+		$( ".master-check" ).click(function(e){
+			var id = this.id.split("_");
+
+			if($(this).is(":checked")) {
+				$("#"+id[0]+"_mandatory").prop("checked", "checked");
+				$("#"+id[0]+"_mandatory").prop("disabled", "disabled");
+			} else {
+				$("#"+id[0]+"_mandatory").prop("checked", "");
+				$("#"+id[0]+"_mandatory").prop("disabled", "");			
+			}
+		});
+		
+		$('#userPermissionForm').submit(function(e) {							
+			var rows = [];
+			var user = $("#<?php echo $this->userLabel;?>").val();
+			
+			$('#user-perm tbody tr').each(function(i){
+				var cols = $(this).children('td');
+				var permission = 0;
+				if(cols.eq(3).find("input:checkbox").is(":checked"))
+					permission =  cols.eq(3).find("input:checkbox").val();
+				else if(cols.eq(2).find("input:checkbox").is(":checked"))
+					permission = cols.eq(2).find("input:checkbox").val();
+
+				rows.push({
+					'isNew' : cols.eq(0).find("input:hidden").val(),
+					'<?php echo $this->colLabel;?>': cols.eq(0).text(),
+					'<?php echo $this->permLabel;?>': permission,
+					'<?php echo $this->userLabel;?>': user
+				});
+			});
+			
+			rows = JSON.stringify(rows);
+			$.post('ajaxcallmanager.php?class=userpermission&action=save', {'rows': rows}, function(data){
+				$('#modal-div').modal('hide');	
+				showMessage("Changes saved");
+			});
+			e.preventDefault();
+		});
+		
+		$('#btn-save').click(function(){
+			$('#userPermissionForm').submit();
+		});	
+	});
+	
+</script>
