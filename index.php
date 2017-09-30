@@ -99,31 +99,6 @@
 	
 	function showHome($main){
 		$content = new View;
-		/*				<?php	
-					// die MySQL-Daten entsprechend anpassen
-					$db = @new MySQLi($host, $user, $password, $database);
-					if (mysqli_connect_errno()) {
-						die('Konnte keine Verbindung zu Datenbank aufbauen, MySQL meldete: '.mysqli_connect_error());
-						// ist zwar keine saubere Fehlermeldung aber ist ja auch nur ne einfache Inplementierung
-					}
-					$sql = 'SELECT Titel, Datum, Inhalt	FROM News ORDER BY Datum DESC';
-					// "ORDER BY" damit die Datensätze nach der Datumsspalte sortiert werden, absteigend
-
-					$result = $db->query($sql);
-					if (!$result) {
-						die ('Konnte den Folgenden Query nicht senden: '.$sql."<br />\nFehlermeldung: ".$db->error);
-					}
-					if (!$result->num_rows) {
-						echo '<p>Es sind keine Newsbeitr&auml;ge vorhanden</p>';
-					} else {
-						while ($row = $result->fetch_assoc()) {
-							$datum=substr($row['Datum'], 0 , -3); //mit substr die Sekunden :ss entfern
-							echo '<h4>'.$row['Titel'].'</h4>'.$datum.'';
-							echo '<p class="small">'.$row['Inhalt'].'</p>';    
-						}
-					}
-				?>
-		*/	
 		$content->projectName = Utils::getSetting(Settings::PROJECT_NAME);	
 		$content->projectDescription = Utils::getSetting(Settings::PROJECT_DESCRIPTION);
 		$main->content = $content->render("main.phtml");	
