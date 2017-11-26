@@ -82,6 +82,54 @@ class SoundManagerController {
 				die();
 		}
 	}
+	
+	public function delete()
+	{
+		if (!Auth::isUserAdmin() || !isset($_POST["id"])){
+			throw new \Exception(ERROR_NO_ADMIN); 
+		}
+		
+		$id = filter_var($_POST["id"], FILTER_SANITIZE_NUMBER_INT); 
+			
+		$sound = $this->sound->getSound($id);		
+		error_log(implode(',', $sound));				
+		
+		$fileName = $sound[SOUND::ORIGINAL_FILENAME];
+		$colID = $sound[SOUND::COL_ID];
+		$dirID = $sound[SOUND::DIR_ID];
+		$audioPreviewFilename =  $sound[SOUND::AUDIO_PREVIEW];
+		$absoluteDir = ABSOLUTE_DIR . 'sounds';
+		$soundsDir="$absoluteDir/sounds/$colID/$dirID/";
+		$imagesDir="$absoluteDir/images/$colID/$dirID/";
+		$previewDir="$absoluteDir/previewsounds/$colID/$dirID/";
+		
+		if (unlink($soundsDir . $fileName)) {
+			$data = ['itemID' => $id, SOUND::SOUND_STATUS => '9'];
+			$result = $this->sound->updateSound($data);
+
+			//Check if there are images
+			$images = $this->sound->getImages($id);
+
+			foreach ($images as $image) {
+				unlink($imagesDir . $image['ImageFile']);
+			}
+			$result = $this->sound->deleteImages($id);			
+				
+			//Check if there are mp3
+			if (is_file($previewDir . $audioPreviewFilename)) {
+				unlink($previewDir . $audioPreviewFilename);
+			}
+			
+			$wavFileName = substr($fileName, 0, strrpos($fileName, '.')) . '.wav';
+			if (is_file($soundsDir . $wavFileName)) {
+				unlink($soundsDir . $wavFileName);
+			}
+			
+			$result = $this->sound->deleteTags($id);	
+			$result = $this->sound->deleteListenLogs($id);	
+		}
+		return 'The sound has been successfully deleted.';
+	}
     
     private function getContent(){
 		if (Auth::isUserAdmin()){
@@ -147,7 +195,8 @@ class SoundManagerController {
 			$this->view->listSounds .= "<td>$originalFilename</td>";
 			$this->view->listSounds .= "<td><input type='text' name='" . Sound::NAME . "' value='$soundName'></td>";
 			$this->view->listSounds .= "<td><input type='date' name='" . Sound::DATE . "' value='$date'></td>";
-			$this->view->listSounds .= "<td><input type='time' name='" . Sound::TIME . "' value='$time'></td>";		
+			$this->view->listSounds .= "<td><input type='time' name='" . Sound::TIME . "' value='$time'></td>";
+			$this->view->listSounds .= "<td><a class='delete_sound' href='#' data-id= '$soundID' title='Delete Sound'><span class='glyphicon glyphicon-trash'></span></a></td>";			
 			$this->view->listSounds .= "</tr>";
 		}
 	}

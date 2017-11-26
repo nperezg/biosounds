@@ -93,7 +93,9 @@ class Database
 				throw new \Exception("There's no statement to execute. Error: $connection->errno  $connection->error", E_USER_ERROR);
 		
 			if($values != NULL){
-				self::$stmt->execute($values);	
+				if(!self::$stmt->execute($values)) {
+					error_log(implode(',',self::$stmt->errorInfo()));
+				}
 			} else			 
 				self::$stmt->execute();	
 			

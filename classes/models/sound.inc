@@ -8,6 +8,8 @@ class Sound {
 	
 	const TABLE_NAME = "Sounds";
 	const ID = "SoundID"; 
+	const COL_ID = "ColID"; 
+	const DIR_ID = "DirID"; 
 	const FORMAT = "SoundFormat";
 	const FILE_SIZE = "FileSize";
 	const NAME = "SoundName";
@@ -17,6 +19,8 @@ class Sound {
 	const DURATION = "Duration";
 	const NUM_CHANNELS = "Channels";
 	const SAMPLING_RATE = "SamplingRate";
+	const SOUND_STATUS = 'SoundStatus';
+	const AUDIO_PREVIEW = 'AudioPreviewFilename'; 
 	
 	public function __construct() {
     }
@@ -128,6 +132,34 @@ class Sound {
 		Database::prepareQuery("UPDATE " . self::TABLE_NAME. " SET " . implode(", ", $fields) . " WHERE " . self::ID. "= :soundID");
 		$result = Database::executeUpdate($values);	
 		return $result;
+	}
+	
+	public function getImages($id)
+	{
+		$fields = [':soundID' => $id];
+		Database::prepareQuery("SELECT ImageFile FROM SoundsImages WHERE " . self::ID . ' = :soundID' );
+		return Database::executeSelect($fields);	
+	}
+	
+	public function deleteImages($id)
+	{
+		$fields = [':soundID' => $id];
+		Database::prepareQuery("DELETE FROM SoundsImages WHERE " . self::ID . ' = :soundID' );
+		return Database::executeDelete($fields);	
+	}
+	
+	public function deleteTags($id)
+	{
+		$fields = [':soundID' => $id];
+		Database::prepareQuery("DELETE FROM SoundsMarks WHERE " . self::ID . ' = :soundID' );
+		return Database::executeDelete($fields);	
+	}
+	
+	public function deleteListenLogs($id)
+	{
+		$fields = [':soundID' => $id];
+		Database::prepareQuery("DELETE FROM SoundListenLogs WHERE " . self::ID . ' = :soundID' );
+		return Database::executeDelete($fields);	
 	}
 }
 

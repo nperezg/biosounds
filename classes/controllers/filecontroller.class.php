@@ -108,8 +108,8 @@ class FileController {
 			#Check that the extension is a valid sound file
 			#Quick check to avoid adding non-sound files
 			$extension = pathinfo($fileName, PATHINFO_EXTENSION);
-			
-			if (substr_count($fileExtensions, strtolower($extension)) > 0){
+
+			if (substr_count($fileExtensions, strtolower($extension)) > 0) {
 				$values = array();
 				$values[":fileID"] = $fileToAddID;
 				$values[":filePath"] = $filePath;
@@ -121,7 +121,7 @@ class FileController {
 				$values[":dirID"] = $dirID;
 				$values[":sensorID"] = $sensorID;
 				$file->insertFileToAdd($values);
-			}
+			}			
 		}
 
 		//if ($special_noprocess == FALSE){
