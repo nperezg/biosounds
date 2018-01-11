@@ -298,7 +298,7 @@ function deleteCookie(name){
 function deleteTag(tagID){
 	$.ajax({
 		type: "POST",
-		url: "ajaxcallmanager.php?class=soundtag&action=delete&id="+tagID,
+		url: "ajaxcallmanager.php?class=SoundTag&action=delete&id="+tagID,
 		success: function(data){
 			$("#"+tagID ).remove();	
 			showMessage("Tag succesfully removed!");
@@ -367,7 +367,7 @@ function saveFormList(element, object){
  * Shows Call Distance Estimation Window
  */
 function showEstimateDist(tagID){
-	var url = "ajaxcallmanager.php?class=soundtag&action=showCallDistance&id="+tagID;
+	var url = "ajaxcallmanager.php?class=SoundTag&action=showCallDistance&id="+tagID;
 	openModal(url);
 }
 
