@@ -121,7 +121,7 @@
 		var playStartTime = getCookie('playStartTime');
 		deleteCookie('playStartTime');
 		
-		$.post("ajaxcallmanager.php?class=soundlistenlog&action=save", {SoundID: soundID, UserID: userID, StartTime: playStartTime, StopTime: unixDate })
+		$.post("ajaxcallmanager.php?class=SoundListenLog&action=save", {SoundID: soundID, UserID: userID, StartTime: playStartTime, StopTime: unixDate })
 			.fail(function(xhr, textStatus, errorThrown) {
 				console.log('Error while calling saving sound listening log: '+xhr.responseText);
 			})

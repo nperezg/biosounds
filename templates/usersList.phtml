@@ -41,11 +41,3 @@
 	<thead><tr><th>Name</th><th>Username</th><th>Email</th><th>Role</th><th>Active</th><th></th><th></th><th></th></tr></thead>
 	<tbody><?php echo $this->listUsers;?></tbody>
 </table>
-
-<script>
-    $(function() {
-        $(".colorpicker-component").colorpicker().on("changeColor", function(e) {
-			$(this).prev().val(e.color.toString("rgba")).trigger('change'); 
-        });
-    });
-</script>
