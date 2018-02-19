@@ -406,7 +406,7 @@ try:
 		
 		#check if the file can be found
 		if fileExists(OriginalFullPath)==0:
-			updatefile(ToAddMemberID, str(9), '', "Could not find file")
+			updatefile(ToAddMemberID, str(9), '', "Could not find file " + str(OriginalFullPath))
 			continue
 
 		#check if the file is not empty

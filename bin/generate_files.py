@@ -101,7 +101,8 @@ class Ticker(threading.Thread):
 def extractflac(directory, item_flac):
 	item_wav = directory + item_flac[:-5] + '.wav'
 	print item_wav
-	status, output = commands.getstatusoutput('flac -dFf ' + directory + item_flac + ' -o ' + item_wav)
+	#status, output = commands.getstatusoutput('flac -dFf ' + directory + item_flac + ' -o ' + item_wav)
+	status, output = commands.getstatusoutput('sox ' + directory + item_flac + ' -o ' + item_wav)
 	if status != 0:
 		print " "
 		print "There was a problem processing " + item_flac + "!"
@@ -442,22 +443,21 @@ def insertpng(SoundID, soundname, spectrogram_palette, max_freq):
 	soundname_prefix=soundname[:-5]
 	small_s= str(SoundID) + '-small_s.png'
 	player_s= str(SoundID) + '-player_s.png'
+	spectrogram_small = 'spectrogram-small'
+	spectrogram_player = 'spectrogram-player'
 	spectrogram_palette = str(spectrogram_palette)
+	
 	try:
 		con = MySQLdb.connect(host=db_hostname, user=db_username, passwd=db_password, db=db_database)
 	except MySQLdb.Error, e:
 		print "Error %d: %s" % (e.args[0], e.args[1])
 		sys.exit (1)
 	cursor = con.cursor()
-	query = "INSERT INTO SoundsImages (SoundID,ImageFile,ColorPalette,ImageType,SpecMaxFreq) \
-         VALUES (" + \
-	`SoundID` + ", " + `small_s` + ", " + `spectrogram_palette` + ", 'spectrogram-small', " + `max_freq` + ")"
-	cursor.execute (query)
+	query = """INSERT INTO SoundsImages (SoundID,ImageFile,ColorPalette,ImageType,SpecMaxFreq) VALUES (%s, %s, %s, %s, %s)"""	 
+	cursor.execute (query, (SoundID, small_s, spectrogram_palette, spectrogram_small, max_freq))
 
-	query = "INSERT INTO SoundsImages (SoundID,ImageFile,ColorPalette,ImageType,SpecMaxFreq) \
-         VALUES (" + \
-	`SoundID` + ", " + `player_s` + ", " + `spectrogram_palette` + ", 'spectrogram-player', " + `max_freq` + ")"
-	cursor.execute (query)
+	query = """INSERT INTO SoundsImages (SoundID,ImageFile,ColorPalette,ImageType,SpecMaxFreq) VALUES (%s, %s, %s, %s, %s)"""
+	cursor.execute (query, (SoundID, player_s, spectrogram_palette, spectrogram_player, max_freq))
 
 	#Close MySQL
 	cursor.close ()
@@ -886,7 +886,7 @@ except Exception as inst:
 	commands.getstatusoutput('rm *.wav')
 	
 	when_stop = datetime.datetime.now().strftime("  Script interrupted on %d/%b/%y %H:%M\n")
-	write_log("0", "0", "0", "none", "Script interrupted "+inst.args + inst)
+	write_log("0", "0", "0", "none", "Script interrupted "+ str(inst.args) + str(inst))
 
 	print when_stop
 	sys.exit (1) #Exit with error
