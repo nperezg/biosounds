@@ -72,7 +72,7 @@
 		$('#reviewForm').submit(function(e) {
 			$.ajax({
 				type: 'POST',
-				url: 'ajaxcallmanager.php?class=tagreview&action=save',
+				url: 'ajaxcallmanager.php?class=TagReview&action=save',
 				data: $(this).serialize(),
 				success: function(data)
 			    {	 
