@@ -153,9 +153,9 @@ class UserController
 			if($isAdmin)
 				$privHidden = "hidden";
 
-			$this->view->listUsers .= "<td><a href='ajaxcallmanager.php?class=user&action=show&id=$userID' class='open-modal' title='Edit Password'><span class='glyphicon glyphicon-pencil'></span></a></td>";
+			$this->view->listUsers .= "<td><a href='" . APP_URL . "/ajaxcallmanager.php?class=user&action=show&id=$userID' class='open-modal' title='Edit Password'><span class='glyphicon glyphicon-pencil'></span></a></td>";
 			
-			$this->view->listUsers .= "<td><a href='ajaxcallmanager.php?class=UserPermission&action=manage&id=$userID' class='open-modal' title='Collection Privileges' $privHidden><span class='glyphicon glyphicon-tasks'></span></a></td>";
+			$this->view->listUsers .= "<td><a href='" . APP_URL . "/ajaxcallmanager.php?class=UserPermission&action=manage&id=$userID' class='open-modal' title='Collection Privileges' $privHidden><span class='glyphicon glyphicon-tasks'></span></a></td>";
 
             $this->view->listUsers .= '<td><input type="color" name="TagColor" alt= "User tags color" value=' . $userTagColor . '></td>';;
 						

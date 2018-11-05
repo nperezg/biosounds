@@ -4,7 +4,7 @@ namespace Hybridars\BioSounds\Controller;
 
 use Hybridars\BioSounds\Entity\User;
 use Hybridars\BioSounds\Entity\TagReview;
-use Hybridars\BioSounds\Entity\Animal;
+use Hybridars\BioSounds\Entity\Species;
 use Hybridars\BioSounds\Utils\Auth;
 
 class TagReviewController
@@ -46,7 +46,7 @@ class TagReviewController
 			foreach($reviews as $value){
 				$date = strtotime($value[TagReview::DATE]);
 				$this->view->reviewsList .= "<tr><td>" . $value[User::FULL_NAME] . "</td><td>" . $value[TagReview::STATUS_NAME] . "</td>";
-				$this->view->reviewsList .= "<td>" . $value[Animal::BINOMIAL] . "</td><td>" . date("d/m/Y", $date) . "</td></tr>";
+				$this->view->reviewsList .= "<td>" . $value[Species::BINOMIAL] . "</td><td>" . date("d/m/Y", $date) . "</td></tr>";
 			}			
 		}	
 				
@@ -59,12 +59,15 @@ class TagReviewController
 		return $this->create();
 	}
 	
-	public function save(){
+	public function save() {
 		if(!Auth::isUserLogged()){
 			throw new \Exception(ERROR_NOT_LOGGED);
 		} else if(!Auth::isUserAdmin() && (!isset($_SESSION["user_col_permission"]) || empty($_SESSION["user_col_permission"]))) {
 			throw new \Exception(ERROR_NOT_ALLOWED);
 		}
+
+		if(empty($_POST['status']))
+		    return null;
 		
 		$data = array();
 		$data[TagReview::USER] = Auth::getUserLoggedID();

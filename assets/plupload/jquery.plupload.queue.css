@@ -83,7 +83,7 @@
 
 .plupload_filelist li {
 	padding: 10px 8px;
-	background: #F5F5F5 url('img/backgrounds.gif') repeat-x 0 -156px;
+	background: #F5F5F5 url('./img/backgrounds.gif') repeat-x 0 -156px;
 	border-bottom: 1px solid #DDD;
 }
 
@@ -97,7 +97,7 @@
 	border-bottom: 1px solid #CDCDCD;
 }
 
-.plupload_filelist_footer {border-top: 1px solid #FFF; height: 22px; line-height: 20px; vertical-align: middle;}
+.plupload_filelist_footer {border-top: 1px solid #FFF; line-height: 20px; vertical-align: middle;}
 .plupload_file_name {float: left; overflow: hidden}
 .plupload_file_status {color: #777;}
 .plupload_file_status span {color: #42454A;}
@@ -122,7 +122,7 @@
 	height: 16px;
 }
 
-li.plupload_uploading {background: #ECF3DC url('../img/backgrounds.gif') repeat-x 0 -238px;}
+li.plupload_uploading {background: #ECF3DC url(img/backgrounds.gif') repeat-x 0 -238px;}
 li.plupload_done {color:#AAA}
 
 li.plupload_delete a {

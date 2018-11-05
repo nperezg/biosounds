@@ -2,22 +2,34 @@
 
 namespace Hybridars\BioSounds\Controller;
 
+use Hybridars\BioSounds\Classes\BaseController;
 use Hybridars\BioSounds\Utils\Auth;
 
-class AdminController
+class AdminController extends BaseController
 {
     protected $template = "admin.phtml";
     protected $view;
 
-    public function __construct() {
+    /**
+     * AdminController constructor.
+     * @throws \Exception
+     */
+    public function __construct()
+    {
+        parent::__construct();
 		if (!Auth::isUserAdmin()){
 			throw new \Exception(ERROR_NO_ADMIN); 
 		}
 		$this->view = new View();
 		$this->view->section = NULL;
     }
-    
-    public function create() {
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    public function create()
+    {
 		if (!Auth::isUserAdmin()){
 			throw new \Exception(ERROR_NO_ADMIN); 
 		}
@@ -26,28 +38,45 @@ class AdminController
 		}
         return $this->view->render($this->template);
     }
-    
-	public function settings(){
+
+    /**
+     * @throws \Exception
+     */
+	public function settings()
+    {
 		$settingsController = new SettingsController();			
 		$this->view->section = $settingsController->create();
 		$this->view->sectionTitle = "Settings";
 	}
-	
-	public function collections(){
-		$collectionController = new CollectionController();			
+
+    /**
+     * @throws \Exception
+     */
+	public function collections()
+    {
+		$collectionController = new CollectionController();
 		$this->view->section = $collectionController->getList();	
 		$this->view->sectionTitle = "Collections";
 	}
-	
-	public function users(){
+
+    /**
+     * @throws \Exception
+     */
+	public function users()
+    {
 		$userController = new UserController();		
 		$this->view->sectionTitle = "Users";	
 		$this->view->section = $userController->create();		
 	}
-	
-    public function sounds($id = NULL, $page=1){
-		$soundManagerController = new SoundManagerController();		
-		$this->view->sectionTitle = "Sounds";	
-		$this->view->section = $soundManagerController->create($id, $page);		
+
+    /**
+     * @param int|null $id
+     * @param int $page
+     * @throws \Exception
+     */
+    public function recordings(int $id = null, int $page = 1)
+    {
+		$this->view->sectionTitle = 'Recordings';
+		$this->view->section = (new RecordingManagerController())->show($id, $page);
 	}
 }

@@ -1,0 +1,168 @@
+﻿{% block body %}
+
+    <div class="page-header">
+        <h4>{{ player.recording.name }}</h4>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2 text-center">
+            <ul class="nav nav-pills nav-stacked" style="margin-top:0.6em;">
+                <li>
+                    <a id="add-tag-btn" title="Add Tag" href="{{ base_url }}/ajaxcallmanager.php?class=tag&action=addNew" class="tag">
+                        <span class="glyphicon glyphicon-tag"></span>
+                    </a>
+                </li>
+                <li>
+                    {% if player.isShowTags %}
+                        <a class='toggleTag' href='#' onclick='return false;' title='Hide tags'>
+                            <span class='glyphicon glyphicon-eye-close'></span>
+                        </a>
+                    {% else %}
+                        <a class='toggleTag' href='#' onclick='return false;' title='Show tags'>
+                            <span class='glyphicon glyphicon-eye-open'></span>
+                        </a>
+                    {% endif %}
+                </li>
+                <li>
+                    <a class="readingMode" href="{{ base_url }}/recording/show/{{ player.recording.recording_id }}" title="Reading mode">
+                        <span class="glyphicon glyphicon-cd"></span>
+                    </a>
+                </li>
+                <li><a href="#" id="shift-left" title="Shift Left"><span class="glyphicon glyphicon-arrow-left"></span></a></li>
+                <li><a href="#" id="shift-right" title="Shift Right"><span class="glyphicon glyphicon-arrow-right"></span></a></li>
+            </ul>
+            <hr>
+            <div>
+                {% if player.recording.channel_num > 1 %}
+                    <label class="{{ player.channel == 1 ? 'active' : '' }}">
+                        <a href="#" class="channel-left" onclick="return false;"> L </a>
+                    </label>
+                    <span class='glyphicon glyphicon-headphones'></span>
+                    <label class="{{ player.channel == 2 ? 'active' : '' }}">
+                        <a href="#" class="channel-right" onclick="return false;"> R </a>
+                    </label>
+                {% else %}
+                    <label>Mono File</label>
+                {% endif %}
+            </div>
+            <hr>
+            <a href="#" class="viewport" title="Overall view"><img src="{{ base_url }}/{{ player.viewPortFilePath }}"></a>
+            <hr>
+
+        </div>
+        <div class="col-md-9">
+            <div class="row timescale">
+                <h6>
+                    {% for second in player.timeScaleSeconds %}
+                        <div class='col-sm-1'><img src="{{ base_url }}/assets/images/vert_line.png"> {{ second }} s</div>
+                    {% endfor %}
+                </h6>
+            </div>
+
+            <div id="myCanvas" class="canvas">
+                {% include 'player/tags.html.twig' with {'base_url': base_url, 'tags': player.tags, 'show_tags': player.showTags} %}
+                <div id="myLine" class="player-line"></div>
+                <img src="{{ player.imageFilePath }}" id="cropbox" />
+            </div>
+            <audio id="player" src="{{ player.filePath }}"></audio>
+
+            <div class="row" style="margin-top:7px;">
+                <div class="col-md-3">
+                    <div>
+                        <button type="button" id="playPause" class="btn btn-link"><span class="glyphicon glyphicon-play"></span></button>
+                        <button type="button" id="stop" class="btn btn-link"><span class="glyphicon glyphicon-stop"></span></button>
+                        <h8>
+                            <span id="time_sec_div">{{ player.minTime > 0 ? player.minTime|round: 0 }}</span> /
+                            <span id="duration">{{ (player.maxTime - player.minTime|round) }} s</span>
+                        </h8>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <form class="form-inline text-right" id="recordingForm" action="{{ base_url }}/recording/show/{{ player.recording.recording_id }}" method="POST">
+                        <input type="hidden" name="channel" value="{{ player.channel }}">
+                        <input type='hidden' name='showTags' value="{{ player.showTags }}">
+                        <input type='hidden' name='estimateDistID' value="{{ player.estimateDistID }}">
+                        <input type="hidden" name="recording_id" value="{{ player.recording.recording_id }}">
+                        <input type="hidden" name="recording_name" value="{{ player.recording.name }}">
+                        <input type="hidden" name="specWidth" value="{{ player.spectrogramWidth }}">
+                        <input type="hidden" name="specHeight" value="{{ player.spectrogramHeight }}">
+                        <input type="hidden" name="minTimeView" value="{{ player.minTime }}">
+                        <input type="hidden" name="maxTimeView" value="{{ player.maxTime }}">
+                        <input type="hidden" name="minFreqView" value="{{ player.minFrequency }}">
+                        <input type="hidden" name="maxFreqView" value="{{ player.maxFrequency }}">
+
+                        <div class="form-group">
+                            <div class="input-group input-group-sm">
+                              <span class="input-group-addon" id="basic-addon1">Time From</span>
+                              <input type="text" class="form-control" aria-describedby="basic-addon1" size="4" id="x" name="t_min" value="{{ player.minTime }}" title="Minimum time of selection">
+                              <span class="input-group-addon" id="basic-addon1">To</span>
+                              <input type="text" class="form-control" aria-describedby="basic-addon1" size="4" id="w" name="t_max" value="{{ player.maxTime }}" title="Maximum time of selection">
+                            </div>
+                            <div class="input-group input-group-sm">
+                              <span class="input-group-addon" id="basic-addon1">Freq From</span>
+                              <input type="text" class="form-control" aria-describedby="basic-addon1" size="4" id="y" name="f_min" value="{{ player.minFrequency }}" title="Minimum frequency of selection">
+                              <span class="input-group-addon" id="basic-addon1">To</span>
+                              <input type="text" class="form-control" aria-describedby="basic-addon1" size="4" id="h" name="f_max" value="{{ player.maxFrequency }}" title="Maximum frequency of selection">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group input-group-sm">
+                                <input type="checkbox" name="continuous_play" title="Continuous Playback"{{ player.isContinuousPlay ? 'checked':'' }}>
+                                <span class="glyphicon glyphicon-repeat"></span>
+                                <input type="checkbox" name="filter" title="Filter" disabled><span class="glyphicon glyphicon-filter"></span>
+                                <button type="button" id="zoom_submit" class="btn btn-link" disabled><span class="glyphicon glyphicon-zoom-in"></span></button>
+                            </div>
+                            <div class="btn-group dropup input-group-sm">
+                              <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <span class="glyphicon glyphicon-cog"></span>
+                              </button>
+                                  <ul class="dropdown-menu">
+                                    <li><a href="{{ player.filePath }}" download><span class='glyphicon glyphicon-save-file'></span> Download Sound</a></li>
+
+                                    <li><a href="{{ player.imageFilePath }}" download><span class='glyphicon glyphicon-picture'></span> Download Spectrogram</a></li>
+
+                                    <li><a href="#"><span class='glyphicon glyphicon-equalizer'></span> Convert File</a></li>
+
+                                    <li>
+                                        <a href="{{ base_url }}/ajaxcallmanager.php?class=recording&action=details&id={{ player.recording.recording_id }}" class="open-modal">
+                                            <span class='glyphicon glyphicon-list-alt'></span> File Details
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ base_url }}/collection/show/{{ player.recording.col_id }}/{{ collection_page }}/gallery">
+                                            <span class="glyphicon glyphicon-remove-circle"></span> Back to Collection
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% include 'player/frequencyScale.html.twig' with {'frequency_data': frequency_data} %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        fileDuration = {{ player.duration }};
+        minTime = {{ player.minTime }};
+        maxTime = {{ player.maxTime }};
+
+        minFrequency = {{ player.minFrequency }};
+        maxFrequency = {{ player.maxFrequency }};
+        fileFreqMax = {{ player.fileFreqMax }};
+
+        specWidth = {{ player.spectrogramWidth }};
+        specHeight = {{ player.spectrogramHeight }};
+
+        recordingId = {{ player.recording.recording_id }};
+        userId = {{ player.user }};
+
+        base_url = '{{ base_url }}';
+
+        {% include '/player/js/player.js' %}
+        {% include '/player/js/recording.js' %}
+    </script>
+{% endblock %}

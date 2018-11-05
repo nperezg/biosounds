@@ -1,0 +1,85 @@
+<div id="hiddenForm" class="hidden-form" hidden>
+    <form id="upload-form" method="POST">
+        <div class="row">
+            <div class="col-md-6">
+                <div id="file-uploader" class="file-uploader">You browser doesn't support native upload.</div>
+                <input type="hidden" name="colId" value="{{ colId }}">
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="date">Date </label>
+                        <input id="date" class="form-control file-field" name="date" type="date" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="time">Time </label>
+                        <input id="time" class="form-control file-field" name="time" type="time" min="00:00:00" max="23:59:59" step="1" required>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <div class="form-check">
+                            <input id="from-file" class="form-check-input" name="dateFromFile" type="checkbox">
+                            <label for="from-file">File</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="sensor">Sensor </label>
+                        <select id="sensor" name="sensor" class="form-control">
+                            {% for sensor in sensors %}
+                                <option value="{{ sensor.SensorID }}">{{ sensor.Recorder }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="site">Site </label>
+                        <select id="site" name="site" class="form-control">
+                            {% for site in sites %}
+                                <option value="{{ site.SiteID }}">{{ site.SiteName }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label><input id="reference" name="reference" type="checkbox"> Reference Sound</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="species-name">Species</label>
+                    <input id="species" name="species" type="hidden">
+                    <input id="species-name" class="form-control reference-field field-required" type="text" size="50" placeholder="Insert the species name for searching" disabled>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="type">Type </label>
+                        <select id="type" name="sound-type" class="form-control reference-field field-required" disabled>
+                            {% for soundType in soundTypes %}
+                                <option value="{{ soundType.soundTypeId }}">{{ soundType.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="subtype">Subtype </label>
+                        <input id="subtype" name="subtype" class="form-control reference-field" type="text" pattern="[A-Z]{1}" placeholder="A-Z" disabled>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="rating">Rating </label>
+                        <input id="rating" name="rating" class="form-control reference-field" type="text" pattern="[A-E]{1}" placeholder="A-E" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group text-right">
+            <button type="button" class="btn btn-primary open-form">Close</button>
+            <button id="save_button" type="submit" class="btn btn-primary" disabled><span class="glyphicon glyphicon-save"></span> Save</button>
+        </div>
+    </form>
+</div>
+
+{% block scripts %}
+    <script>
+        var base_url = '{{ base_url }}';
+        {% include 'administration/js/upload.js' %}
+    </script>
+{% endblock %}

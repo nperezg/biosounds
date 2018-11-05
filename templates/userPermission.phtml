@@ -57,7 +57,7 @@
 			});
 			
 			rows = JSON.stringify(rows);
-			$.post('ajaxcallmanager.php?class=UserPermission&action=save', {'rows': rows}, function(data){
+			$.post('<?php echo APP_URL ?>/ajaxcallmanager.php?class=UserPermission&action=save', {'rows': rows}, function(data){
 				$('#modal-div').modal('hide');	
 				showMessage("Changes saved");
 			});

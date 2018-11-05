@@ -1,5 +1,5 @@
 <div id="hiddenForm" class="hidden-form" hidden>
-	<form action="user/save" method="POST" id="addUserForm">
+	<form action="<?php echo APP_URL ?>/user/save" method="POST" id="addUserForm">
 		<div class="form-group input-group-sm">			
 			<label for="userName">Username</label>
 			<input type="text" name="<?php echo $this->usernameLabel;?>" class="form-control" maxlength="20" required>
@@ -41,3 +41,10 @@
 	<thead><tr><th>Name</th><th>Username</th><th>Email</th><th>Role</th><th>Active</th><th></th><th></th><th></th></tr></thead>
 	<tbody><?php echo $this->listUsers;?></tbody>
 </table>
+
+<script>
+    /* Save users list */
+    $(".save-user").on('change', 'input, select, textarea', function(){
+        saveFormList($(this), "user", "<?php echo APP_URL; ?>");
+    });
+</script>

@@ -33,8 +33,9 @@ $class = isset($_GET['class']) ? $_GET['class'] : NULL;
 $action = isset($_GET['action']) ? $_GET['action'] : NULL;
 $id = isset($_GET['id']) ? $_GET['id'] : NULL;
 $param = isset($_GET['param']) ? $_GET['param'] : NULL;
+$type = isset($_GET['type']) ? $_GET['type'] : null;
 
-if(empty($class)){
+if (empty($class)) {
     showHome($main);
 }
 else {
@@ -47,9 +48,12 @@ else {
             $sectionController = new $className;
             if(!empty($action)){
                 if(!empty($id)){
-                    if(!empty($param))
-                        $sectionController->$action($id, $param);
-                    else
+                    if(!empty($param)) {
+                        if(!empty($type))
+                            $sectionController->$action($id, $param, $type);
+                        else
+                            $sectionController->$action($id, $param);
+                    } else
                         $sectionController->$action($id);
                 }
                 else
@@ -59,6 +63,7 @@ else {
             if(method_exists($sectionController,'getTitle'))
                 $main->title .= " - " . $sectionController->getTitle();
         } catch(\Exception $e){
+            error_log($e);
             showError($e->getMessage(), $main);
             showHome($main);
         }
@@ -67,7 +72,12 @@ else {
 echo $main->render('index.phtml');
 
 function getHeader(){
-    return file_get_contents("templates/header.phtml");
+    try {
+        $headerView = new View();
+        return $headerView->render('header.phtml');
+    } catch(\Exception $e){
+        echo 'Message: ' .$e->getMessage();
+    }
 }
 
 function getBottom()

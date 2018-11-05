@@ -32,7 +32,7 @@
 		$("#reviewForm :input").not("#review_animal_desc").prop("disabled", <?php echo $this->disableReviewForm;?>);
 				
 		$('#review_animal_desc').autocomplete({
-			source:'ajaxcallmanager.php?class=animal&action=getAnimalList', minLength:3,
+			source:'<?php echo APP_URL; ?>/ajaxcallmanager.php?class=species&action=getList', minLength:3,
 			change: function (event, ui) {
 				if(!ui.item){
 					$('#review_animal_desc').val('');
@@ -72,27 +72,20 @@
 		$('#reviewForm').submit(function(e) {
 			$.ajax({
 				type: 'POST',
-				url: 'ajaxcallmanager.php?class=TagReview&action=save',
+				url: '<?php echo APP_URL; ?>/ajaxcallmanager.php?class=TagReview&action=save',
 				data: $(this).serialize(),
-				success: function(data)
-			    {	 
-					if(data.status == 'error'){
-						showMessage(data.message, true);						
-					}
-					else {
-						showMessage("Changes saved");
-					} 	
+				success: function(data) {
+					showMessage("Changes saved");
 			    },
-			    error: function(data, error, message)
-			    {
-					showMessage(message, true);
+			    error: function(response) {
+                    showMessage(response.responseJSON.message, true);
 			    }
 			});
 			e.preventDefault();
 		});
 	});
 	
-	function submitReviewForm(closeModal = true){
+	function submitReviewForm(closeModal = true) {
 		$('#review_animal_group').removeClass('has-error');
 		$('#review_animal_help').remove();		
 		if($('#review_status').val() == 2 && $('#review_animal_id').val() == ''){

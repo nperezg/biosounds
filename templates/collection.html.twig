@@ -1,0 +1,71 @@
+{% block body %}
+    <div class="page-header">
+        <div class="row">
+            <div class="col-md-7">
+                <h1>{{ collection.name }} <small>{{ recordingNum }} sounds</small></h1>
+            </div>
+            <div class="col-md-5 text-right">
+                <a href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ page }}/gallery" type="button" class="btn btn-default btn-md view {{ display == 'gallery' ? 'active' : '' }}" title="Gallery view">
+                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+                </a>
+                <a href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ page }}/list" type="button" class="btn btn-default btn-md view {{ display == 'list' ? 'active' : '' }}" title="List view">
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-5">
+            <p><strong>Notes: </strong>{{ collection.note }}</p>
+        </div>
+        {% if display == 'list' %}
+            <div class="col-md-7 text-right">
+                <form id="search-form" action="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ page }}/{{ display }}" class="form-inline" method="post">
+                    <div class="form-group">
+                        <label for="species">Species</label>
+                        <input type="hidden" class="filter" id="species" name="species" value="{{ filter.species_id }}">
+                        <input type="text" class="form-control filter" id="species-name" name="species-name" placeholder="Species" value="{{ filter.speciesName }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="rating">Rating</label>
+                        <input type="text" class="form-control filter" id="rating" name="rating" placeholder="A-E" pattern="[A-E]{1}" style="width:60px;" value="{{ filter.rating }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+                    </button>
+                    <button id="clear-filter" type="submit" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Clear
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+    <hr>
+
+    {% include template with {'list': list, 'baseUrl': baseUrl} %}
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            {% if pageNum > 0 %}
+                <ul class="pagination">
+                    {% for i in 1..pageNum %}
+                        <li {{ page == i ? "class='active'" : '' }}>
+                            <a {%  if display == 'list' %}class="page-selector"{% endif %} href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ i }}/{{ display }}">{{ i }} <span class='sr-only'></span></a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <h4>No results</h4>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block scripts %}
+    <script>
+        var baseUrl = '{{ baseUrl }}';
+        {% include 'collection/js/collection.js' %}
+    </script>
+{% endblock %}

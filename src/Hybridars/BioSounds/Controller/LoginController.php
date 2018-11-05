@@ -2,25 +2,19 @@
 
 namespace Hybridars\BioSounds\Controller;
 
+use Hybridars\BioSounds\Classes\BaseController;
+use Hybridars\BioSounds\Exception\AuthenticationException;
 use Hybridars\BioSounds\Utils\Auth;
 
-class LoginController
+class LoginController extends BaseController
 {
-    protected $template = 'login.phtml';
-    protected $view;
+    public function create()
+    {
+    }
 
-    public function __construct() {
-		$this->view = new View();  
-    }
-    
-    public function getContent(){
-	}
-	
-    public function create() {
-		$this->getContent();
-        return $this->view->render($this->template);
-    }
-    
+    /**
+     * @throws \Exception
+     */
     public function log(){
 		$userName = strtolower(filter_var($_POST["inputUsername"], FILTER_SANITIZE_STRING));
 		$password = filter_var($_POST["inputPassword"], FILTER_SANITIZE_STRING);
@@ -29,9 +23,9 @@ class LoginController
 			exit();
 		}
 		else 
-			throw new \Exception("Invalid Username or Password, try again.");
-	}   
-	
+			throw new AuthenticationException();
+	}
+
 	public function logout(){
 		Auth::logout();
 		header('Location: '.APP_URL);
