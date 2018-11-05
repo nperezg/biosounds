@@ -1,0 +1,13 @@
+{% block body %}
+    <div class='row'>
+        {% for item in list %}
+            <div class="col-lg-4 sound-list-item">
+                <a href="{{ baseUrl }}/recording/show/{{ item.recording.id }}/{{ page }}" title="BioSounds player">
+                    <img src="{{ baseUrl }}/{{ item.smallImage }}">
+                </a>
+                <span>{{ item.recording.name }}</span>
+                <span>{{ item.recording.file_date }}</span>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

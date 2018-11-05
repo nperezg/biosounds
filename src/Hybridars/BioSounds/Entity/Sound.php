@@ -2,160 +2,306 @@
 
 namespace Hybridars\BioSounds\Entity;
 
-use Hybridars\BioSounds\Database\Database;
 
 class Sound
 {
-	const TABLE_NAME = "Sounds";
-	const ID = "SoundID"; 
-	const COL_ID = "ColID"; 
-	const DIR_ID = "DirID"; 
-	const FORMAT = "SoundFormat";
-	const FILE_SIZE = "FileSize";
-	const NAME = "SoundName";
-	const ORIGINAL_FILENAME = "OriginalFilename";
-	const DATE = "Date";
-	const TIME = "Time";
-	const DURATION = "Duration";
-	const NUM_CHANNELS = "Channels";
-	const SAMPLING_RATE = "SamplingRate";
-	const SOUND_STATUS = 'SoundStatus';
-	const AUDIO_PREVIEW = 'AudioPreviewFilename'; 
-	
-    public function countSoundsCollection($colID){
-		Database::prepareQuery("SELECT COUNT(*) AS NumSounds FROM Sounds LEFT JOIN SoundsImages ON Sounds.SoundID = SoundsImages.SoundID WHERE ColID = :colID AND SoundStatus != '9'
-		 AND ImageType='spectrogram-small'");
-		/* ??
-		 * #If user is not logged in, add check for QF
-			if ($pumilio_loggedin == FALSE) {
-				$qf_check = "AND Sounds.QualityFlagID>='$default_qf'";
-				}
-			else {
-				$qf_check = "";
-				}
-		 * */
-		$fields = [":colID" => $colID];
-		$result = Database::executeSelect($fields);
-		if(empty($result))
-			return 0;
-					
-		return $result[0]["NumSounds"];
-	}
-	
-	public function getSoundsPagByCollection($colID, $sqlLimit, $sqlOffset){
-		//$query = "SELECT *, DATE_FORMAT(Date, '%d-%b-%Y') AS Date_h FROM Sounds WHERE ColID='$ColID' 
-				//AND Sounds.SoundStatus!='9' $qf_check ORDER BY $order_byq $order_dir LIMIT $sql_limit";
-				
-		//Database::prepareQuery("SELECT *, DATE_FORMAT(Date, '%d-%b-%Y') AS Date FROM Sounds  
-		//WHERE ColID = :colID AND Sounds.SoundStatus != '9' ORDER BY SoundName LIMIT :sqlLimit OFFSET :sqlOffset");				
-				
-		Database::prepareQuery("SELECT *, DATE_FORMAT(Date, '%d-%b-%Y') AS Date, ImageFile FROM Sounds LEFT JOIN SoundsImages ON Sounds.SoundID = SoundsImages.SoundID 
-		WHERE ColID = :colID AND Sounds.SoundStatus != '9' AND ImageType='spectrogram-small' ORDER BY SoundName LIMIT :sqlLimit OFFSET :sqlOffset");		
-		$fields = [":colID" => $colID, ":sqlLimit" => $sqlLimit, ":sqlOffset" => $sqlOffset];
-		$result = Database::executeSelect($fields);
+    const TABLE_NAME = 'sound';
+    const SPECIES_ID = 'species_id';
+    const RATING = 'rating';
 
-		if(empty($result))
-			return NULL;
-					
-		return $result;
-	}
-	
-	public function getSoundsByCollection($colID, $sqlLimit, $sqlOffset){
-		Database::prepareQuery("SELECT " . self::ID . ", " . self::ORIGINAL_FILENAME . ", " . self::NAME. 
-		", DATE_FORMAT(" . self::DATE . ", '%Y-%m-%d') AS " . self::DATE .
-		", DATE_FORMAT(" . self::TIME . ", '%H:%i:%s') AS " . self::TIME . " FROM Sounds WHERE ColID = :colID AND Sounds.SoundStatus != '9' 
-		 ORDER BY " . self::ID. " LIMIT :sqlLimit OFFSET :sqlOffset");		
-		$fields = [":colID" => $colID, ":sqlLimit" => $sqlLimit, ":sqlOffset" => $sqlOffset];
-		$result = Database::executeSelect($fields);
+    /**
+     * @var int
+     */
+    private $sound_id;
 
-		if(empty($result))
-			return NULL;
-					
-		return $result;
-	}
+    /**
+     * @var int
+     */
+    private $species;
 
-	public function getSound($soundID){
-		$query = "SELECT *, (SELECT ImageFile FROM SoundsImages WHERE Sounds.SoundID = SoundsImages.SoundID ";
-		$query .= "AND ImageType = 'spectrogram-player') AS ImageFile ";
-		$query .= "FROM Sounds WHERE Sounds.SoundID = :soundID AND SoundStatus != '9'";
-		Database::prepareQuery($query);
-		$fields = [":soundID" => $soundID];
-		$result = Database::executeSelect($fields);
-		if(empty($result))
-			 throw new \Exception("Sound $soundID doesn't exist.");
-					
-		return $result[0];
-	}
-	
-	public function insertSound($soundData){
-		if(empty($soundData))
-			return false;
-			
-		$fields = "( ";
-		$valuesNames = "( ";
-		$values = array();
-		
-		foreach($soundData as $key => $value){
-			$fields .= $key;
-			$valuesNames .= ":".$key;
-			$values[":".$key] = $value;
-			if(end($soundData) !== $value){
-				$fields .= ", ";
-				$valuesNames .= ", ";
-			}
-		}
-		$fields .= " )";
-		$valuesNames .= " )";
+    /**
+     * @var int
+     */
+    private $type;
 
-		Database::prepareQuery("INSERT INTO " . self::TABLE_NAME . " $fields VALUES $valuesNames");
-		$result = Database::executeInsert($values);	
-		return $result;
-	}
-	
-	public function updateSound($soundData){
-		if(empty($soundData))
-			return false;
-			
-		$soundID = $soundData["itemID"];	
-		unset($soundData["itemID"]);
-		$fields = array();
-		$values = array();
-		
-		foreach($soundData as $key => $value){
-			$fields[] = $key . " = :".$key;
-			$values[":".$key] = $value;
-		}
-		$values[":soundID"] = $soundID;
-		Database::prepareQuery("UPDATE " . self::TABLE_NAME. " SET " . implode(", ", $fields) . " WHERE " . self::ID. "= :soundID");
-		$result = Database::executeUpdate($values);	
-		return $result;
-	}
-	
-	public function getImages($id)
-	{
-		$fields = [':soundID' => $id];
-		Database::prepareQuery("SELECT ImageFile FROM SoundsImages WHERE " . self::ID . ' = :soundID' );
-		return Database::executeSelect($fields);	
-	}
-	
-	public function deleteImages($id)
-	{
-		$fields = [':soundID' => $id];
-		Database::prepareQuery("DELETE FROM SoundsImages WHERE " . self::ID . ' = :soundID' );
-		return Database::executeDelete($fields);	
-	}
-	
-	public function deleteTags($id)
-	{
-		$fields = [':soundID' => $id];
-		Database::prepareQuery("DELETE FROM SoundsMarks WHERE " . self::ID . ' = :soundID' );
-		return Database::executeDelete($fields);	
-	}
-	
-	public function deleteListenLogs($id)
-	{
-		$fields = [':soundID' => $id];
-		Database::prepareQuery("DELETE FROM SoundListenLogs WHERE " . self::ID . ' = :soundID' );
-		return Database::executeDelete($fields);	
-	}
+    /**
+     * @var string
+     */
+    private $subtype;
+
+    /**
+     * @var int
+     */
+    private $distance;
+
+    /**
+     * @var bool
+     */
+    private $notEstimableDistance;
+
+    /**
+     * @var int
+     */
+    private $individualNum = 1;
+
+    /**
+     * @var bool
+     */
+    private $uncertain = false;
+
+    /**
+     * @var string
+     */
+    private $rating;
+
+    /**
+     * @var string
+     */
+    private $note;
+
+    /**
+     * TODO: this property should be in species property, when it's an object, using ORM
+     * @var string
+     */
+    private $speciesName;
+
+    /**
+     * TODO: this property should be in type property, when it's an object, using ORM
+     * @var string
+     */
+    private $typeName;
+
+    /**
+     * @return int
+     */
+    public function getSoundId(): int
+    {
+        return $this->sound_id;
+    }
+
+    /**
+     * @param int $sound_id
+     * @return Sound
+     */
+    public function setSoundId(int $sound_id): Sound
+    {
+        $this->sound_id = $sound_id;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSpecies(): int
+    {
+        return $this->species;
+    }
+
+    /**
+     * @param int $species
+     * @return Sound
+     */
+    public function setSpecies(int $species): Sound
+    {
+        $this->species = $species;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getType(): int
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param int $type
+     * @return Sound
+     */
+    public function setType(int $type): Sound
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getSubtype(): ?string
+    {
+        return $this->subtype;
+    }
+
+    /**
+     * @param null|string $subtype
+     * @return Sound
+     */
+    public function setSubtype(?string $subtype): Sound
+    {
+        $this->subtype = $subtype;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDistance(): ?int
+    {
+        return $this->distance;
+    }
+
+    /**
+     * @param int|null $distance
+     * @return Sound
+     */
+    public function setDistance(?int $distance): Sound
+    {
+        $this->distance = $distance;
+        return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isNotEstimableDistance(): ?bool
+    {
+        return $this->notEstimableDistance;
+    }
+
+    /**
+     * @param bool|null $notEstimableDistance
+     * @return Sound
+     */
+    public function setNotEstimableDistance(?bool $notEstimableDistance): Sound
+    {
+        $this->notEstimableDistance = $notEstimableDistance;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIndividualNum(): int
+    {
+        return $this->individualNum;
+    }
+
+    /**
+     * @param int $individualNum
+     * @return Sound
+     */
+    public function setIndividualNum(int $individualNum): Sound
+    {
+        $this->individualNum = $individualNum;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUncertain(): bool
+    {
+        return $this->uncertain;
+    }
+
+    /**
+     * @param bool $uncertain
+     * @return Sound
+     */
+    public function setUncertain(bool $uncertain): Sound
+    {
+        $this->uncertain = $uncertain;
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getRating(): ?string
+    {
+        return $this->rating;
+    }
+
+    /**
+     * @param null|string $rating
+     * @return Sound
+     */
+    public function setRating(?string $rating): Sound
+    {
+        $this->rating = $rating;
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
+    /**
+     * @param null|string $note
+     * @return Sound
+     */
+    public function setNote(?string $note): Sound
+    {
+        $this->note = $note;
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getSpeciesName(): ?string
+    {
+        return $this->speciesName;
+    }
+
+    /**
+     * @param null|string $speciesName
+     * @return Sound
+     */
+    public function setSpeciesName(?string $speciesName): Sound
+    {
+        $this->speciesName = $speciesName;
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getTypeName(): ?string
+    {
+        return $this->typeName;
+    }
+
+    /**
+     * @param null|string $typeName
+     * @return Sound
+     */
+    public function setTypeName(?string $typeName): Sound
+    {
+        $this->typeName = $typeName;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDatabaseValues(): array
+    {
+        return [
+            ':species' => $this->getSpecies(),
+            ':type' => $this->getType(),
+            ':subtype' => $this->getSubtype(),
+            ':distance' => $this->getDistance(),
+            ':notEstimableDistance' => (int)$this->isNotEstimableDistance(),
+            ':individualNum' => $this->getIndividualNum(),
+            ':uncertain' => (int)$this->isUncertain(),
+            ':rating' => $this->getRating(),
+            ':note' => $this->getNote(),
+        ];
+    }
 }

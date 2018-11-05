@@ -19,8 +19,8 @@ class TagReview
 	const STATUS_NAME = "description";
 
     public function getTagReviews($tagID){
-		$query = "SELECT " . User::FULL_NAME. ", " . Animal::BINOMIAL . ", " . self::STATUS_NAME . ", " . self::DATE . " FROM " . self::TABLE_NAME . 
-		         " LEFT JOIN " . Animal::TABLE_NAME . " ON "  . Animal::TABLE_NAME .  "." . Animal::ID . " = " . self::ANIMAL . 
+		$query = "SELECT " . User::FULL_NAME. ", " . Species::BINOMIAL . ", " . self::STATUS_NAME . ", " . self::DATE . " FROM " . self::TABLE_NAME .
+		         " LEFT JOIN " . Species::TABLE_NAME . " ON "  . Species::TABLE_NAME .  "." . Species::ID . " = " . self::ANIMAL .
 		         " LEFT JOIN " . User::TABLE_NAME . " ON " . User::TABLE_NAME . "." . User::ID . " = " . self::USER . 
 		         " LEFT JOIN " . self::STATUS_TABLE_NAME . " ON " . self::STATUS_TABLE_NAME . ".id = " . self::STATUS . " WHERE " . self::SOUND_TAG. "=:tagID ORDER BY " . self::DATE;
 

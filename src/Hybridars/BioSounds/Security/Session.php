@@ -24,9 +24,14 @@ class Session
         Database::$connection = new \PDO(
             $this->config['DRIVER'].':host='.$this->config['HOST'].';dbname='.$this->config['DATABASE'],
             $this->config['USER'],
-            $this->config['PASSWORD']
+            $this->config['PASSWORD'],
+            [
+                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+                \PDO::ATTR_EMULATE_PREPARES => false,
+            ]
+
         );
-        Database::$connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
     }
 
     /**
@@ -69,10 +74,13 @@ class Session
         define('IMAGES_URL', APP_URL . $this->config['IMAGES_URL']);
         define('PROJECT_IMAGES_URL', IMAGES_URL . $this->config['PROJECT_IMAGES_URL']);
         define('ABSOLUTE_DIR', $this->config['ABSOLUTE_DIR']);
+        define('TEMPLATES_DIR', $this->config['TEMPLATES_DIR']);
+        define('CACHE_DIR', $this->config['CACHE_DIR']);
         define('LOGO', IMAGES_URL . $this->config['LOGO']);
+        define('TMP_DIR', $this->config['TMP_DIR']);
 
         define('WINDOW_WIDTH', $this->config['WINDOW_WIDTH']);
-        define('SPECTROGRAM_LEFT', $this->config['SPECTROGRAM_RIGHT']);
+        define('SPECTROGRAM_LEFT', $this->config['SPECTROGRAM_LEFT']);
         define('SPECTROGRAM_RIGHT', $this->config['SPECTROGRAM_RIGHT']);
         define('SPECTROGRAM_HEIGHT', $this->config['SPECTROGRAM_HEIGHT']);
 

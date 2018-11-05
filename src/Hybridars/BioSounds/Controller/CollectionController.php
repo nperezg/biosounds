@@ -2,130 +2,147 @@
 
 namespace Hybridars\BioSounds\Controller;
 
+use Hybridars\BioSounds\Classes\BaseController;
 use Hybridars\BioSounds\Entity\Collection;
 use Hybridars\BioSounds\Entity\Sound;
+use Hybridars\BioSounds\Provider\CollectionProvider;
+use Hybridars\BioSounds\Provider\RecordingProvider;
+use Hybridars\BioSounds\Service\RecordingService;
 use Hybridars\BioSounds\Utils\Auth;
 
-class CollectionController
+class CollectionController extends BaseController
 {
-    protected $template = 'collection.phtml';
+    const GALLERY_TEMPLATE = 'collection/views/gallery.html.twig';
+    const LIST_TEMPLATE = 'collection/views/list.html.twig';
+
+    private $template;
+
     protected $view;
+    private $display;
 
     private $page;
-    private $colID;
-    private $numSounds;
+    private $colId;
+    private $recordingNum;
+    private $pageNum;
+    private $openCollection = false;
+    private $collection;
+    private $recordings = [];
+
+    private $filter = [];
     
     const ITEMS_PAGE = 9;
 
-    public function __construct() {
-		if(!Auth::isUserLogged()){
-			throw new \Exception(ERROR_NOT_LOGGED);
-		}
-		$this->view = new View();  
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    public function create()
+    {
+        $this->checkPermissions();
+
+        return $this->render('collection.html.twig', [
+            'collection' => $this->collection,
+            'pageNum' => $this->pageNum,
+            'page' => $this->page,
+            'recordingNum' => $this->recordingNum,
+            'list' => $this->recordings,
+            'template' => $this->template,
+            'baseUrl' => APP_URL,
+            'display' => $this->display,
+            'filter' => $this->filter,
+        ]);
     }
-    
-    public function create() {
-		if(!Auth::isUserLogged()){
-			throw new \Exception(ERROR_NOT_LOGGED);
-		} else if(empty($this->colID)){
-			throw new \Exception(ERROR_EMPTY_ID);
-		}
-		$this->getContent();
-        return $this->view->render($this->template);
+
+    /**
+     * @param int $id
+     * @param int $page
+     * @param string|null $view
+     * @throws \Exception
+     */
+    public function show(int $id, int $page, string $view = null)
+    {
+        $this->colId = $id;
+
+        //TODO: Set open collections in administration (not hard-coded)
+        if ($id == 1 || $id == 3 || $id == 18) {
+            $this->openCollection = true;
+        }
+
+        $this->checkPermissions();
+
+        $this->page = $page;
+
+        $this->collection = (new CollectionProvider())->get($this->colId);
+
+        $this->display = $view == null ? $this->collection->getView() : $view;
+        $this->template = $this->display == Collection::LIST_VIEW ? self::LIST_TEMPLATE : self::GALLERY_TEMPLATE;
+
+        if (isset($_POST['species']) && !empty($_POST['species'])) {
+            $this->filter[Sound::SPECIES_ID] = filter_var($_POST['species'], FILTER_VALIDATE_INT);
+        }
+
+        if (isset($_POST['rating']) && !empty($_POST['rating'])) {
+            $this->filter[Sound::RATING] = filter_var($_POST['rating'], FILTER_SANITIZE_STRING);
+        }
+
+        $recordingProvider = new RecordingProvider();
+        $this->recordingNum = $recordingProvider->countReady($this->colId, $this->filter);
+
+        if ($this->recordingNum > 0) {
+            $this->pageNum = ceil($this->recordingNum / self::ITEMS_PAGE);
+
+            if ($this->page > $this->pageNum) {
+                $this->page = 1;
+            }
+        }
+
+        $this->recordings = (new RecordingService())->getListWithImages(
+            $this->colId,
+            self::ITEMS_PAGE,
+            self::ITEMS_PAGE * ($this->page - 1),
+            $this->filter
+        );
+
+        if (isset($_POST['species-name'])) {
+            $this->filter['speciesName'] = filter_var($_POST['species-name'], FILTER_SANITIZE_STRING);
+        }
     }
-    
-    public function getList(){
-		if (!Auth::isUserAdmin()){
-			throw new \Exception(ERROR_NO_ADMIN); 
-		}
-	
-		$collection = new Collection();
-		$colsList = $collection->getFullListOrderBy(Collection::PRIMARY_KEY);
-		
-		$this->view->listCollections = "";
-				
-		foreach($colsList as $colData){
-			$this->view->listCollections .= "<tr><th scope='row'>".$colData['ColID']."</th>";
-			$this->view->listCollections .= "<td>".$colData['CollectionName']."</td>";
-			$this->view->listCollections .= "<td>".$colData['Author']."</td>";
-			$this->view->listCollections .= "<td>".$colData['Notes']."</td></tr>";
-		}
-		return $this->view->render("collectionsList.phtml");
-	}
-    
-    public function show($id, $page = 1){
-		if(!Auth::isUserLogged()){ 
-			throw new \Exception(ERROR_NOT_LOGGED);
-		} else if(empty($id)){
-			throw new \Exception(ERROR_EMPTY_ID);
-		}
-		
-		$this->colID = $id;
-		$this->page = $page;
-		
-		$collection = new Collection();
-		$colData = $collection->getObject($this->colID);
-		
-		$this->view->collectionName = $colData["CollectionName"];
-		$this->view->notes = $colData["Notes"];
-		
-		$sound = new Sound();
-		$this->numSounds = $sound->countSoundsCollection($this->colID);		
-		$this->view->numSounds = $this->numSounds;
-		
-		$this->getPaginator();
-		
-		/* In case we change page by AJAX - Form
-		 * if(isset($_POST["selectedPage"]) && $_POST["selectedPage"] > 0)
-			$this->page = filter_var($_POST["selectedPage"], FILTER_SANITIZE_INT);*/
-			
-		$pageFirstItemID = 	self::ITEMS_PAGE * ($this->page - 1);	
-		$soundData = $sound->getSoundsPagByCollection($this->colID, self::ITEMS_PAGE, $pageFirstItemID);
-		if($soundData != NULL)
-			$this->setSoundsList($soundData);
-	}
-	
-	private function getContent(){
-		if(Auth::isUserAdmin()){
-			$this->view->extraTop = "<div>
-			<form action='collection/add' method='POST'>
-			<input type='hidden' name='ColID' value='$this->colID'>
-			<input type=submit value=' Add files '></form></div>";
-		}
-	}
-	
-	private function getPaginator(){
-		if($this->numSounds <= 0)
-			return;
 
-		$this->numPages = ceil($this->numSounds / self::ITEMS_PAGE);
-		
-		if($this->page > $this->numPages) 
-			$this->page = 1;
+    /**
+     * TODO: Move to collection admin
+     * @return string
+     * @throws \Exception
+     */
+    public function getList()
+    {
+        if (!Auth::isUserAdmin()){
+            throw new \Exception(ERROR_NO_ADMIN);
+        }
 
-		for ($i = 1; $i <= $this->numPages; $i++) {
-			$active = $this->page == $i ? "class='active'" : "";
-			$this->view->paginator .= "<li $active><a href='collection/show/$this->colID/$i'>$i <span class='sr-only'></span></a></li>";
-		}
-	}	
-	
-	private function setSoundsList($soundData){
-		foreach($soundData as $row) {
-			$siteID = $row["SiteID"];
-			$dirID = $row["DirID"];
-			$soundName = $row["SoundName"];
-			$date = $row["Date"];
-			$soundID = $row["SoundID"];
-			$imagePath = "sounds/images/$this->colID/$dirID/".$row["ImageFile"];	
+        $list = (new CollectionProvider())->getListOrderById();
 
-			$this->view->soundList .= "<div class='col-lg-4 sound-list-item'>";
-			
-			if (!is_file($imagePath))	{
-				$imagePath = "assets/images/notready-small.png";
-			}
+        $this->view->listCollections = "";
 
-			$this->view->soundList .= "<a href='sound/show/$soundID' title='Click for file details and more options'>
-				<img src='$imagePath'></a><span>$soundName</span><span>$date</span></div>"; 
-		}
-	}	
+        foreach($list as $item){
+            $this->view->listCollections .= "<tr><th scope='row'>" . $item->getId() ."</th>";
+            $this->view->listCollections .= "<td>" . $item->getName() . "</td>";
+            $this->view->listCollections .= "<td>" . $item->getAuthor() . "</td>";
+            $this->view->listCollections .= "<td>" . $item->getNote() . "</td></tr>";
+        }
+        return $this->view->render("collectionsList.phtml");
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function checkPermissions()
+    {
+        if (!Auth::isUserLogged() && !$this->openCollection) {
+            throw new \Exception(ERROR_NOT_LOGGED);
+        } else {
+            if (empty($this->colId)) {
+                throw new \Exception(ERROR_EMPTY_ID);
+            }
+        }
+    }
 }

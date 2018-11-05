@@ -6,9 +6,15 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-		    <li><a href="collection/show/1">Demo</a></li>
-		    <?php echo $this->extraMenu;?>
-            <li><a href="project">Project</a></li>
+              <li class='dropdown'><a aria-expanded='true' tabindex='0' data-toggle='dropdown' data-submenu='' href='#'>Open Collections<span class='caret'></span></a>
+                  <ul class='dropdown-menu'>
+                      <li><a href="<?php echo APP_URL?>/collection/show/1/1">Demo</a></li>
+                      <li><a href="<?php echo APP_URL?>/collection/show/3/1">Berbak NP phase 1 and 2 </a></li>
+                      <li><a href="<?php echo APP_URL?>/collection/show/18/1">Reference collection (amphibians)</a></li>
+                  </ul>
+              </li>
+              <?php echo $this->extraMenu;?>
+              <li><a href="<?php echo APP_URL?>/project">Project</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">   
 			  <li><a><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</a></li> 

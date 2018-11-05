@@ -133,15 +133,15 @@ div .active a {
 	width:200px;
 }
 
-.table-sounds input[type=text] {
+.table-recordings input[type=text] {
 	width:300px;
 }
 
-.table-sounds input[type=date] {
+.table-recordings input[type=date] {
 	width:140px;
 }
 
-.table-sounds input[type=time] {
+.table-recordings input[type=time] {
 	width:100px;
 }
 
@@ -265,4 +265,8 @@ span.tag-color > i {
   border-style: solid;
   border-width: 1px;
   border-color: black;
+}
+
+.form-check {
+    padding-top: 50%;
 }

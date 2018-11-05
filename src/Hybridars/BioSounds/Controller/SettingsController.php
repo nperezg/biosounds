@@ -11,9 +11,9 @@ class SettingsController
     protected $view;
 
     public function __construct() {
-		$this->view = new View(); 
+		$this->view = new View();
     }
-    
+
     public function create() {
 		if (!Auth::isUserAdmin()){
 			throw new \Exception(ERROR_NO_ADMIN);
@@ -21,7 +21,7 @@ class SettingsController
 		$this->getContent();
         return $this->view->render($this->template);
     }
-	
+
 	public function save(){
 		if (!Auth::isUserAdmin()){
 			throw new \Exception(ERROR_NO_ADMIN);
@@ -36,7 +36,7 @@ class SettingsController
 		return true;
 	}
 	
-	private function getContent(){	
+	private function getContent(){
 		$settings = new Settings();
 		$this->view->projectName = $settings->getSetting("projectName");
 		$this->view->projectDescription = $settings->getSetting("projectDescription");

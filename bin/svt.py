@@ -27,39 +27,8 @@ svt_version = "1.0"
  
 import optparse, math, sys
 import scikits.audiolab as audiolab
-import ImageFilter, ImageChops, Image, ImageDraw, ImageColor
+from PIL import ImageFilter, ImageChops, Image, ImageDraw, ImageColor
 import numpy
- 
-class TestAudioFile(object):
-    """A class that mimics audiolab.sndfile but generates noise instead of reading
-    a wave file. Additionally it can be told to have a "broken" header and thus crashing
-    in the middle of the file. Also useful for testing ultra-short files of 20 samples."""
-    def __init__(self, num_frames, has_broken_header=False):
-        self.seekpoint = 0
-        self.num_frames = num_frames
-        self.has_broken_header = has_broken_header
- 
-    def seek(self, seekpoint):
-        self.seekpoint = seekpoint
- 
-    def get_nframes(self):
-        return self.num_frames
- 
-    def get_samplerate(self):
-        return 44100
- 
-    def get_channels(self):
-        return 1
- 
-    def read_frames(self, frames_to_read):
-        if self.has_broken_header and self.seekpoint + frames_to_read > self.num_frames / 2:
-            raise IOError()
- 
-        num_frames_left = self.num_frames - self.seekpoint
-        will_read = num_frames_left if num_frames_left < frames_to_read else frames_to_read
-        self.seekpoint += will_read
-        return numpy.random.random(will_read)*2 - 1 
-
 
 class AudioProcessor(object):
     def __init__(self, audio_file, fft_size, channel, window):
@@ -248,7 +217,7 @@ def interpolate_colors(colors, flat=False, num_colors=256):
  
  
 class WaveformImage(object):
-    def __init__(self, image_width, image_height, palette):
+    def __init__(self, image_width, image_height):
         self.image = Image.new("RGB", (image_width, image_height))
  
         self.image_width = image_width
@@ -257,67 +226,15 @@ class WaveformImage(object):
         self.draw = ImageDraw.Draw(self.image)
         self.previous_x, self.previous_y = None, None
  
-        if palette==2:
-	        colors = [
-	                    (255,255,255),
-	                    (255,255,255),
-	                    (255,255,255),
-	                    (225,248,255),
-	                    (210,241,255),
-	                    (195,232,255),
-	                    (180,221,255),
-	                    (165,208,255),
-	                    (150,193,255),
-	                    (135,175,255),
-	                    (120,156,255),
-	                    (105,134,255),
-	                    (90,110,255),
-	                    (75,85,255),
-	                    (63,60,255),
-	                    (64,45,255),
-	                    (66,30,255),
-	                    (76,0,255),
-	                    (0,128,13),
-	                    (8,138,0),
-	                    (20,143,0),
-	                    (33,148,0),
-	                    (46,153,0),
-	                    (60,158,0),
-	                    (91,168,0),
-	                    (108,173,0),
-	                    (125,179,0),
-	                    (143,184,0),
-	                    (162,189,0),
-	                    (182,194,0),
-	                    (199,195,0),
-	                    (204,184,0),
-	                    (255,230,128),
-	                    (255,221,119),
-	                    (255,213,111),
-	                    (255,203,102),
-	                    (255,193,94),
-	                    (255,181,85),
-	                    (255,169,77),
-	                    (255,157,68),
-	                    (255,143,60),
-	                    (255,129,51),
-	                    (255,113,43),
-	                    (255,97,34),
-	                    (255,81,25),
-	                    (255,63,17),
-	                    (255,45,8),
-	                    (255,26,0)
-	                 ]
-        elif palette==1:
-	        colors = [
-	                    (0, 0, 0),
-	                    (58/4,68/4,65/4),
-	                    (80/2,100/2,153/2),
-	                    (90,180,100),
-	                    (224,224,44),
-	                    (255,60,30),
-	                    (255,255,255)
-	                 ]
+        colors = [
+                    (0, 0, 0),
+                    (58/4,68/4,65/4),
+                    (80/2,100/2,153/2),
+                    (90,180,100),
+                    (224,224,44),
+                    (255,60,30),
+                    (255,255,255)
+                 ]
  
         # this line gets the old "screaming" colors back...
         # colors = [self.color_from_value(value/29.0) for value in range(0,30)]
@@ -386,84 +303,28 @@ class WaveformImage(object):
  
  
 class SpectrogramImage(object):
-    def __init__(self, image_width, image_height, fft_size, f_max, f_min, nyquist_freq, palette):
+    def __init__(self, image_width, image_height, fft_size, f_max, f_min, nyquist_freq):
         self.image = Image.new("P", (image_height, image_width))
- 
+
         self.image_width = image_width
         self.image_height = image_height
         self.fft_size = fft_size
         self.f_max = f_max
         self.f_min = f_min
         self.nyquist_freq = nyquist_freq
-        self.palette = palette
- 
+
         if nyquist_freq<f_max:
             print "\nWarning: The specified maximum frequency to draw (%d Hz) is higher that what the digital file allows, which is %d Hz. The image file will have blank areas on top that correspond to empty data.\n" % (f_max,nyquist_freq)
 
-        if palette>2:
-            palette=2
-
-        if palette==2:
-	        colors = [
-	                    (255,255,255),
-	                    (255,255,255),
-	                    (255,255,255),
-	                    (225,248,255),
-	                    (210,241,255),
-	                    (195,232,255),
-	                    (180,221,255),
-	                    (165,208,255),
-	                    (150,193,255),
-	                    (135,175,255),
-	                    (120,156,255),
-	                    (105,134,255),
-	                    (90,110,255),
-	                    (75,85,255),
-	                    (63,60,255),
-	                    (64,45,255),
-	                    (66,30,255),
-	                    (76,0,255),
-	                    (0,128,13),
-	                    (8,138,0),
-	                    (20,143,0),
-	                    (33,148,0),
-	                    (46,153,0),
-	                    (60,158,0),
-	                    (91,168,0),
-	                    (108,173,0),
-	                    (125,179,0),
-	                    (143,184,0),
-	                    (162,189,0),
-	                    (182,194,0),
-	                    (199,195,0),
-	                    (204,184,0),
-	                    (255,230,128),
-	                    (255,221,119),
-	                    (255,213,111),
-	                    (255,203,102),
-	                    (255,193,94),
-	                    (255,181,85),
-	                    (255,169,77),
-	                    (255,157,68),
-	                    (255,143,60),
-	                    (255,129,51),
-	                    (255,113,43),
-	                    (255,97,34),
-	                    (255,81,25),
-	                    (255,63,17),
-	                    (255,45,8),
-	                    (255,26,0)
-	                 ]
-        elif palette==1:
-	        colors = [
-	                    (0, 0, 0),
-	                    (58/4,68/4,65/4),
-	                    (80/2,100/2,153/2),
-	                    (90,180,100),
-	                    (224,224,44),
-	                    (255,60,30),
-	                    (255,255,255)
-	                 ]
+        colors = [
+                    (0, 0, 0),
+                    (58/4,68/4,65/4),
+                    (80/2,100/2,153/2),
+                    (90,180,100),
+                    (224,224,44),
+                    (255,60,30),
+                    (255,255,255)
+                 ]
  
         self.image.putpalette(interpolate_colors(colors, True))
  
@@ -502,10 +363,8 @@ class SpectrogramImage(object):
         self.image.transpose(Image.ROTATE_90).save(filename)
  
  
-def create_png(input_filename, output_filename_w, output_filename_s, image_width, image_height, fft_size, f_max, f_min, wavefile, palette, channel, window):
-    print "NOMBRE" + input_filename
-
-    print "processing file %s:\n\t" % input_file,
+def create_png(input_filename, output_filename_w, output_filename_s, image_width, image_height, fft_size, f_max, f_min, wavefile, channel, window):
+    print "Processing file %s:\n\t" % input_file,
  
     audio_file = audiolab.sndfile(input_filename, 'read')
  
@@ -516,8 +375,8 @@ def create_png(input_filename, output_filename_w, output_filename_s, image_width
     processor = AudioProcessor(audio_file, fft_size, channel, numpy_window)
  
     if wavefile==1:
-        waveform = WaveformImage(image_width, image_height, palette)
-    spectrogram = SpectrogramImage(image_width, image_height, fft_size, f_max, f_min, nyquist_freq, palette)
+        waveform = WaveformImage(image_width, image_height)
+    spectrogram = SpectrogramImage(image_width, image_height, fft_size, f_max, f_min, nyquist_freq)
  
     for x in range(image_width):
  
@@ -554,11 +413,10 @@ if __name__ == '__main__':
     parser.add_option("-n", "--window", action="store", dest="window", type="string", help="window to use for the FFT: bartlett, blackman, hanning, hamming, or kaiser (default %default)")
     parser.add_option("-m", "--fmax", action="store", dest="f_max", type="int", help="Maximum freq to draw, in Hz (default %default)")
     parser.add_option("-i", "--fmin", action="store", dest="f_min", type="int", help="Minimum freq to draw, in Hz (default %default)")
-    parser.add_option("-p", "--palette", action="store", dest="palette", type="int", help="Which color palette to use to draw the spectrogram, 1 for black background and 2 for white background (default %default)")
     parser.add_option("-c", "--channel", action="store", dest="channel", type="int", help="Which channel to draw in a stereo file, 1 for left or 2 for right (default %default)")
     parser.add_option("-v", "--version", action="store_true", dest="version", help="display version information")
  
-    parser.set_defaults(output_filename_w=None, output_filename_s=None, image_width=500, image_height=170, fft_size=2048, f_max=22050, f_min=10, wavefile=0, palette=1, channel=1, window="hanning")
+    parser.set_defaults(output_filename_w=None, output_filename_s=None, image_width=500, image_height=170, fft_size=2048, f_max=22050, f_min=10, wavefile=0, channel=1, window="hanning")
  
     (options, args) = parser.parse_args()
  
@@ -579,7 +437,7 @@ if __name__ == '__main__':
 	            output_file_w = options.output_filename_w or input_file + "_w.png"
 	            output_file_s = options.output_filename_s or input_file + "_s.png"
  
-	        args = (input_file, output_file_w, output_file_s, options.image_width, options.image_height, options.fft_size, options.f_max, options.f_min, options.wavefile, options.palette, options.channel, options.window)
+	        args = (input_file, output_file_w, output_file_s, options.image_width, options.image_height, options.fft_size, options.f_max, options.f_min, options.wavefile, options.channel, options.window)
  
 	    print "\nsvt version " + str(svt_version) + "\n"
 	    create_png(*args)

@@ -1,0 +1,272 @@
+<div class="modal fade" id="modal-div" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+	<div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	    <h4 class="modal-title">Tag <?php echo $this->tagId;?> for recording <?php echo $this->recordingName;?> (ID <?php echo $this->recordingId;?>)</h4>
+	</div>
+	<div class="modal-body">
+	    <div class="row">
+		    <div id="tag-panel" class="col-md-12">
+			    <form id="tagForm">
+				    <input name="<?php echo $this->tagIdLabel;?>" type="hidden" value="<?php echo $this->tagId;?>">
+				    <input name="<?php echo $this->recordingIdLabel;?>" type="hidden" value="<?php echo $this->recordingId;?>">
+				    <input id='species_id' name='<?php echo $this->speciesIdLabel;?>' type='hidden' value='<?php echo $this->speciesId;?>'>
+				    <div class="form-group" id="species_group">
+					    <label for="species_desc">Species</label>
+					    <div class="checkbox form-inline" id="uncertain_check">				
+					    <input id="species_desc" class="form-control" type="text" size="50" value="<?php echo $this->binomial;?>">
+						    <label>
+							    <input id="uncertain" name="uncertain" type="checkbox" <?php echo $this->uncertain;?>> Uncertain?
+						    </label>
+					    </div>
+					    <a target="_blank" id="googleImages" style="cursor: pointer;"> Images</a> | <a target="_blank" id="xenoImages" style="cursor: pointer;">Xeno-canto </a>
+
+				    </div> 
+
+				    <div class="form-group">                                 
+					    <label for="min_time">Time </label>
+					    <div class="form-inline">
+						    <input id="min_time" class="form-control" name="min_time" type="text" maxlength="100" value="<?php echo $this->minTime?>"> -
+						    <input id="max_time" class="form-control" name="max_time" type="text" maxlength="100" value="<?php echo $this->maxTime?>"> sec
+					    </div>
+				    </div>	
+				    <div class="form-group">   	
+					    <label for="freq_min">Frequency </label>
+					    <div class="form-inline">
+						    <input id="min_freq" class="form-control" name="min_freq" type="text" maxlength="100" value="<?php echo $this->minFreq?>"> -
+						    <input id="max_freq" class="form-control" name="max_freq" type="text" maxlength="100" value="<?php echo $this->maxFreq?>"> Hz
+					    </div>
+				    </div>
+				    <div class="form-group" id="distance_group"> 
+					    <label for="call_distance">Call Distance </label>
+					    <div class="form-inline">
+						    <input id="call_distance" class="form-control" name="call_distance_m" type="number" value="<?php echo $this->callDistance?>">
+						    <div class="checkbox" id="dist_check">
+							    <label>
+								    <input id='distance_not_estimable' name="distance_not_estimable" type="checkbox" <?php echo $this->distance_not_estimable;?>> Distance not estimable
+							    </label>
+						    </div>
+					    </div>
+				    </div>
+				    <div class="form-group">  
+					    <div class="row">
+					      <div class="col-xs-4" id="individuals_group">
+						    <label for="<?php echo $this->numberIndivLabel;?>">Number of individuals </label>
+						    <input id="number_of_individuals" class="form-control" name="<?php echo $this->numberIndivLabel;?>" min="0" max="1000" type="number" value="<?php echo $this->numberIndiv;?>">
+					      </div>
+					      <div class="col-xs-4">
+						    <label for="type">Type </label>
+						    <select id="type" name="type" class="form-control">
+							    <?php echo $this->type;?>
+						    </select>
+					      </div>
+					      <div class="col-xs-4">
+						    <div class="checkbox" id="reference">
+							    <label> 
+								    <input name="reference_call" type="checkbox" <?php echo $this->reference_call;?>> Reference call
+							    </label>
+						    </div>
+					      </div>
+					    </div>
+				    </div>	
+				    <div class="form-group">
+					    <textarea name="comments" class="form-control" placeholder="Insert your comments" maxlength="200" col="50" rows="3"><?php echo $this->comments;?></textarea>
+				    </div>
+				    <div class="form-group">                                 
+					    <label for="user_full_name">Creation User: </label>
+					    <span id="user_full_name"><?php echo $this->userFullName;?></span>
+				    </div>	
+			    </form>
+		    </div>
+		    <div id="review-panel"><?php echo $this->reviewPanel;?></div>
+	    </div>	
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-danger <?php echo $this->displayDeleteBtn;?>" id="bdelete">Delete Mark</button>					
+		<button type="button" class="btn btn-primary <?php echo $this->displaySaveBtn;?>" id="bsave">Save changes</button>	
+	</div>
+    </div>
+  </div>
+</div>
+
+<script> 
+	$(function() {
+
+		$('#modal-div').on('show.bs.modal', function() {
+			if ( $( "#reviewForm" ).length ) {
+				$(this).find('.modal-content').addClass("modal-tag");
+				$("#tag-panel").removeClass("col-md-12");
+				$("#tag-panel").addClass("col-md-7");
+				$("#tag-panel").addClass("line-right");
+				$("#review-panel").addClass("col-md-5");
+			}
+		});
+		
+		$('#modal-div').on('shown.bs.modal', function() {
+		    $('#animal_desc').focus();
+		});
+		
+		$('#species_desc').autocomplete({
+			source:'<?php echo APP_URL; ?>/ajaxcallmanager.php?class=species&action=getList', minLength:3,
+			change: function (event, ui) {
+				if(!ui.item){
+					// The item selected from the menu, if any. Otherwise the property is null
+					//so clear the item for force selection
+					$('#species_desc').val('');
+					$('#species_id').val('');
+				} 
+			},
+			select: function (event, ui) {
+				event.preventDefault();
+				var label = ui.item.label.split('(')[0];
+				$('#species_desc').val(label);
+				$('#species_id').val(ui.item.value);
+		}});
+		
+		$("#tagForm :input").prop("disabled", <?php echo $this->disableForm;?>);
+		
+		$("#call_distance").prop("readonly", true);
+
+		$("#googleImages").click(function(){
+			var bird = $("#species_desc").val();
+			$("#googleImages").attr("href", "http://www.google.com/images?q="+bird+"");
+		});
+		
+		$("#xenoImages").click(function(){
+			var bird = $("#species_desc").val();
+			$("#xenoImages").attr("href", "http://www.xeno-canto.org/browse.php?query="+bird+"");
+		});
+	
+		$('#tagForm').submit(function(e) {
+			var tagId = '<?php echo $this->tagId;?>';
+			$.ajax({
+				type: 'POST',
+				url: '<?php echo APP_URL; ?>/ajaxcallmanager.php?class=tag&action=save',
+				data: $(this).serialize(),
+				success: function(data) {
+                    if(data > 1) {
+                        tagId = "new"+data;
+                    }
+                    updateTag(tagId);
+                    showMessage("Changes saved");
+				},
+				error: function(response) {
+                    showMessage(response.responseJSON.message, true);
+				}
+			});
+			e.preventDefault();
+		});
+	
+		$('#bdelete').click(function(){
+			if(confirm('Are you sure you want to delete this tag?')){
+			   $('#bsave').attr('disabled', true);
+			   $('#bdelete').attr('disabled', true);
+			   $('#bclose').attr('disabled', true);
+			   $('#modal-div').modal('hide');
+			   deleteTag(<?php echo $this->tagId;?>);
+			} else {
+				return false;	
+			}
+		});
+		
+		$('#bsave').click(function() {
+		    <?php echo $this->submitFormFunction;?>		
+		});
+		
+		$('#distance_not_estimable').click( function() {
+		  if ($(this).is(':checked'))
+		    $('#call_distance').val(null);
+		});
+		
+	});
+	
+	function submitAllForms() {
+		submitTagForm(false);
+		submitReviewForm(true);
+	}
+	
+	function submitTagForm(closeModal = true){
+		clearMessages();
+		if($('#species_id').val() == ''){
+			$('#species_group').addClass('has-error');
+			$('#uncertain_check').after('<span id="species_help" class="help-block">Please select an animal from the list.</span>');
+		} else if(!$('#number_of_individuals').val() == null || $('#number_of_individuals').val() == '' || $('#number_of_individuals').val() <= 0){
+			$('#individuals_group').addClass('has-error');
+			$('#number_of_individuals').after('<span id="individuals_help" class="help-block">Please introduce a valid number of individuals.</span>');
+		} else {
+			//$('#bsave').attr('disabled', true);
+			$('#tagForm').submit();
+			if(closeModal === true)
+				$('#modal-div').modal('hide');
+		}
+	}
+	
+	function clearMessages(){
+		$('#species_group').removeClass('has-error');
+		$('#species_help').remove();
+		$('#distance_group').removeClass('has-error');
+		$('#distance_help').remove();
+		$('#individuals_group').removeClass('has-error');
+		$('#individuals_help').remove();
+	}
+	
+	function updateTag(tagID)
+    {
+	  var freq_min = $('#min_freq').val();
+	  var freq_max = $('#max_freq').val();
+	  var time_min = $('#min_time').val();
+	  var time_max = $('#max_time').val();
+	  
+	  var viewFreqRange = <?php echo $this->maxFreqView;?> - <?php echo $this->minFreqView;?>;
+	  var viewTotalTime = <?php echo $this->maxTimeView;?> - <?php echo $this->minTimeView;?>;
+	  
+	  var left = ((time_min-<?php echo $this->minTimeView;?>)/viewTotalTime)*<?php echo $this->specWidth;?>;
+	  var top = (((viewFreqRange + <?php echo $this->minFreqView;?>)-freq_max)/viewFreqRange)*<?php echo $this->specHeight;?>;
+	  var height = ((freq_max-freq_min)/viewFreqRange)*<?php echo $this->specHeight;?>;
+	  var width = ((time_max-time_min)/viewTotalTime)*<?php echo $this->specWidth;?>;
+
+	  if (tagID.substring(0,3) === 'new') {
+	      tagID = tagID.substring(3, tagID.length);
+	      speciesName = $('#species_desc').val();
+	      
+	      var newTag = "<div class='tag-controls tag-dashed' id='"+tagID+"' style='z-index:800; border-color: white; left: ";
+	      newTag += left+"px; top: "+top+"px; height: "+height+"px; width: "+width+"px;'></div>";
+	      newTag += "<div class='panel panel-default panel-tag' style='z-index:8000; position: absolute;' hidden><div class='panel-heading'>" + speciesName +"</div>";
+	      newTag += "<div class='panel-body'><div class='btn-group no-wrap' role='group'>";
+	      newTag += "<a href='<?php echo APP_URL; ?>/ajaxcallmanager.php?class=tag&action=edit&id=" + tagID + "' class='btn btn-primary btn-sm tag' title='Edit Tag'>";
+	      newTag += "<span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a>";
+	      newTag += "<a href='#' onclick='return false;' class='btn btn-primary btn-sm zoom-tag' title='Zoom Tag'><span class='glyphicon glyphicon-zoom-in' aria-hidden='true'></span></a>";
+	      newTag += "<a href='#' onclick='return false;' id='est_" + tagID + "' type='button' class='btn btn-primary btn-sm estimate-distance' title='Estimate Call Distance'><span class='glyphicon glyphicon-bullhorn' aria-hidden='true'></span></a>";
+	      newTag += "</div></div></div>";
+	      
+	      $('#myCanvas').append(newTag);		  	   
+	  } else { 
+	      if($('#call_distance').val() > 0 || $('#distance_not_estimable').is(':checked'))
+		$( '#'+tagID ).removeClass("tag-orange");
+	      else if(!$('#call_distance').val() && !$('#distance_not_estimable').is(':checked'))
+		$( '#'+tagID ).addClass("tag-orange");
+		  
+	      $( '#'+tagID ).css( 'width', width+"px");
+	      $( '#'+tagID ).css( 'height', height+"px");
+	      $( '#'+tagID ).css( 'left', left+"px");
+	      $( '#'+tagID ).css( 'top', top+"px");
+	  }
+	}
+
+    function deleteTag(tagID)
+    {
+        $.ajax({
+            type: "POST",
+            url: "<?php echo APP_URL; ?>/ajaxcallmanager.php?class=tag&action=delete&id="+tagID,
+            success: function(data){
+                $("#"+tagID ).remove();
+                showMessage("Tag succesfully removed!");
+            },
+            error: function(response){
+                showMessage(response.responseJSON.message, true);
+            }
+        });
+    }
+</script>
