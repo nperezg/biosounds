@@ -47,7 +47,6 @@ $(function() {
             }
 
             this.dataset.playing = 'true';
-            playbackControl.removeAttribute('disabled');
             playButton.html('<span class="glyphicon glyphicon-pause"></span>');
             $('#playerCursor').draggable('disable');
         }
@@ -67,10 +66,13 @@ $(function() {
     });
 
     playbackControl.oninput = function() {
-        elapsedRateTime = currentTime - ((context.currentTime - startTime) * this.value);
-        source.playbackRate.value = this.value;
+        if (source !== null) {
+            elapsedRateTime = currentTime - ((context.currentTime - startTime) * this.value);
+            source.playbackRate.value = this.value;
+            seek = 0;
+        }
+        console.log(this.value);
         playbackValue.innerHTML = this.value;
-        seek = 0;
     };
 
     $('#playerCursor').draggable({
@@ -111,7 +113,6 @@ $(function() {
             $("#time_sec_div").html(Math.round(minTime));
         }
 
-        playbackControl.setAttribute('disabled', 'disabled');
         playButton.html('<span class="glyphicon glyphicon-play"></span>');
         playButton.attr('data-playing', false);
         pause = false;
