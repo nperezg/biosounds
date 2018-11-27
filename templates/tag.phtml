@@ -94,19 +94,20 @@
 <script> 
 	$(function() {
 
-		$('#modal-div').on('show.bs.modal', function() {
-			if ( $( "#reviewForm" ).length ) {
-				$(this).find('.modal-content').addClass("modal-tag");
-				$("#tag-panel").removeClass("col-md-12");
-				$("#tag-panel").addClass("col-md-7");
-				$("#tag-panel").addClass("line-right");
-				$("#review-panel").addClass("col-md-5");
-			}
-		});
-		
-		$('#modal-div').on('shown.bs.modal', function() {
-		    $('#animal_desc').focus();
-		});
+		$('#modal-div')
+            .on('show.bs.modal', function() {
+                if ($( "#reviewForm" ).length) {
+                    $(this).find('.modal-content').addClass("modal-tag");
+                    $('#tag-panel')
+                        .removeClass("col-md-12")
+                        .addClass("col-md-7")
+                        .addClass("line-right");
+                    $("#review-panel").addClass("col-md-5");
+                }
+            })
+		    .on('shown.bs.modal', function() {
+                $('#animal_desc').focus();
+            });
 		
 		$('#species_desc').autocomplete({
 			source:'<?php echo APP_URL; ?>/ajaxcallmanager.php?class=species&action=getList', minLength:3,
@@ -176,10 +177,10 @@
 		});
 		
 		$('#distance_not_estimable').click( function() {
-		  if ($(this).is(':checked'))
-		    $('#call_distance').val(null);
+		  if ($(this).is(':checked')) {
+              $('#call_distance').val(null);
+          }
 		});
-		
 	});
 	
 	function submitAllForms() {
@@ -187,12 +188,13 @@
 		submitReviewForm(true);
 	}
 	
-	function submitTagForm(closeModal = true){
+	function submitTagForm(closeModal = true)
+    {
 		clearMessages();
-		if($('#species_id').val() == ''){
+		if ($('#species_id').val() === '') {
 			$('#species_group').addClass('has-error');
 			$('#uncertain_check').after('<span id="species_help" class="help-block">Please select an animal from the list.</span>');
-		} else if(!$('#number_of_individuals').val() == null || $('#number_of_individuals').val() == '' || $('#number_of_individuals').val() <= 0){
+		} else if(!$('#number_of_individuals').val() == null || $('#number_of_individuals').val() === '' || $('#number_of_individuals').val() <= 0){
 			$('#individuals_group').addClass('has-error');
 			$('#number_of_individuals').after('<span id="individuals_help" class="help-block">Please introduce a valid number of individuals.</span>');
 		} else {
@@ -203,7 +205,8 @@
 		}
 	}
 	
-	function clearMessages(){
+	function clearMessages()
+    {
 		$('#species_group').removeClass('has-error');
 		$('#species_help').remove();
 		$('#distance_group').removeClass('has-error');
