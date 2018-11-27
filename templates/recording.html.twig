@@ -1,5 +1,4 @@
-﻿{% block body %}
-
+{% block body %}
     <div class="page-header">
         <h4>{{ player.recording.name }}</h4>
     </div>
@@ -8,17 +7,17 @@
         <div class="col-md-2 text-center">
             <ul class="nav nav-pills nav-stacked" style="margin-top:0.6em;">
                 <li>
-                    <a id="add-tag-btn" title="Add Tag" href="{{ base_url }}/ajaxcallmanager.php?class=tag&action=addNew" class="tag">
+                    <a class="new-tag" href="{{ base_url }}/ajaxcallmanager.php?class=tag&action=addNew" title="New Tag">
                         <span class="glyphicon glyphicon-tag"></span>
                     </a>
                 </li>
                 <li>
                     {% if player.isShowTags %}
-                        <a class='toggleTag' href='#' onclick='return false;' title='Hide tags'>
+                        <a class='toggleTag' href='#' title='Hide tags'>
                             <span class='glyphicon glyphicon-eye-close'></span>
                         </a>
                     {% else %}
-                        <a class='toggleTag' href='#' onclick='return false;' title='Show tags'>
+                        <a class='toggleTag' href='#' title='Show tags'>
                             <span class='glyphicon glyphicon-eye-open'></span>
                         </a>
                     {% endif %}
@@ -48,6 +47,8 @@
             <hr>
             <a href="#" class="viewport" title="Overall view"><img src="{{ base_url }}/{{ player.viewPortFilePath }}"></a>
             <hr>
+            <input id="playback-rate" class="form-control input-sm playback-rate-control" type="range" min="0.05" max="1" step="0.01" value="1" disabled>
+            <label for="playback-rate">Speed: <span class="playback-rate-value">1.0</span>x</label>
 
         </div>
         <div class="col-md-9">
@@ -60,17 +61,18 @@
             </div>
 
             <div id="myCanvas" class="canvas">
-                {% include 'player/tags.html.twig' with {'base_url': base_url, 'tags': player.tags, 'show_tags': player.showTags} %}
-                <div id="myLine" class="player-line"></div>
+                {% include 'recording/tagBoxes.html.twig' with {'base_url': base_url, 'tags': player.tags, 'show_tags': player.showTags} %}
+                <div id="playerCursor" class="player-line"></div>
                 <img src="{{ player.imageFilePath }}" id="cropbox" />
             </div>
-            <audio id="player" src="{{ player.filePath }}"></audio>
 
             <div class="row" style="margin-top:7px;">
                 <div class="col-md-3">
                     <div>
-                        <button type="button" id="playPause" class="btn btn-link"><span class="glyphicon glyphicon-play"></span></button>
-                        <button type="button" id="stop" class="btn btn-link"><span class="glyphicon glyphicon-stop"></span></button>
+                        <button id="play" class="btn btn-link" data-playing="false" role="switch" aria-checked="false" disabled>
+                            <span class="glyphicon glyphicon-play"></span>
+                        </button>
+                        <button id="stop" class="btn btn-link"><span class="glyphicon glyphicon-stop"></span></button>
                         <h8>
                             <span id="time_sec_div">{{ player.minTime > 0 ? player.minTime|round: 0 }}</span> /
                             <span id="duration">{{ (player.maxTime - player.minTime|round) }} s</span>
@@ -110,7 +112,7 @@
                                 <input type="checkbox" name="continuous_play" title="Continuous Playback"{{ player.isContinuousPlay ? 'checked':'' }}>
                                 <span class="glyphicon glyphicon-repeat"></span>
                                 <input type="checkbox" name="filter" title="Filter" disabled><span class="glyphicon glyphicon-filter"></span>
-                                <button type="button" id="zoom_submit" class="btn btn-link" disabled><span class="glyphicon glyphicon-zoom-in"></span></button>
+                                <button type="button" id="zoom-submit" class="btn btn-link" disabled><span class="glyphicon glyphicon-zoom-in"></span></button>
                             </div>
                             <div class="btn-group dropup input-group-sm">
                               <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -140,12 +142,15 @@
                 </div>
             </div>
         </div>
-        {% include 'player/frequencyScale.html.twig' with {'frequency_data': frequency_data} %}
+        {% include 'recording/frequencyScale.html.twig' with {'frequency_data': frequency_data} %}
     </div>
 {% endblock %}
 
 {% block scripts %}
     <script type="text/javascript">
+        playButton = $('#play');
+        {% include '/recording/js/playbackRate.js' %}
+
         fileDuration = {{ player.duration }};
         minTime = {{ player.minTime }};
         maxTime = {{ player.maxTime }};
@@ -162,7 +167,13 @@
 
         base_url = '{{ base_url }}';
 
-        {% include '/player/js/player.js' %}
-        {% include '/player/js/recording.js' %}
+        frequency = {{ player.recording.sampling_rate }};
+        channelNum = {{ player.recording.channel_num }};
+        soundFilePath = '{{ player.filePath }}';
+
+
+        {% include '/recording/js/player.js' %}
+        {% include '/recording/js/recording.js' %}
+        {% include '/recording/js/imageCrop.js' %}
     </script>
 {% endblock %}

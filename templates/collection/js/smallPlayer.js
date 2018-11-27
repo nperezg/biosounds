@@ -1,7 +1,7 @@
 $(function() {
-    var player = $('audio');
-    var clock;
-    var spectrogramWidth = 600;
+    let player = $('audio');
+    let clock;
+    let spectrogramWidth = 600;
 
     player.on('playing', function(event) {
         player.stop();
@@ -16,7 +16,7 @@ $(function() {
 
     function moveCursor(element)
     {
-        var time = element.currentTime / element.duration;
-        $('#player-cursor-'+element.getAttribute('data-id')).css('margin-left', time * spectrogramWidth + 'px');
+        let time = element.currentTime / element.duration;
+        $('#recording-cursor-'+element.getAttribute('data-id')).css('margin-left', time * spectrogramWidth + 'px');
     }
 });

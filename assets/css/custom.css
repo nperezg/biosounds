@@ -2,6 +2,7 @@ html, body {
 	margin:0;
 	padding:0;
 	height:100%;
+    font-family: 'Roboto', sans-serif;
 }
 
 .wrapper {
@@ -190,25 +191,24 @@ div .inline {
 /* Player */
 .canvas {
   position:relative; 
-  left: 0px;
-  width: 1000px;
+  left: 0;
   display: inline-block;
 }
 
 .player-line {
-  position:absolute; 
-  width:1px; 
-  height:400px; 
-  background-color:red; 
-  border:solid 1px red; 
-  top:0px; 
-  float:left; 
-  z-index:1000; 
-  margin-left:0;
+    position:absolute;
+    width:1px;
+    height:400px;
+    background-color:red;
+    border:solid 1px red;
+    top:0;
+    float:left;
+    z-index:1000;
+    margin-left:0;
 }
 
 .timescale {
-  width:950px; 
+  width:950px;
   margin-top:-8px;
 }
 

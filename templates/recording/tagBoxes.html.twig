@@ -6,17 +6,23 @@
 
         <div class='panel-body'>
             <div class='btn-group no-wrap' role='group'>
-                <a href="{{ base_url }}/ajaxcallmanager.php?class=tag&action=edit&id={{ tag.id }}" class='btn btn-primary btn-sm tag' title='Edit Tag'>
+                <a href="{{ base_url }}/ajaxcallmanager.php?class=tag&action=edit&id={{ tag.id }}" class='btn btn-primary btn-sm tag' title='Edit tag'>
                     <span class='glyphicon glyphicon-edit' aria-hidden='true'></span>
                 </a>
 
-                <a href='#' onclick='return false;' class='btn btn-primary btn-sm zoom-tag' title='Zoom Tag'>
+                <a href='#' onclick='return false;' class='btn btn-primary btn-sm zoom-tag' title='Zoom tag'>
                     <span class='glyphicon glyphicon-zoom-in' aria-hidden='true'></span>
                 </a>
-                <a href='#' onclick='return false;' id="est_{{ tag.id }}" type='button' class='btn btn-primary btn-sm estimate-distance' title='Estimate Call Distance'>
+                <a href='#' onclick='return false;' id="est_{{ tag.id }}" type='button' class='btn btn-primary btn-sm estimate-distance' title='Estimate call distance'>
                     <span class='glyphicon glyphicon-bullhorn' aria-hidden='true'></span>
                 </a>
             </div>
         </div>
     </div>
 {% endfor %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        {% include '/recording/js/tagControls.js' %}
+    </script>
+{% endblock %}
