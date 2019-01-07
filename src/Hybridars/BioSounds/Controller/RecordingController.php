@@ -13,13 +13,14 @@ use Hybridars\BioSounds\Presenter\FrequencyScalePresenter;
 use Hybridars\BioSounds\Presenter\RecordingPresenter;
 use Hybridars\BioSounds\Presenter\TagPresenter;
 use Hybridars\BioSounds\Provider\RecordingProvider;
+use Hybridars\BioSounds\Service\RecordingService;
 use Hybridars\BioSounds\Service\SpectrogramService;
 use Hybridars\BioSounds\Utils\Auth;
 use Hybridars\BioSounds\Utils\Utils;
 
 class RecordingController extends BaseController
 {
-	const DEFAULT_TAG_COLOR = '#FFFFFF';
+    const DEFAULT_TAG_COLOR = '#FFFFFF';
 	const SOUND_PATH = 'sounds/sounds/%s/%s/%s';
     const IMAGE_SOUND_PATH = 'sounds/images/%s/%s/%s';
 
@@ -32,6 +33,7 @@ class RecordingController extends BaseController
     private $spectrogramService;
     private $openSound = false;
     private $collectionPage;
+    private $recordingService;
 
     /**
      * @var RecordingPresenter
@@ -52,6 +54,7 @@ class RecordingController extends BaseController
 		$this->view = new View();
 		$this->spectrogramService = new SpectrogramService();
 		$this->recordingPresenter = new RecordingPresenter();
+		$this->recordingService = new RecordingService();
 		$this->recordingPresenter->setSpectrogramHeight(SPECTROGRAM_HEIGHT);
 		$this->fftSize = Utils::getSetting('fft');
 
@@ -93,7 +96,7 @@ class RecordingController extends BaseController
         $collectionId = $recordingData[Recording::COL_ID];
 
         //TODO: Take the hardcoded open collections out. Implement open collections management
-        if ($collectionId == 1 || $collectionId == 3 || $collectionId == 18) {
+        if ($collectionId == 1 || $collectionId == 3 || $collectionId == 18 || $collectionId == 31) {
             $this->openSound = true;
         }
 
@@ -232,23 +235,25 @@ class RecordingController extends BaseController
 			$randomID = mt_rand();
 			$_SESSION['random_id'] = $randomID;
 		} 
-		else
-			$randomID = $_SESSION['random_id'];
+		else {
+            $randomID = $_SESSION['random_id'];
+        }
 			
 		if (!file_exists("tmp/$randomID"))	{
             @mkdir("tmp/$randomID");
         }
 			
 		$spectrogramImagePath = 'tmp/' . $randomID . '/' . $selectedFileName.'.png';
-		$soundFileView =  'tmp/' . $randomID .'/'. $selectedFileName . '.mp3';
-		$wavFilePath = 'tmp/' . $randomID .'/'. $selectedFileName . '.wav';
+		//$soundFileView =  'tmp/' . $randomID .'/'. $selectedFileName . '.mp3';
+        $zoomedFilePlayer =  'tmp/' . $randomID .'/'. $selectedFileName . '.ogg';
+		$zoomedFilePath = 'tmp/' . $randomID .'/'. $selectedFileName . '.' . $fileName[1];
 
 		/* If spectrogram doesn't exist, generate */
-		if (!file_exists($soundFileView)) {
+		if (!file_exists($zoomedFilePlayer)) {
 			$durationTime = round(($maxTime - $minTime) * $samplingRate); //Set to number of samples
 			$startTime = round($minTime * $samplingRate); //Set to number of samples
-			$tempPath = 'tmp/' . $randomID .'/';
-			$selectionFilePath = $filter ? 'tmp/1.' . $selectedFileName . '.wav' : $wavFilePath;
+			//$tempPath = 'tmp/' . $randomID .'/';
+			$selectionFilePath = $filter ? 'tmp/1.' . $selectedFileName . '.' . $fileName[1] : $zoomedFilePath;
 
             if ($minTime != 0 || $maxTime != $duration) {
                 Utils::generateSoundFileSelection(
@@ -260,43 +265,42 @@ class RecordingController extends BaseController
                 if ($filter) {
                     Utils::filterFrequenciesSound(
                         $selectionFilePath,
-                        $wavFilePath,
+                        $zoomedFilePath,
                         $minFrequency,
                         ($maxFrequency == $samplingRate / 2) ? $maxFrequency - 1 : $maxFrequency
                     );
                 }
             } else {
-  				if (is_file($originalMp3FilePath)) {
-					copy($originalMp3FilePath, $soundFileView);
-				}
+//  				if (is_file($originalMp3FilePath)) {
+//					copy($originalMp3FilePath, $soundFileView);
+//				}
 				if ($this->recordingPresenter->getChannel() == 1 && is_file($imageFilePath)) {
   					copy($imageFilePath, $spectrogramImagePath);
 				}
-                copy($originalWavFilePath, $wavFilePath);
+               // copy($originalWavFilePath, $wavFilePath);
+                copy($originalSoundFilePath, $zoomedFilePath);
 			}
 
 			/* Generation MP3 File */
-			if(!file_exists($soundFileView)) {
-				Utils::generateMp3File($wavFilePath, $samplingRate, $selectedFileName . '.mp3', $tempPath);
-			}
+			if(!file_exists($zoomedFilePlayer)) {
+                $zoomedFilePlayer = $zoomedFilePath;
 
-			// Generate player spectrogram image
-			if (!file_exists($spectrogramImagePath)) {
-			    try {
-                    $this->spectrogramService->generatePlayerImage(
-                        $spectrogramImagePath,
-                        $wavFilePath,
-                        $maxFrequency,
-                        $this->recordingPresenter->getChannel(),
-                        $minFrequency
-                    );
-                } catch(\Exception $exception) {
-			        error_log($exception->getMessage());
-			        throw new \Exception('There was a problem generating the player spectrogram image.');
+                if ($samplingRate <= 44100) {
+                    $zoomedFilePlayer = Utils::convertToMp3($zoomedFilePath);
                 }
-
+                if ($samplingRate > 44100 && $samplingRate <= 192000) {
+                    $zoomedFilePlayer = Utils::convertToOgg($zoomedFilePath);
+                }
 			}
-		}	
+
+			$this->recordingService->generateSpectrogramImage(
+                $spectrogramImagePath,
+                Utils::generateWavFile($zoomedFilePath),
+                $maxFrequency,
+                $this->recordingPresenter->getChannel(),
+                $minFrequency
+            );
+		}
 
 		$this->recordingPresenter->setMinTime(round($minTime, 1));
         $this->recordingPresenter->setMaxTime(round($maxTime, 1));
@@ -304,15 +308,20 @@ class RecordingController extends BaseController
         $this->recordingPresenter->setMaxFrequency($maxFrequency);
         $this->recordingPresenter->setDuration($duration);
         $this->recordingPresenter->setFileFreqMax($samplingRate / 2);
-        $this->recordingPresenter->setFilePath(APP_URL . '/' . $soundFileView);
+        $this->recordingPresenter->setFilePath(APP_URL . '/' . $zoomedFilePlayer);
         $this->recordingPresenter->setImageFilePath(APP_URL . '/' . $spectrogramImagePath);
         $this->recordingPresenter->setUser(empty(Auth::getUserID()) ? 0 : Auth::getUserID());
 
 		$this->generateFrequenciesScale($maxFrequency, $minFrequency);
 		$this->setTags($minTime, $maxTime, $minFrequency, $maxFrequency, $spectrogramWidth);
 		$this->setTime($maxTime, $minTime);
-		$this->setViewPort($samplingRate, $this->recordingPresenter->getChannel(), $originalWavFilePath);
-
+        $this->recordingService->setViewPort(
+            $this->recordingPresenter,
+            $samplingRate,
+            $this->recordingPresenter->getChannel(),
+            $originalWavFilePath
+        );
+		//$this->setViewPort($samplingRate, $this->recordingPresenter->getChannel(), $originalWavFilePath);
 	}
 
     /**
@@ -367,27 +376,6 @@ class RecordingController extends BaseController
 	}
 
     /**
-     * @param $samplingRate
-     * @param $channel
-     * @param $fileName
-     * @throws \Exception
-     */
-	private function setViewPort($samplingRate, $channel, $fileName)
-    {
-		$this->recordingPresenter->setViewPortFilePath($this->spectrogramService->generateViewPort(
-		    $samplingRate,
-            $this->recordingPresenter->getMinFrequency(),
-            $this->recordingPresenter->getMaxFrequency(),
-            $this->recordingPresenter->getMinTime(),
-            $this->recordingPresenter->getMaxTime(),
-            $fileName,
-            $channel,
-            $this->recordingPresenter->getDuration(),
-            'tmp/'.$_SESSION['random_id'] . '/'
-        ));
-	}
-
-    /**
      * @param $viewTimeMin
      * @param $viewTimeMax
      * @param $viewFreqMin
@@ -418,13 +406,13 @@ class RecordingController extends BaseController
 			$reviewPermission = $permission->isReviewPermission($perm);
 			$viewPermission = $permission->isViewPermission($perm);
 		}  	
-		
+
 		if (Auth::isUserAdmin() || $reviewPermission || $viewPermission) {
 		    $tags = $soundTagModel->getList($this->recordingId);
         } else {
             $tags = $soundTagModel->getList($this->recordingId, Auth::getUserLoggedID());
         }
-				
+
 		if (!empty($tags)) {
 			$viewTotalTime = $viewTimeMax - $viewTimeMin;
 			$viewFreqRange = $viewFreqMax - $viewFreqMin;

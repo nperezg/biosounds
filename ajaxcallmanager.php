@@ -17,7 +17,7 @@ try {
 
     $classname = 'Hybridars\\BioSounds\\Controller\\'.ucfirst($class)."Controller";
     $t = new $classname;
-    if(!empty($action)){
+    if (!empty($action)) {
         if(!empty($id))
             $result = $t->$action($id);
         else

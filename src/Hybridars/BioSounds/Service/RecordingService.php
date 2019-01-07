@@ -3,12 +3,23 @@
 namespace Hybridars\BioSounds\Service;
 
 use Hybridars\BioSounds\Presenter\RecordingListPresenter;
+use Hybridars\BioSounds\Presenter\RecordingPresenter;
 use Hybridars\BioSounds\Provider\RecordingProvider;
 
 class RecordingService
 {
     const RECORDING_PATH = 'sounds/sounds/%s/%s/%s';
     const IMAGE_PATH = 'sounds/images/%s/%s/%s';
+
+    private $spectrogramService;
+
+    /**
+     * RecordingService constructor.
+     */
+    public function __construct()
+    {
+        $this->spectrogramService = new SpectrogramService();
+    }
 
     /**
      * @param int $colId
@@ -90,5 +101,61 @@ class RecordingService
             $result[] = $recordingListPresenter;
         }
         return $result;
+    }
+
+    /**
+     * @param string $imagePath
+     * @param string $wavFilePath
+     * @param int $maxFrequency
+     * @param int $channel
+     * @param int $minFrequency
+     * @throws \Exception
+     */
+    public function generateSpectrogramImage(
+        string $imagePath,
+        string $wavFilePath,
+        int $maxFrequency,
+        int $channel,
+        int $minFrequency
+    ){
+        if (!file_exists($imagePath)) {
+            try {
+                $this->spectrogramService->generatePlayerImage(
+                    $imagePath,
+                    $wavFilePath,
+                    $maxFrequency,
+                    $channel,
+                    $minFrequency
+                );
+            } catch(\Exception $exception) {
+                error_log($exception->getMessage());
+                throw new \Exception('There was a problem generating the recording spectrogram image.');
+            }
+        }
+    }
+
+    /**
+     * @param RecordingPresenter $recordingPresenter
+     * @param int $samplingRate
+     * @param int $channel
+     * @param string $fileName
+     */
+    public function setViewPort(
+        RecordingPresenter $recordingPresenter,
+        int $samplingRate,
+        int $channel,
+        string $fileName
+    ){
+        $recordingPresenter->setViewPortFilePath($this->spectrogramService->generateViewPort(
+            $samplingRate,
+            $recordingPresenter->getMinFrequency(),
+            $recordingPresenter->getMaxFrequency(),
+            $recordingPresenter->getMinTime(),
+            $recordingPresenter->getMaxTime(),
+            $fileName,
+            $channel,
+            $recordingPresenter->getDuration(),
+            'tmp/'.$_SESSION['random_id'] . '/'
+        ));
     }
 }

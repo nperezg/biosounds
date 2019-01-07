@@ -124,7 +124,7 @@ class RecordingProvider
 //        $query .= 'ImageFile ';
 //        $query .= 'FROM ' . Recording::TABLE_NAME . ' LEFT JOIN SoundsImages ';
 //        $query .= 'ON ' . Recording::TABLE_NAME . '.' . Recording::ID . ' = SoundsImages.recording_id ';
-//        $query .= 'WHERE ' . Recording::COL_ID . ' = :colId AND ImageType=\'spectrogram-player\' ';
+//        $query .= 'WHERE ' . Recording::COL_ID . ' = :colId AND ImageType=\'spectrogram-recording\' ';
 //        $query .= 'ORDER BY ' . Recording::NAME . ' LIMIT :sqlLimit OFFSET :sqlOffset';
 //
 //        Database::prepareQuery($query);
