@@ -64,7 +64,7 @@ class CollectionController extends BaseController
         $this->colId = $id;
 
         //TODO: Set open collections in administration (not hard-coded)
-        if ($id == 1 || $id == 3 || $id == 18) {
+        if ($id == 1 || $id == 3 || $id == 18 || $id == 31) {
             $this->openCollection = true;
         }
 
