@@ -75,7 +75,7 @@ class Tag
 
 		$values[':recordingId'] = $recordingId;
 		
-		if (!empty($userID)) {
+		if (!empty($userId)) {
 			$query .= ' AND ' . self::USER_ID . ' = :userId';
 			$values[':userId'] = $userId;
 		}
