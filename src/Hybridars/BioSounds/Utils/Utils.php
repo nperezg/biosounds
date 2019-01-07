@@ -2,6 +2,7 @@
 
 namespace Hybridars\BioSounds\Utils;
 
+use Hybridars\BioSounds\Exception\File\Mp3ProcessingException;
 use Hybridars\BioSounds\Exception\File\WavProcessingException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -95,17 +96,74 @@ class Utils
     public static function generateWavFile(string $filePath): ?string
     {
         $pathInfo = pathinfo($filePath);
-        $wavFilePath = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '.wav';
+        $resultFilePath = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '.wav';
+
+        if ($filePath === $resultFilePath) {
+            return $resultFilePath;
+        }
 
         try {
-            $process = new Process("sox $filePath $wavFilePath");
-            if (self::getFileFormat($filePath) === 'flac') {
-                $process = new Process("flac -dFf  $filePath -o $wavFilePath");
-            }
+            $process = new Process("sox $filePath $resultFilePath");
+//            if (self::getFileFormat($filePath) === 'flac') {
+//                $process = new Process("flac -dFf  $filePath -o $wavFilePath");
+//            }
             $process->mustRun();
-            return $wavFilePath;
+            return $resultFilePath;
         } catch (ProcessFailedException $exception) {
             throw new WavProcessingException($filePath, $exception->getMessage());
+        }
+    }
+
+    /**
+     * @param string $filePath
+     * @return null|string
+     * @throws WavProcessingException
+     */
+    public static function convertToOgg(string $filePath): ?string
+    {
+        $pathInfo = pathinfo($filePath);
+        $resultFilePath = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '.ogg';
+
+        if ($filePath === $resultFilePath) {
+            return $resultFilePath;
+        }
+
+        try {
+            //$process = new Process("oggenc $filePath -q 10 -o $resultFilePath");
+            $process = new Process("sox $filePath -C 10 $resultFilePath");
+//            if (self::getFileFormat($filePath) === 'flac') {
+//                //$process = new Process("flac -Ff --best $filePath -o $resultFilePath");
+//                $process = new Process("oggenc $filePath -q 10 -o $resultFilePath");
+//            }
+            $process->mustRun();
+            return $resultFilePath;
+        } catch (ProcessFailedException $exception) {
+            throw new WavProcessingException($filePath, $exception->getMessage());
+        }
+    }
+
+    /**
+     * @param string $filePath
+     * @return string
+     * @throws Mp3ProcessingException
+     */
+    public static function convertToMp3(string $filePath)
+    {
+        $pathInfo = pathinfo($filePath);
+        $resultFilePath = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '.mp3';
+
+        if ($filePath === $resultFilePath) {
+            return $resultFilePath;
+        }
+
+        try {
+            $process = new Process("lame --noreplaygain -f -b 128 $filePath $resultFilePath");
+//            if (self::getFileFormat($filePath) === 'flac') {
+//                //$process = new Process("flac -Ff --best $filePath -o $resultFilePath");
+            $process->mustRun();
+            return $resultFilePath;
+        } catch (ProcessFailedException $exception) {
+            throw new Mp3ProcessingException($filePath, $exception->getMessage());
         }
     }
 
@@ -140,61 +198,6 @@ class Utils
 				return null;
 			return $settings[$name];	
 		}
-	}
-
-    /**
-     * @param $originalFilePath
-     * @param $samplingrate
-     * @param $fileOutName
-     * @param $tempPath
-     * @return int
-     * @throws \Exception
-     */
-	public static function generateMp3File($originalFilePath, $samplingrate, $fileOutName, $tempPath)
-    {
-		//$samplingrate = 44100;
-		$sampledFilePath = $originalFilePath;
-		
-		/*if ($samplingrate != 44100) {
-			#Safe sampling rates for mp3 files
-			if ($samplingrate > 44100) {
-				$to_SamplingRate = 44100;
-				$nyquist_freq = $to_SamplingRate/2;
-				}
-			elseif ($samplingrate < 44100 && $samplingrate > 22050) {
-				$to_SamplingRate = 44100;
-				$nyquist_freq = $samplingrate/2;
-				}
-			elseif ($samplingrate < 22050 && $samplingrate > 11025) {
-				$to_SamplingRate = 22050;
-				$nyquist_freq = $samplingrate/2;
-				}
-			elseif ($samplingrate < 11025) {
-				$to_SamplingRate = 11025;
-				$nyquist_freq = $samplingrate/2;
-				}
-			else {
-				$to_SamplingRate = $samplingrate;
-				$nyquist_freq = $samplingrate/2;
-				}
-
-			$sampledFilePath = self::changeFileSamplingRate($originalFilePath, $to_SamplingRate, $tempPath);
-		}*/
-		return self::executeCommand('lame --noreplaygain -f -b 128 ' . $sampledFilePath . ' ' . $tempPath . $fileOutName);
-	}
-
-	static function changeFileSamplingRate($originalFilePath, $samplingRate, $tempPath)
-    {
-		//$fileName = "1" . substr($originalFilePath, strrpos($originalFilePath, "/"));
-        $pathInfo = pathinfo($originalFilePath);
-		$finalFilePath = $tempPath . $pathInfo['filename'] . '.wav';
-		
-		exec('sox '. $originalFilePath . ' -r ' . $samplingRate . ' ' . $finalFilePath, $lastline, $retval);
-		if ($retval != 0) {
-			throw new \Exception("Error changing the file sampling rate.");
-		}
-		
-		return $finalFilePath;			
 	}
 
 	public static function encodePasswordHash($password)
