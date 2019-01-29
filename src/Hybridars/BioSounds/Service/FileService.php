@@ -280,7 +280,7 @@ class FileService
         int $recordingId = null,
         string $errorMessage = null
     ) {
-        $file->setErrorMessage(empty($errorMessage) ? '' : filter_var($errorMessage, FILTER_SANITIZE_STRING));
+        $file->setError(empty($errorMessage) ? '' : filter_var($errorMessage, FILTER_SANITIZE_STRING));
         $file->setRecording($recordingId);
         $file->setStatus($status);
         $this->fileProvider->update($file);
