@@ -57,7 +57,7 @@ class File
     /**
      * @var string
      */
-    private $errorMessage;
+    private $error;
 
     /**
      * @var int
@@ -259,18 +259,18 @@ class File
     /**
      * @return null|string
      */
-    public function getErrorMessage(): ?string
+    public function getError(): ?string
     {
-        return $this->errorMessage;
+        return $this->error;
     }
 
     /**
-     * @param string $errorMessage
+     * @param string $error
      * @return File
      */
-    public function setErrorMessage(?string $errorMessage): File
+    public function setError(?string $error): File
     {
-        $this->errorMessage = $errorMessage;
+        $this->error = $error;
         return $this;
     }
 
@@ -403,7 +403,7 @@ class File
     public function getDatabaseValues(): array
     {
         return [
-            ':filePath' => $this->getPath(),
+            ':path' => $this->getPath(),
             ':filename' => $this->getName(),
             ':date' => $this->getDate(),
             ':time' => $this->getTime(),

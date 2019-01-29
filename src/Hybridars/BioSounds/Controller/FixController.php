@@ -2,12 +2,8 @@
 
 namespace Hybridars\BioSounds\Controller;
 
-use Hybridars\BioSounds\Entity\Recording;
 use Hybridars\BioSounds\Exception\File\FileNotFoundException;
-use Hybridars\BioSounds\Exception\File\FileQueueNotFoundException;
-use Hybridars\BioSounds\Provider\FileProvider;
 use Hybridars\BioSounds\Provider\RecordingProvider;
-use Hybridars\BioSounds\Service\FileService;
 use Hybridars\BioSounds\Service\SpectrogramService;
 use Hybridars\BioSounds\Utils\Auth;
 
