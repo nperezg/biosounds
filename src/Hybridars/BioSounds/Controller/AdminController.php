@@ -44,7 +44,7 @@ class AdminController extends BaseController
      */
 	public function settings()
     {
-		$settingsController = new SettingsController();			
+		$settingsController = new SettingController();
 		$this->view->section = $settingsController->create();
 		$this->view->sectionTitle = "Settings";
 	}

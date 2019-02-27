@@ -5,7 +5,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Hybridars\BioSounds\Controller\View;
 use Hybridars\BioSounds\Controller\FooterController;
 use Hybridars\BioSounds\Controller\TopController;
-use Hybridars\BioSounds\Entity\Settings;
+use Hybridars\BioSounds\Entity\Setting;
 use Hybridars\BioSounds\Utils\Utils;
 
 $main = new View;
@@ -109,7 +109,7 @@ function showError($message, $main)
 function showHome($main)
 {
     $content = new View;
-    $content->projectName = Utils::getSetting(Settings::PROJECT_NAME);
-    $content->projectDescription = Utils::getSetting(Settings::PROJECT_DESCRIPTION);
+    $content->projectName = Utils::getSetting(Setting::PROJECT_NAME);
+    $content->projectDescription = Utils::getSetting(Setting::PROJECT_DESCRIPTION);
     $main->content = $content->render("main.phtml");
 }

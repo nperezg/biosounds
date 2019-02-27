@@ -3,7 +3,7 @@
 namespace Hybridars\BioSounds\Security;
 
 use Hybridars\BioSounds\Database\Database;
-use Hybridars\BioSounds\Entity\Settings;
+use Hybridars\BioSounds\Entity\Setting;
 
 class Session
 {
@@ -44,13 +44,13 @@ class Session
         $httpOnly = true;
         // Forces sessions to only use cookies.
         if (!ini_set('session.use_only_cookies', 1)) {
-            error_log("Session: error when setting cookies.");
-            throw new \Exception("There was a problem with your session. Please contact the administrator.");
+            error_log('Session: error when setting cookies.');
+            throw new \Exception('There was a problem with your session. Please contact the administrator.');
         }
 
         // Gets current cookies params.
         $cookieParams = session_get_cookie_params();
-        session_set_cookie_params(1800, $cookieParams["path"], $cookieParams["domain"], $secure, $httpOnly);
+        session_set_cookie_params(1800, $cookieParams['path'], $cookieParams['domain'], $secure, $httpOnly);
 
         // Sets the session name to the one set above.
         session_name($session_name);
@@ -68,6 +68,9 @@ class Session
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function initGlobals()
     {
         define('APP_URL', $this->config['APP_URL']);
@@ -90,9 +93,8 @@ class Session
         define('ERROR_NO_ADMIN', $this->config['ERROR_NO_ADMIN']);
         define('ERROR_UPLOAD_RUNNING', $this->config['ERROR_UPLOAD_RUNNING']);
 
-        if (!isset($_SESSION["settings"])) {
-            $settings = new Settings();
-            $_SESSION["settings"] = $settings->getSettings();
+        if (!isset($_SESSION['settings'])) {
+            $_SESSION['settings'] = (new Setting())->getList();
         }
     }
 }

@@ -11,7 +11,8 @@ class PlayLogController
      * PlayLogController constructor.
      * @throws \Exception
      */
-    public function __construct() {
+    public function __construct()
+    {
 		if(!Auth::isUserLogged()){
 			throw new \Exception(ERROR_NOT_LOGGED);
 		}

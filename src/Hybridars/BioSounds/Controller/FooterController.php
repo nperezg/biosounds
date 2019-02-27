@@ -3,7 +3,7 @@
 namespace Hybridars\BioSounds\Controller;
 
 use Hybridars\BioSounds\Utils\Utils;
-use Hybridars\BioSounds\Entity\Settings;
+use Hybridars\BioSounds\Entity\Setting;
 
 class FooterController
 {
@@ -11,14 +11,19 @@ class FooterController
     protected $vars = array();
     protected $view;
 
-    public function __construct() {
+    /**
+     * FooterController constructor.
+     */
+    public function __construct()
+    {
 		$this->view = new View();		
-        $this->view->projectName = Utils::getSetting(Settings::PROJECT_NAME);
-        $this->view->filesLicense = Utils::getSetting(Settings::FILES_LICENSE);      
-        $this->view->filesLicenseDetail = Utils::getSetting(Settings::FILES_LICENSE_DETAIL);  
+        $this->view->projectName = Utils::getSetting(Setting::PROJECT_NAME);
+        $this->view->filesLicense = Utils::getSetting(Setting::FILES_LICENSE);
+        $this->view->filesLicenseDetail = Utils::getSetting(Setting::FILES_LICENSE_DETAIL);
     }
     
-    public function getContent(){
+    public function getContent()
+    {
 		#License
 		/*$files_license = query_one("SELECT Value from PumilioSettings WHERE Settings='files_license'", $connection);
 		$files_license_detail = query_one("SELECT Value from PumilioSettings WHERE Settings='files_license_detail'", $connection);
@@ -51,7 +56,8 @@ class FooterController
 
 	}
 	
-    public function create() {
+    public function create()
+    {
 		$this->getContent();
         return $this->view->render($this->template);
     }
