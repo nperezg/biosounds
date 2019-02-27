@@ -1,15 +1,15 @@
 <div id="hiddenForm" class="hidden-form" hidden>
 	<form action="<?php echo APP_URL ?>/user/save" method="POST" id="addUserForm">
 		<div class="form-group input-group-sm">			
-			<label for="userName">Username</label>
+			<label for="username">Username</label>
 			<input type="text" name="<?php echo $this->usernameLabel;?>" class="form-control" maxlength="20" required>
 		</div>	
 		<div class="form-group input-group-sm">
-			<label for="userFullName">Full Name</label>
+			<label for="name">Full Name</label>
 			<input type="text" name="<?php echo $this->userFullNameLabel;?>" class="form-control" maxlength="100" required>
 		</div>	
 		<div class="form-group input-group-sm">
-			<label for="userEmail">Email Address</label>
+			<label for="email">Email Address</label>
 			<input type="email" name="<?php echo $this->userEmailLabel;?>" class="form-control" maxlength="100" required>
 		</div>
 		<div class="form-group input-group-sm">		
@@ -21,7 +21,7 @@
 			<input type="password" name="<?php echo $this->userPwdLabel;?>" id="newpassword2" class="form-control" maxlength="20" required>
 		</div>
 		<div class="form-group input-group-sm">
-			<label for="userRole">User Role</label>
+			<label for="role_id">User Role</label>
 			<select name="<?php echo $this->userRoleLabel;?>" class="form-control" required>
 				<?php echo $this->rolesList;?>
 			</select>
