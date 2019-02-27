@@ -24,11 +24,11 @@ class Tag
 	const TYPE = 'type';
 
     /**
-     * @param int $id
+     * @param int $tagId
      * @return array
      * @throws \Exception
      */
-    public function get(int $id) : array
+    public function get(int $tagId) : array
     {
 		$query = 'SELECT ' . self::ID . ', ' . self::RECORDING_ID . ', ' . User::FULL_NAME . ', ';
         $query .= self::TABLE_NAME . '.' . self::USER_ID . ' as user_id, ' . self::MIN_TIME .  ', ' . self::MAX_TIME .  ', ';
@@ -41,15 +41,11 @@ class Tag
 		$query .= self::TABLE_NAME . '.' . self::SPECIES_ID . ' = ' . Species::TABLE_NAME .'.'. Species::ID . ' ';
 		$query .= 'LEFT JOIN user ON '. self::TABLE_NAME . '.' . self::USER_ID. ' = ';
 		$query .= User::TABLE_NAME . '.' . User::ID. ' ';
-		$query .= 'WHERE ' . self::TABLE_NAME . '.' . self::ID . ' = :id';
+		$query .= 'WHERE ' . self::TABLE_NAME . '.' . self::ID . ' = :tagId';
 
 		Database::prepareQuery($query);
-
-        $values[':id'] = $id;
-		$result = Database::executeSelect($values);
-
-		if(empty($result)) {
-            throw new \Exception("Tag $id doesn't exist.");
+		if (empty($result = Database::executeSelect([':tagId' => $tagId]))) {
+            throw new \Exception("Tag $tagId doesn't exist.");
         }
 					
 		return $result[0];
@@ -65,8 +61,8 @@ class Tag
     {
 		$query = 'SELECT ' . self::ID . ', ' . self::RECORDING_ID . ', ';
 		$query .= self::MIN_TIME. ', ' . self::MAX_TIME . ', ' . self::MIN_FREQ . ', ' . self::MAX_FREQ . ', ';
-		$query .= self::USER_ID . ', ' . Species::BINOMIAL . ', (SELECT COUNT(*) FROM Reviews ';
-		$query .= 'WHERE sound_tag = ' . self::TABLE_NAME . '.' .self::ID . ') as reviews, ';
+		$query .= self::USER_ID . ', ' . Species::BINOMIAL . ', (SELECT COUNT(*) FROM tag_review ';
+		$query .= 'WHERE tag_id = ' . self::TABLE_NAME . '.' .self::ID . ') as reviews, ';
 		$query .= '((' . self::MAX_TIME . '-'. self::MIN_TIME . ')+(' . self::MAX_FREQ . '-'. self::MIN_FREQ ;
 		$query .= ')) AS time, ' . self::CALL_DISTANCE . ', '. self::DISTANCE_NOT_ESTIMABLE . ' ';
 		$query .= 'FROM ' . self::TABLE_NAME . ' LEFT JOIN ' . Species::TABLE_NAME . ' ON ';
@@ -82,9 +78,7 @@ class Tag
 		$query .= ' ORDER BY time';
 		
 		Database::prepareQuery($query);
-		$result = Database::executeSelect($values);
-
-		return $result;
+		return Database::executeSelect($values);
 	}
 
     /**
@@ -157,17 +151,13 @@ class Tag
 	}
 
     /**
-     * @param $id
+     * @param int $tagId
      * @return array|int
      * @throws \Exception
      */
-	public function delete($id)
+	public function delete(int $tagId)
     {
-		Database::prepareQuery('DELETE FROM ' . self::TABLE_NAME . ' WHERE ' . self::ID . '=:id');
-
-		$values = [':id' => $id];
-		$result = Database::executeDelete($values);
-
-		return $result;
+		Database::prepareQuery('DELETE FROM ' . self::TABLE_NAME . ' WHERE ' . self::ID . '= :tagId');
+		return Database::executeDelete([':tagId' => $tagId]);
 	}
 }

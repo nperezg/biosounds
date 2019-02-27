@@ -79,11 +79,11 @@ class TagController
 	}
 
     /**
-     * @param $tagId
+     * @param int $tagId
      * @return mixed
      * @throws \Exception
      */
-	public function edit($tagId)
+	public function edit(int $tagId)
     {
 		if (!Auth::isUserLogged()) {
 			throw new \Exception(ERROR_NOT_LOGGED);
@@ -140,9 +140,10 @@ class TagController
 		$this->view->reference_call = ($tagData["reference_call"] ? "checked" : "");
 		
 		$this->setTypeSelect($tagData["type"]);
-		
-		if($hasReviewPerm)
-			$this->view->reviewPanel = $this->setReviewPanel($tagId);
+
+		if ($hasReviewPerm) {
+            $this->view->reviewPanel = (new TagReviewController())->show($tagId);
+        }
 		
 		return $this->create();
 	}
@@ -186,24 +187,13 @@ class TagController
 	}
 
     /**
-     * @param $tagId
+     * @param int $tagId
      * @return array|int
      * @throws \Exception
      */
-	public function delete($tagId)
+	public function delete(int $tagId)
     {
 		return (new Tag())->delete($tagId);
-	}
-
-    /**
-     * @param $tagId
-     * @return string
-     * @throws \Exception
-     */
-	private function setReviewPanel($tagId)
-    {
-		$tagReview = new TagReviewController();
-		return $tagReview->show($tagId);
 	}
 
     /**
