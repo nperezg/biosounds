@@ -4,51 +4,66 @@ namespace Hybridars\BioSounds\Entity;
 
 use Hybridars\BioSounds\Database\Database;
 
-class Permission {
-	
-	const TABLE_NAME = "Permissions";
-	const ID = "id";
-	const DESCRIPTION = "description";
-	const VIEW = "View";
-	const REVIEW = "Review";
+class Permission
+{
+	const VIEW = 'View';
+	const REVIEW = 'Review';
 
-	public function isReviewPermission($id){
-		Database::prepareQuery("SELECT " . self::DESCRIPTION . " FROM " . self::TABLE_NAME. " WHERE " . self::ID . " = :id");	
-		$fields = [":id" => $id];		    
-		$result = Database::executeSelect($fields);	
-		if(empty($result))
-			return false;
+    /**
+     * @param int $permissionId
+     * @return bool
+     * @throws \Exception
+     */
+	public function isReviewPermission(int $permissionId): bool
+    {
+		Database::prepareQuery('SELECT name FROM permission WHERE permission_id = :permissionId');
+		if (empty($result = Database::executeSelect([':permissionId' => $permissionId]))) {
+            return false;
+        }
 		
-		return $result[0][self::DESCRIPTION ] == self::REVIEW ? true : false;		
-	}	
-	
-	public function isViewPermission($id){
-		Database::prepareQuery("SELECT " . self::DESCRIPTION . " FROM " . self::TABLE_NAME. " WHERE " . self::ID . " = :id");	
-		$fields = [":id" => $id];		    
-		$result = Database::executeSelect($fields);	
-		if(empty($result))
-			return false;
-		
-		return $result[0][self::DESCRIPTION ] == self::VIEW ? true : false;		
+		return $result[0]['name'] == self::REVIEW ? true : false;
 	}
-	
-	public function getViewID(){
-		Database::prepareQuery("SELECT " . self::ID . " FROM " . self::TABLE_NAME. " WHERE " . self::DESCRIPTION . " =:name");	
-		$fields = [":name" => self::VIEW];	
-		$result = Database::executeSelect($fields);	
-		if(empty($result))
-			return NULL;
+
+    /**
+     * @param int $permissionId
+     * @return bool
+     * @throws \Exception
+     */
+	public function isViewPermission(int $permissionId): bool
+    {
+		Database::prepareQuery('SELECT name FROM permission WHERE permission_id = :permissionId');
+		if (empty($result = Database::executeSelect([':permissionId' => $permissionId]))) {
+            return false;
+        }
 		
-		return $result[0][self::ID];		
-	}	
-	
-	public function getReviewID(){
-		Database::prepareQuery("SELECT " . self::ID . " FROM " . self::TABLE_NAME. " WHERE " . self::DESCRIPTION . " =:name");
-		$fields = [":name" => self::REVIEW];	
-		$result = Database::executeSelect($fields);	
-		if(empty($result))
-			return NULL;
+		return $result[0]['name'] == self::VIEW ? true : false;
+	}
+
+    /**
+     * @return int|null
+     * @throws \Exception
+     */
+	public function getViewId(): ?int
+    {
+		Database::prepareQuery('SELECT permission_id FROM permission WHERE name = :name');
+		if (empty($result = Database::executeSelect([':name' => self::VIEW]))) {
+            return null;
+        }
 		
-		return $result[0][self::ID];		
+		return $result[0]['permission_id'];
+	}
+
+    /**
+     * @return int|null
+     * @throws \Exception
+     */
+	public function getReviewId(): ?int
+    {
+		Database::prepareQuery('SELECT permission_id FROM permission WHERE name = :name');
+		if (empty($result = Database::executeSelect([':name' => self::REVIEW]))) {
+		    return null;
+        }
+
+		return $result[0]['permission_id'];
 	}	
 }

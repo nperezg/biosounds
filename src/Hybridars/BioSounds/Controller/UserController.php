@@ -17,15 +17,25 @@ class UserController
     protected $view;
     protected $user;
 
-    public function __construct() {
+    /**
+     * UserController constructor.
+     * @throws \Exception
+     */
+    public function __construct()
+    {
 		if (!Auth::isUserAdmin()){
 			throw new \Exception(ERROR_NO_ADMIN); 
 		}
 		$this->view = new View(); 
 		$this->user = new User();
     }
-    
-    public function create() {
+
+    /**
+     * @return false|string
+     * @throws \Exception
+     */
+    public function create()
+    {
 		if (!Auth::isUserAdmin()){
 			throw new \Exception(ERROR_NO_ADMIN); 
 		}
@@ -33,33 +43,38 @@ class UserController
         return $this->view->render($this->listTpl);
     }
 
-    public function save(){
+    /**
+     * @return bool
+     * @throws \Exception
+     */
+    public function save()
+    {
 		if (!Auth::isUserAdmin()){
 			throw new \Exception(ERROR_NO_ADMIN); 
 		}
 		
-		if(isset($_POST["admin_pwd"])){
+		if (isset($_POST["admin_pwd"])) {
 			$adminPwd = filter_var($_POST["admin_pwd"], FILTER_SANITIZE_STRING); 
-			$bdAdminPwd = $this->user->getPasswordByUserID(Auth::getUserLoggedID());
+			$bdAdminPwd = $this->user->getPasswordByUserId(Auth::getUserLoggedID());
 			if(Utils::checkPasswords($adminPwd, $bdAdminPwd))
 				unset($_POST["admin_pwd"]);
 			else
 				throw new \Exception("The administrator password is not correct."); 	
 		}
 		
-		$data = array();
+		$data = [];
 
-		foreach($_POST as $key => $value){
-			if(strpos($key, "_")){
+		foreach ($_POST as $key => $value) {
+			if (strpos($key, "_")) {
 				$type = substr($key, strpos($key, "_") + 1, strlen($key));
 				$key = substr($key, 0, strpos($key, "_"));
-				
-				switch($type){
+
+				switch ($type) {
 					case "email":
 						$data[$key] =  filter_var($value, FILTER_SANITIZE_EMAIL); 
 						break;
 					case "checkbox":
-						$data[$key] =  filter_var($value, FILTER_VALIDATE_BOOLEAN); 
+						$data[$key] =  filter_var($value, FILTER_SANITIZE_NUMBER_INT);
 						break;
 					case "select-one":
 						$data[$key] =  filter_var($value, FILTER_SANITIZE_NUMBER_INT); 
@@ -72,28 +87,40 @@ class UserController
                         $data[$key] = filter_var($value, FILTER_SANITIZE_STRING);
                         break;
                 }
-			} else
-				$data[$key] =  filter_var($value, FILTER_SANITIZE_STRING); 
+			} else {
+                $data[$key] =  filter_var($value, FILTER_SANITIZE_STRING);
+            }
 		}
-		if(isset($data["itemID"]))
-			return $this->user->updateUser($data);
-		else {
-			if($this->user->insertUser($data) > 0)
-				header("Location: " . APP_URL . "/admin/users");
-				die();
+
+		if (isset($data['itemID'])) {
+            return $this->user->updateUser($data);
+        }
+		else if($this->user->insertUser($data) > 0) {
+            header("Location: " . APP_URL . "/admin/users");
+            die();
 		}
 	}
-	
-	public function show($userID){
-		if (!Auth::isUserAdmin()){
+
+    /**
+     * @param int $userId
+     * @return false|string
+     * @throws \Exception
+     */
+	public function show(int $userId)
+    {
+		if (!Auth::isUserAdmin()) {
 			throw new \Exception(ERROR_NO_ADMIN); 
 		}
 		$this->view->userPasswordLabel = User::PASSWORD;
-		$this->view->userID = $userID;
+		$this->view->userID = $userId;
 		return $this->view->render($this->pwdTpl);
 	}
-    
-    private function getContent(){
+
+    /**
+     * @throws \Exception
+     */
+    private function getContent(): void
+    {
 		if (Auth::isUserAdmin()){
 			$this->getUsersList();
 			$this->view->usernameLabel = User::NAME . "_text";
@@ -103,8 +130,12 @@ class UserController
 			$this->view->userPwdLabel = User::PASSWORD . "_password";
 		}
 	}
-	
-	private function getUsersList(){	
+
+    /**
+     * @throws \Exception
+     */
+	private function getUsersList()
+    {
 		$currentUserID = Auth::getUserLoggedID();
 		$listUsers = $this->user->getAllUsers();
 		$this->view->numUsers = count($listUsers);
@@ -157,7 +188,7 @@ class UserController
 			
 			$this->view->listUsers .= "<td><a href='" . APP_URL . "/ajaxcallmanager.php?class=UserPermission&action=manage&id=$userID' class='open-modal' title='Collection Privileges' $privHidden><span class='glyphicon glyphicon-tasks'></span></a></td>";
 
-            $this->view->listUsers .= '<td><input type="color" name="TagColor" alt= "User tags color" value=' . $userTagColor . '></td>';;
+            $this->view->listUsers .= '<td><input type="color" name="color" alt= "User tags color" value=' . $userTagColor . '></td>';;
 						
 			$this->view->listUsers .= "</tr>";
 		}

@@ -39,18 +39,18 @@ $(function() {
     };
 });
 
-function showMessage(message, warning){
+function showMessage(message, warning) {
 	$("#message").html(message);
 	$("#messageBox").show();	
 }
 
-function toggleLoading(message){
+function toggleLoading(message) {
 	$(".loading").toggle();
 	if(message !== undefined)
 		$("#loading-text").html(message);
 }
 
-function openModal(href){
+function openModal(href) {
 	$.ajax({
 	   type: "POST",
 	   url: href,
@@ -87,7 +87,8 @@ function deleteCookie(name) {
 /*
  * Function for saving the fields of a list with formulars.
  */
-function saveFormList(element, object, base_url){
+function saveFormList(element, object, base_url)
+{
 	var row = element.closest("tr"); 
 	var columns = row.find("input, select");
 	var values = {};
@@ -96,9 +97,9 @@ function saveFormList(element, object, base_url){
 	columns.each(function(i, item) {
 		var value = item.value;
 		if(item.type === "checkbox" && item.checked)
-			value = true;
+			value = 1;
 		else if(item.type === "checkbox" && !item.checked)
-			value = false;
+			value = 0;
 		
 		values[item.name+"_"+item.type] = value;
 	});

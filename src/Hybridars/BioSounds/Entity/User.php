@@ -6,118 +6,179 @@ use Hybridars\BioSounds\Database\Database;
 
 class User
 {
-	const TABLE_NAME = "Users";
-	const ID = "UserID";
-	const NAME = "UserName";
-	const FULL_NAME = "UserFullname";
-	const EMAIL = "UserEmail";
-	const ROLE = "Role";
-	const ACTIVE = "UserActive";
-	const PASSWORD = "Password";
-	const TAG_COLOR = "TagColor";
+	const TABLE_NAME = "user";
+	const ID = "user_id";
+	const NAME = "username";
+	const FULL_NAME = "name";
+	const EMAIL = "email";
+	const ROLE = "role";
+	const ACTIVE = "active";
+	const PASSWORD = "password";
+	const TAG_COLOR = "color";
 
-	public function getPassword($username){
-		if(empty($username))
-			return null;
+    /**
+     * @param string $username
+     * @return string|null
+     * @throws \Exception
+     */
+	public function getPassword(string $username): ?string
+    {
+		if (empty($username)) {
+            return null;
+        }
 			
-		Database::prepareQuery("SELECT Password FROM Users WHERE UserName = :username");	
-		$fields = [":username" => $username];
-		$result = Database::executeSelect($fields);	
-		if(empty($result))
-			return NULL;
-		
-		return $result[0]["Password"];	
+		Database::prepareQuery('SELECT password FROM user WHERE username = :username');
+		if (empty($result = Database::executeSelect([":username" => $username]))) {
+		    return null;
+        }
+
+		return $result[0]["password"];
 	}
-	
-	public function getPasswordByUserID($userID){
-		if(empty($userID))
-			return null;
-			
-		Database::prepareQuery("SELECT Password FROM Users WHERE " . self::ID. " =:userID");	
-		$fields = [":userID" => $userID];
-		$result = Database::executeSelect($fields);	
-		if(empty($result))
-			return NULL;
-		
+
+    /**
+     * @param int $userId
+     * @return string|null
+     * @throws \Exception
+     */
+	public function getPasswordByUserId(int $userId): ?string
+    {
+		if (empty($userId)) {
+		    return null;
+        }
+
+		Database::prepareQuery('SELECT password FROM user WHERE user_id = :userId');
+		if (empty($result = Database::executeSelect([':userId' => $userId]))) {
+		    return null;
+        }
+
 		return $result[0][self::PASSWORD];	
 	}
 
-	public function getUserID($username){
-		Database::prepareQuery("SELECT UserID FROM Users WHERE UserName = :username");
-		$fields = [":username" => $username];
-		$result = Database::executeSelect($fields);
-		if(empty($result))
-			return NULL;
-			
-		return $result[0]["UserID"];
+    /**
+     * @param string $username
+     * @return int|null
+     * @throws \Exception
+     */
+	public function getUserId(string $username): ?int
+    {
+		Database::prepareQuery('SELECT user_id FROM user WHERE username = :username');
+		if (empty($result = Database::executeSelect([":username" => $username]))) {
+		    return null;
+        }
+
+		return $result[0]['user_id'];
 	}
-	
-	public function getUserName($userID){
-		Database::prepareQuery("SELECT " . self::NAME . " FROM Users WHERE " . self::ID . " = :userID");
-		$fields = [":userID" => $userID];
-		$result = Database::executeSelect($fields);
-		if(empty($result))
-			return NULL;
-			
+
+    /**
+     * @param int $userId
+     * @return string|null
+     * @throws \Exception
+     */
+	public function getUserName(int $userId): ?string
+    {
+		Database::prepareQuery('SELECT username FROM user WHERE user_id = :userId');
+		if (empty($result = Database::executeSelect([":userId" => $userId]))) {
+		    return null;
+        }
+
 		return $result[0][self::NAME];
 	}
-	
-	public function getTagColor($userID){
-		Database::prepareQuery("SELECT ". self::TAG_COLOR . " FROM Users WHERE " . self::ID. " =:userID");	
-		$fields = [":userID" => $userID];
-		$result = Database::executeSelect($fields);	
-		if(empty($result))
-			return NULL;
-		
+
+    /**
+     * @param int $userId
+     * @return string|null
+     * @throws \Exception
+     */
+	public function getTagColor(int $userId): ?string
+    {
+		Database::prepareQuery('SELECT color FROM user WHERE user_id = :userId');
+		if (empty($result = Database::executeSelect([":userId" => $userId]))) {
+		    return null;
+        }
+
 		return $result[0][self::TAG_COLOR];	
 	}
-	
-	public function isUserActive($userID){
-		Database::prepareQuery("SELECT UserActive from Users WHERE UserID = :userid");	
-		$fields = [":userid" => $userID];		    
-		$result = Database::executeSelect($fields);	
-		if(empty($result))
-			return false;
-		
-		return $result[0]["UserActive"] == 1 ? true : false;		
-	}	
-	
-	public function isUserAdmin($userID){
-		Database::prepareQuery("SELECT STRCMP(Roles.Name, :roleName) AS Result FROM Users LEFT JOIN Roles ON Users.Role = Roles.ID WHERE UserID = :userid");	
-		$fields = [":userid" => $userID, ":roleName" => Role::ADMIN_ROLE];		    
-		$result = Database::executeSelect($fields);	
-		if(empty($result))
-			throw new \Exception("User $userID doesn't exist.");
-		
-		return ($result[0]["Result"] == 0 ? true : false);	
+
+    /**
+     * @param int $userId
+     * @return bool
+     * @throws \Exception
+     */
+	public function isUserActive(int $userId): bool
+    {
+		Database::prepareQuery('SELECT active from user WHERE user_id = :userId');
+		if (empty($result = Database::executeSelect([":userId" => $userId]))) {
+		    return false;
+        }
+
+		return $result[0]["active"] == 1 ? true : false;
 	}
-	
-	public function getActiveUsers(){
-		Database::prepareQuery("SELECT * from Users WHERE UserActive='1' ORDER BY UserActive, UserName");	
-		$result = Database::executeSelect();	
-		return $result;		
+
+    /**
+     * @param int $userId
+     * @return bool
+     * @throws \Exception
+     */
+	public function isUserAdmin(int $userId): bool
+    {
+		Database::prepareQuery(
+		    'SELECT STRCMP(Roles.Name, :roleName) AS result FROM user ' .
+            'LEFT JOIN Roles ON user.Role = Roles.ID WHERE user_id = :userId'
+        );
+
+		if (empty($result = Database::executeSelect([":userId" => $userId, ":roleName" => Role::ADMIN_ROLE]))) {
+            throw new \Exception("User $userId doesn't exist.");
+        }
+		
+		return ($result[0]["result"] == 0 ? true : false);
 	}
-	
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+	public function getActiveUsers(): array
+    {
+		Database::prepareQuery('SELECT * FROM user WHERE active = \'1\' ORDER BY active, username');
+		return Database::executeSelect();
+	}
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
     public function getAllUsers() : array
     {
-		Database::prepareQuery("SELECT * from Users ORDER BY UserActive DESC, UserName");	
-		$result = Database::executeSelect();	
-		return $result;		
+		Database::prepareQuery('SELECT * FROM user ORDER BY active DESC, username');
+		return Database::executeSelect();
 	}
-	
-	public function countOtherAdminUsers($userID){
-		Database::prepareQuery("SELECT COUNT(*) AS AdminCount FROM Users WHERE Role = :adminRoleID AND UserID <> :userid");	
-		$result = Database::executeSelect([":userid" => $userID, ":adminRoleID" => Role::ADMIN_ID]);	
-		if(empty($result))
-			return 0;
-		
-		return $result[0]["AdminCount"];
+
+    /**
+     * @param int $userId
+     * @return int
+     * @throws \Exception
+     */
+	public function countOtherAdminUsers(int $userId): int
+    {
+		Database::prepareQuery('SELECT COUNT(*) AS result FROM user WHERE role = :adminRoleId AND user_id <> :userId');
+		if (empty($result = Database::executeSelect([":userId" => $userId, ":adminRoleId" => Role::ADMIN_ID]))) {
+		    return 0;
+        }
+
+		return $result[0]["result"];
 	}
-	
-	public function insertUser($userData){
-		if(empty($userData))
-			return false;
-			
+
+    /**
+     * @param array $userData
+     * @return bool
+     * @throws \Exception
+     */
+	public function insertUser(array $userData): bool
+    {
+		if (empty($userData)) {
+		    return false;
+        }
+
 		$fields = "( ";
 		$valuesNames = "( ";
 		$values = array();
@@ -134,29 +195,36 @@ class User
 		$fields .= " )";
 		$valuesNames .= " )";
 
-		Database::prepareQuery("INSERT INTO " . self::TABLE_NAME . " $fields VALUES $valuesNames");
-		$result = Database::executeInsert($values);	
-		return $result;
+		Database::prepareQuery("INSERT INTO user $fields VALUES $valuesNames");
+		return Database::executeInsert($values);
 	}
-	
-	public function updateUser($userData){
-		if(empty($userData))
-			return false;
+
+    /**
+     * @param array $userData
+     * @return bool
+     * @throws \Exception
+     */
+	public function updateUser(array $userData): bool
+    {
+		if (empty($userData)) {
+            return false;
+        }
 			
-		$userID = $userData["itemID"];	
+		$userId = $userData["itemID"];
 		unset($userData["itemID"]);
-		$fields = "";
-		$values = array();
+		$fields = '';
+		$values = [];
 		
-		foreach($userData as $key => $value){
-			$fields .= $key . " = :".$key;
-			$values[":".$key] = $value;
-			if(end($userData) !== $value)
-				$fields .= ", ";
+		foreach ($userData as $key => $value) {
+			$fields .= $key . ' = :' . $key;
+			$values[':'.$key] = $value;
+			if (end($userData) !== $value) {
+                $fields .= ', ';
+            }
+
 		}
-		$values[":userID"] = $userID;
-		Database::prepareQuery("UPDATE Users SET " . $fields . " WHERE " . self::ID. "= :userID");
-		$result = Database::executeUpdate($values);	
-		return $result;
+		$values[':userId'] = $userId;
+		Database::prepareQuery("UPDATE user SET $fields WHERE user_id = :userId");
+		return Database::executeUpdate($values);
 	}
 }

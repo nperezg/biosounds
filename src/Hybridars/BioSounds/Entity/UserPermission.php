@@ -6,90 +6,134 @@ use Hybridars\BioSounds\Database\Database;
 
 class UserPermission
 {
-	const TABLE_NAME = "UserPermissions";
-	const USER = "user";
-	const COLLECTION = "collection";
-	const PERMISSION = "permission";
+	const TABLE_NAME = "user_permission";
+	const USER = "user_id";
+	const COLLECTION = "collection_id";
+	const PERMISSION = "permission_id";
 
-	public function getUserColPermission($userID, $colID){
-		Database::prepareQuery("SELECT " . self::PERMISSION . " FROM " . self::TABLE_NAME . " WHERE " . self::USER. "=:userID AND " . self::COLLECTION. "=:colID" );	
-		$fields = [":userID" => $userID, ":colID" => $colID];	
-		$result = Database::executeSelect($fields);	
-		if(empty($result))
-			return null;
+    /**
+     * @param int $userId
+     * @param int $colId
+     * @return int|null
+     * @throws \Exception
+     */
+	public function getUserColPermission(int $userId, int $colId): ?int
+    {
+		Database::prepareQuery(
+		    'SELECT permission_id FROM user_permission WHERE user_id = :userId AND collection_id = :colId'
+        );
+
+		if (empty($result = Database::executeSelect([":userId" => $userId, ":colId" => $colId]))) {
+            return null;
+        }
 		return $result[0][self::PERMISSION];		
 	}
-	
-	public function getColPermissionsByUser($userID){
-		Database::prepareQuery("SELECT * FROM " . Collection::TABLE_NAME . " LEFT JOIN " . self::TABLE_NAME . " ON " . 
-		self::COLLECTION. " = " . Collection::PRIMARY_KEY . " AND " . self::USER. " =:userID ORDER BY " . Collection::PRIMARY_KEY);	
-		$fields = [":userID" => $userID];	
-		$result = Database::executeSelect($fields);	
-		return $result;		
+
+    /**
+     * @param int $userId
+     * @return array
+     * @throws \Exception
+     */
+	public function getColPermissionsByUser(int $userId): array
+    {
+		Database::prepareQuery(
+		    'SELECT collection.collection_id, collection.name, collection.author, user_permission.permission_id ' .
+            'FROM collection LEFT JOIN user_permission ON user_permission.collection_id = ' .
+            Collection::TABLE_NAME. '.' . Collection::PRIMARY_KEY . ' AND user_id = :userId ORDER BY ' .
+            Collection::TABLE_NAME. '.' . Collection::PRIMARY_KEY
+        );
+		return Database::executeSelect([':userId' => $userId]);
 	}
-	
-	public function hasUserColPermissions($userID, $colID){
-		Database::prepareQuery("SELECT * FROM " . Collection::TABLE_NAME . " WHERE " . self::USER. " =:userID AND " . self::COLLECTION . " =:colID");	
-		$fields = [":userID" => $userID, ":colID" => $colID];	
-		$result = Database::executeSelect($fields);	
-		if(empty($result))
-			return false;
+
+    /**
+     * @param int $userId
+     * @param int $colId
+     * @return bool
+     * @throws \Exception
+     */
+	public function hasUserColPermissions(int $userId, int $colId): bool
+    {
+		Database::prepareQuery(
+		    'SELECT * FROM ' . Collection::TABLE_NAME . ' WHERE user_id = :userId AND collection_id = :colId'
+        );
+
+		if (empty(Database::executeSelect([':userId' => $userId, ':colId' => $colId]))) {
+            return false;
+        }
 		return true;		
 	}
-	
-	public function insertUserPermission($permData){
-		if(empty($permData))
-			return false;
-			
-		$fields = "( ";
-		$valuesNames = "( ";
-		$values = array();
+
+    /**
+     * @param array $permissionData
+     * @return int|null
+     * @throws \Exception
+     */
+	public function insertUserPermission(array $permissionData): ?int
+    {
+		if (empty($permissionData)) {
+		    return false;
+        }
+
+		$fields = '( ';
+		$valuesNames = '( ';
+		$values = [];
 		
-		foreach($permData as $key => $value){
+		foreach ($permissionData as $key => $value) {
 			$fields .= $key;
-			$valuesNames .= ":".$key;
-			$values[":".$key] = $value;
-			if(end($permData) !== $value){
-				$fields .= ", ";
-				$valuesNames .= ", ";
+			$valuesNames .= ':' . $key;
+			$values[':'.$key] = $value;
+			if (end($permissionData) !== $value) {
+				$fields .= ', ';
+				$valuesNames .= ', ';
 			}
 		}
-		$fields .= " )";
-		$valuesNames .= " )";
-		Database::prepareQuery("INSERT INTO " . self::TABLE_NAME . " $fields VALUES $valuesNames");
-		$result = Database::executeInsert($values);	
-		return $result;
+		$fields .= ' )';
+		$valuesNames .= ' )';
+		Database::prepareQuery("INSERT INTO user_permission $fields VALUES $valuesNames");
+		return Database::executeInsert($values);
 	}
-	
-	public function updateUserPermission($permData){
-		if(empty($permData))
-			return false;
+
+    /**
+     * @param array $permissionData
+     * @return int|null
+     * @throws \Exception
+     */
+	public function updateUserPermission(array $permissionData): ?int
+    {
+		if (empty($permissionData)) {
+            return false;
+        }
 			
-		$userID = $permData[self::USER];	
-		unset($permData[self::USER]);
-		$colID = $permData[self::COLLECTION];	
-		unset($permData[self::COLLECTION]);
+		$userId = $permissionData[self::USER];
+		unset($permissionData[self::USER]);
+		$colId = $permissionData[self::COLLECTION];
+		unset($permissionData[self::COLLECTION]);
 		
-		$fields = "";
-		$values = array();
+		$fields = '';
+		$values = [];
 		
-		foreach($permData as $key => $value){
+		foreach ($permissionData as $key => $value) {
 			$fields .= $key . " = :".$key;
 			$values[":".$key] = $value;
-			if(end($permData) !== $value)
-				$fields .= ", ";
+			if (end($permissionData) !== $value) {
+                $fields .= ", ";
+            }
 		}
-		$values[":userID"] = $userID;
-		$values[":colID"] = $colID;
-		Database::prepareQuery("UPDATE " . self::TABLE_NAME . " SET $fields WHERE " . self::USER. "=:userID AND " . self::COLLECTION . "= :colID");
-		$result = Database::executeUpdate($values);	
-		return $result;
+		$values[':userId'] = $userId;
+		$values[':colId'] = $colId;
+		Database::prepareQuery("UPDATE user_permission SET $fields WHERE user_id = :userId AND collection_id = :colId");
+		return Database::executeUpdate($values);
 	}
-	
-	public function deleteUserPermission($userID, $colID){
-		Database::prepareQuery("DELETE FROM " . self::TABLE_NAME . " WHERE " . self::USER . "=:userID AND " . self::COLLECTION . "=:colID");
-		$values = [":userID" => $userID, ":colID" => $colID];	
-		$result = Database::executeDelete($values);	
-		return $result;
+
+    /**
+     * @param int $userId
+     * @param int $colId
+     * @return int|null
+     * @throws \Exception
+     */
+	public function deleteUserPermission(int $userId, int $colId): ?int
+    {
+		Database::prepareQuery('DELETE FROM user_permission WHERE user_id = :userId AND collection_id =:colId');
+		return Database::executeDelete([':userId' => $userId, ':colId' => $colId]);
 	}
 }
