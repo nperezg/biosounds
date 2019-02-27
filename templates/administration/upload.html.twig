@@ -35,7 +35,7 @@
                         <label for="site">Site </label>
                         <select id="site" name="site" class="form-control">
                             {% for site in sites %}
-                                <option value="{{ site.SiteID }}">{{ site.SiteName }}</option>
+                                <option value="{{ site.site_id }}">{{ site.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
