@@ -11,7 +11,7 @@ class User
 	const NAME = "username";
 	const FULL_NAME = "name";
 	const EMAIL = "email";
-	const ROLE = "role";
+	const ROLE = "role_id";
 	const ACTIVE = "active";
 	const PASSWORD = "password";
 	const TAG_COLOR = "color";
@@ -122,8 +122,8 @@ class User
 	public function isUserAdmin(int $userId): bool
     {
 		Database::prepareQuery(
-		    'SELECT STRCMP(Roles.Name, :roleName) AS result FROM user ' .
-            'LEFT JOIN Roles ON user.Role = Roles.ID WHERE user_id = :userId'
+		    'SELECT STRCMP(role.name, :roleName) AS result FROM user ' .
+            'LEFT JOIN role ON user.role_id = role.role_id WHERE user_id = :userId'
         );
 
 		if (empty($result = Database::executeSelect([":userId" => $userId, ":roleName" => Role::ADMIN_ROLE]))) {
@@ -160,7 +160,7 @@ class User
      */
 	public function countOtherAdminUsers(int $userId): int
     {
-		Database::prepareQuery('SELECT COUNT(*) AS result FROM user WHERE role = :adminRoleId AND user_id <> :userId');
+		Database::prepareQuery('SELECT COUNT(*) AS result FROM user WHERE role_id = :adminRoleId AND user_id <> :userId');
 		if (empty($result = Database::executeSelect([":userId" => $userId, ":adminRoleId" => Role::ADMIN_ID]))) {
 		    return 0;
         }
