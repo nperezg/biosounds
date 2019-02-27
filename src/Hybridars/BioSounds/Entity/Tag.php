@@ -39,7 +39,7 @@ class Tag
         $query .= 'FROM ' . self::TABLE_NAME . ' ';
 		$query .= 'LEFT JOIN ' . Species::TABLE_NAME . ' ON ';
 		$query .= self::TABLE_NAME . '.' . self::SPECIES_ID . ' = ' . Species::TABLE_NAME .'.'. Species::ID . ' ';
-		$query .= 'LEFT JOIN Users ON '. self::TABLE_NAME . '.' . self::USER_ID. ' = ';
+		$query .= 'LEFT JOIN user ON '. self::TABLE_NAME . '.' . self::USER_ID. ' = ';
 		$query .= User::TABLE_NAME . '.' . User::ID. ' ';
 		$query .= 'WHERE ' . self::TABLE_NAME . '.' . self::ID . ' = :id';
 

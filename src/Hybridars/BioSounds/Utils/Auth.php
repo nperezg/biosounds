@@ -22,7 +22,7 @@ class Auth
 		
 		if (Utils::checkPasswords($password, $encPwd)) {
 			$user_browser = $_SERVER['HTTP_USER_AGENT'];
-			$user_id = $user->getUserID($username);
+			$user_id = $user->getUserId($username);
 			$user_id = preg_replace("/[^0-9]+/", "", $user_id); // XSS protection 
 			$_SESSION['user_id'] = $user_id;
 

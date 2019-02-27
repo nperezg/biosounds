@@ -105,13 +105,14 @@ class TagController
 		$this->view->displayDeleteBtn = "";
 		$this->view->submitFormFunction = "submitTagForm()";
 			
-		if(Auth::isUserAdmin() || $tagData[Tag::USER_ID] != Auth::getUserLoggedID()){
+		if (Auth::isUserAdmin() || $tagData[Tag::USER_ID] != Auth::getUserLoggedID()) {
 			$userColPerm = $_SESSION["user_col_permission"];		
 			$permission = new Permission();	
 			$hasReviewPerm = Auth::isUserAdmin() ? true : $permission->isReviewPermission($userColPerm);	
 			$hasViewPerm = Auth::isUserAdmin() ? true : $permission->isViewPermission($userColPerm);
-			if(!$hasReviewPerm && !$hasViewPerm)
-				throw new \Exception(ERROR_NOT_ALLOWED);
+			if (!$hasReviewPerm && !$hasViewPerm) {
+                throw new \Exception(ERROR_NOT_ALLOWED);
+            }
 				
 			$this->view->disableForm = !Auth::isUserAdmin() ? "true" : "";
 			$this->view->displaySaveBtn = "hidden";	
