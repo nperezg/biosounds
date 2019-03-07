@@ -265,7 +265,7 @@
             url: "<?php echo APP_URL; ?>/ajaxcallmanager.php?class=tag&action=delete&id="+tagID,
             success: function(data){
                 $("#"+tagID ).remove();
-                showMessage("Tag succesfully removed!");
+                showMessage("The tag has been removed");
             },
             error: function(response){
                 showMessage(response.responseJSON.message, true);

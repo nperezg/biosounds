@@ -102,7 +102,7 @@ class TagController
 
 		// USERS CONTROL
 		$hasReviewPerm = false;
-		$this->view->displayDeleteBtn = "";
+		$this->view->displayDeleteBtn = '';
 		$this->view->submitFormFunction = "submitTagForm()";
 			
 		if (Auth::isUserAdmin() || $tagData[Tag::USER_ID] != Auth::getUserLoggedID()) {
@@ -115,12 +115,16 @@ class TagController
             }
 				
 			$this->view->disableForm = !Auth::isUserAdmin() ? "true" : "";
-			$this->view->displaySaveBtn = "hidden";	
+			$this->view->displaySaveBtn = 'hidden';
 			if (Auth::isUserAdmin() || $hasReviewPerm) {
 				$this->view->submitFormFunction = Auth::isUserAdmin() ? "submitAllForms()" : "submitReviewForm()";
 				$this->view->displaySaveBtn = "";
 			}
 		}
+
+		if (!Auth::isUserAdmin() && $tagData[Tag::USER_ID] != Auth::getUserLoggedID()) {
+            $this->view->displayDeleteBtn = 'hidden';
+        }
 		//
 					
 		$this->view->tagId = $tagData[Tag::ID];
@@ -193,6 +197,10 @@ class TagController
      */
 	public function delete(int $tagId)
     {
+        $tagProvider = new Tag();
+        if (!Auth::isUserAdmin() && $tagProvider->get($tagId)['user_id'] != Auth::getUserLoggedID()) {
+            throw new \Exception('The user doesn\'t have permissions to delete this tag.');
+        }
 		return (new Tag())->delete($tagId);
 	}
 
