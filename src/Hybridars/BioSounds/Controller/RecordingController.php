@@ -14,7 +14,7 @@ use Hybridars\BioSounds\Presenter\RecordingPresenter;
 use Hybridars\BioSounds\Presenter\TagPresenter;
 use Hybridars\BioSounds\Provider\RecordingProvider;
 use Hybridars\BioSounds\Service\RecordingService;
-use Hybridars\BioSounds\Service\SpectrogramService;
+use Hybridars\BioSounds\Service\ImageService;
 use Hybridars\BioSounds\Utils\Auth;
 use Hybridars\BioSounds\Utils\Utils;
 
@@ -52,7 +52,7 @@ class RecordingController extends BaseController
 //			throw new \Exception(ERROR_NOT_LOGGED);
 //		}
 		$this->view = new View();
-		$this->spectrogramService = new SpectrogramService();
+		$this->spectrogramService = new ImageService();
 		$this->recordingPresenter = new RecordingPresenter();
 		$this->recordingService = new RecordingService();
 		$this->recordingPresenter->setSpectrogramHeight(SPECTROGRAM_HEIGHT);
