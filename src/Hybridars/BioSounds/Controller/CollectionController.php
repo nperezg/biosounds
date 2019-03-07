@@ -14,6 +14,7 @@ class CollectionController extends BaseController
 {
     const GALLERY_TEMPLATE = 'collection/views/gallery.html.twig';
     const LIST_TEMPLATE = 'collection/views/list.html.twig';
+    const ADMINISTRATION_TEMPLATE = 'administration/collections.html.twig';
 
     private $template;
 
@@ -115,21 +116,14 @@ class CollectionController extends BaseController
      */
     public function getList()
     {
-        if (!Auth::isUserAdmin()){
+        if (!Auth::isUserAdmin()) {
             throw new \Exception(ERROR_NO_ADMIN);
         }
 
-        $list = (new CollectionProvider())->getListOrderById();
-
-        $this->view->listCollections = "";
-
-        foreach($list as $item){
-            $this->view->listCollections .= "<tr><th scope='row'>" . $item->getId() ."</th>";
-            $this->view->listCollections .= "<td>" . $item->getName() . "</td>";
-            $this->view->listCollections .= "<td>" . $item->getAuthor() . "</td>";
-            $this->view->listCollections .= "<td>" . $item->getNote() . "</td></tr>";
-        }
-        return $this->view->render("collectionsList.phtml");
+        return $this->render(self::ADMINISTRATION_TEMPLATE, [
+            'collections' => (new CollectionProvider())->getListOrderById(),
+            'base_url' => APP_URL,
+        ]);
     }
 
     /**

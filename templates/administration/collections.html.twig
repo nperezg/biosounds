@@ -1,0 +1,26 @@
+{% block body %}
+	<table class="table table-condensed table-hover">
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Name</th>
+				<th scope="col">Author</th>
+				<th scope="col">Notes</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for collection in collections %}
+				<tr>
+					<th scope='row'>{{ collection.id }}</th>
+					<td>{{ collection.name }}</td>
+					<td>{{ collection.author }}</td>
+					<td>{{ collection.note }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
+
+{% block head %}
+	<link rel="stylesheet" href="{{ base_url }}/templates/administration/css/collection.css" />
+{% endblock %}
