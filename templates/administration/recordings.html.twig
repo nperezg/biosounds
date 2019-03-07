@@ -19,7 +19,16 @@
         </div>
     </div>
     <table class="table table-condensed table-hover table-recordings save-recording">
-        <thead><tr><th>ID</th><th>Original Filename</th><th>Name</th><th>Date</th><th>Time</th><th></th></tr></thead>
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Original Filename</th>
+                <th scope="col">Name</th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
         <tbody>
             {% for recording in recordings %}
                 <tr>
