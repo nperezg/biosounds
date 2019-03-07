@@ -245,7 +245,7 @@ class FileService
                 }
             }
 
-            (new SpectrogramService())->generateImages($sound);
+            (new ImageService())->generateImages($sound);
 
             $this->updateFileStatus($file, File::STATUS_SUCCESS, $sound[Recording::ID]);
 

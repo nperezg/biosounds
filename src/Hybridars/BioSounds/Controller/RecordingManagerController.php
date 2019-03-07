@@ -8,11 +8,11 @@ use Hybridars\BioSounds\Entity\Collection;
 use Hybridars\BioSounds\Entity\Sensor;
 use Hybridars\BioSounds\Entity\Site;
 use Hybridars\BioSounds\Entity\PlayLog;
-use Hybridars\BioSounds\Entity\SoundImage;
+use Hybridars\BioSounds\Entity\Spectrogram;
 use Hybridars\BioSounds\Entity\Tag;
 use Hybridars\BioSounds\Provider\CollectionProvider;
 use Hybridars\BioSounds\Provider\RecordingProvider;
-use Hybridars\BioSounds\Provider\SoundImageProvider;
+use Hybridars\BioSounds\Provider\SpectrogramProvider;
 use Hybridars\BioSounds\Provider\SoundProvider;
 use Hybridars\BioSounds\Provider\SoundTypeProvider;
 use Hybridars\BioSounds\Utils\Auth;
@@ -148,10 +148,10 @@ class RecordingManagerController extends BaseController
 
         unlink($soundsDir . $fileName);
         //Check if there are images
-        $images = (new SoundImageProvider())->getListInRecording($id);
+        $images = (new SpectrogramProvider())->getListInRecording($id);
 
         foreach ($images as $image) {
-            unlink($imagesDir . $image->getImageFile());
+            unlink($imagesDir . $image->getFilename());
         }
 
         $wavFileName = substr($fileName, 0, strrpos($fileName, '.')) . '.wav';

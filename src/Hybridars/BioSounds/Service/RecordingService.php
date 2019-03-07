@@ -11,14 +11,14 @@ class RecordingService
     const RECORDING_PATH = 'sounds/sounds/%s/%s/%s';
     const IMAGE_PATH = 'sounds/images/%s/%s/%s';
 
-    private $spectrogramService;
+    private $imageService;
 
     /**
      * RecordingService constructor.
      */
     public function __construct()
     {
-        $this->spectrogramService = new SpectrogramService();
+        $this->imageService = new ImageService();
     }
 
     /**
@@ -34,19 +34,19 @@ class RecordingService
         $result = [];
         $list = (new RecordingProvider())->getListByCollection($colId, $limit, $offSet, $filter);
 
-        $soundImageService = new SoundImageService();
+        $spectrogramService = new SpectrogramService();
 
         foreach($list as $item) {
             $recordingListPresenter = new RecordingListPresenter();
             $recordingListPresenter->setRecording($item);
 
             $recordingListPresenter->setPlayerImage('assets/images/notready-small.png');
-            if (!empty($playerImage = $soundImageService->getPlayerImage($item->getId()))
+            if (!empty($playerImage = $spectrogramService->getPlayerImage($item->getId()))
                 && is_file(  sprintf(
                     self::IMAGE_PATH,
                     $item->getCollection(),
                     $item->getDirectory(),
-                    $playerImage->getImageFile()
+                    $playerImage->getFilename()
                 ))
             ) {
                 $recordingListPresenter->setPlayerImage(
@@ -54,18 +54,18 @@ class RecordingService
                         self::IMAGE_PATH,
                         $item->getCollection(),
                         $item->getDirectory(),
-                        $playerImage->getImageFile()
+                        $playerImage->getFilename()
                     )
                 );
             }
 
             $recordingListPresenter->setSmallImage('assets/images/notready-small.png');
-            if (!empty($smallImage = $soundImageService->getSmallImage($item->getId()))
+            if (!empty($smallImage = $spectrogramService->getSmallImage($item->getId()))
                 && is_file(  sprintf(
                     self::IMAGE_PATH,
                     $item->getCollection(),
                     $item->getDirectory(),
-                    $smallImage->getImageFile()
+                    $smallImage->getFilename()
                 ))
             ) {
                 $recordingListPresenter->setSmallImage(
@@ -73,7 +73,7 @@ class RecordingService
                         self::IMAGE_PATH,
                         $item->getCollection(),
                         $item->getDirectory(),
-                        $smallImage->getImageFile()
+                        $smallImage->getFilename()
                     )
                 );
             }
@@ -120,7 +120,7 @@ class RecordingService
     ){
         if (!file_exists($imagePath)) {
             try {
-                $this->spectrogramService->generatePlayerImage(
+                $this->imageService->generatePlayerImage(
                     $imagePath,
                     $wavFilePath,
                     $maxFrequency,
@@ -146,7 +146,7 @@ class RecordingService
         int $channel,
         string $fileName
     ){
-        $recordingPresenter->setViewPortFilePath($this->spectrogramService->generateViewPort(
+        $recordingPresenter->setViewPortFilePath($this->imageService->generateViewPort(
             $samplingRate,
             $recordingPresenter->getMinFrequency(),
             $recordingPresenter->getMaxFrequency(),

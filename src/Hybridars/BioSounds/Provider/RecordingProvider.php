@@ -89,8 +89,8 @@ class RecordingProvider
     {
         $values = [':colId' => $colId];
 
-        $query = 'SELECT COUNT(*) AS num FROM ' . Recording::TABLE_NAME . ' LEFT JOIN SoundsImages ';
-        $query .= 'ON ' . Recording::TABLE_NAME . '.' . Recording::ID . ' = SoundsImages.recording_id ';
+        $query = 'SELECT COUNT(*) AS num FROM ' . Recording::TABLE_NAME . ' LEFT JOIN spectrogram ';
+        $query .= 'ON ' . Recording::TABLE_NAME . '.' . Recording::ID . ' = spectrogram.recording_id ';
 
         if (!empty($filter)) {
             $query .= 'JOIN sound ON recording.sound_id = sound.sound_id ';
@@ -237,8 +237,8 @@ class RecordingProvider
      */
     public function get(int $id): array
     {
-        $query = 'SELECT *, (SELECT filename FROM SoundsImages ';
-        $query .= 'WHERE ' . Recording::TABLE_NAME . '.' . Recording::ID . ' = SoundsImages.recording_id ';
+        $query = 'SELECT *, (SELECT filename FROM spectrogram ';
+        $query .= 'WHERE ' . Recording::TABLE_NAME . '.' . Recording::ID . ' = spectrogram.recording_id ';
         $query .= 'AND type = \'spectrogram-player\') AS ImageFile ';
         $query .= 'FROM ' . Recording::TABLE_NAME . ' ';
         $query .= 'WHERE ' . Recording::TABLE_NAME . '.' . Recording::ID . ' = :id';
@@ -255,10 +255,9 @@ class RecordingProvider
      * @return array
      * @throws \Exception
      */
-    public function getSimpleSound(int $id): array
+    public function getBasic(int $id): array
     {
-        $query = 'SELECT * ';
-        $query .= 'FROM ' . Recording::TABLE_NAME. ' WHERE ' . Recording::ID . ' = :id';
+        $query = 'SELECT * FROM recording WHERE ' . Recording::ID . ' = :id';
 
         Database::prepareQuery($query);
         if (empty($result = Database::executeSelect([':id' => $id]))) {

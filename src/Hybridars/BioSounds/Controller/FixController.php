@@ -4,7 +4,7 @@ namespace Hybridars\BioSounds\Controller;
 
 use Hybridars\BioSounds\Exception\File\FileNotFoundException;
 use Hybridars\BioSounds\Provider\RecordingProvider;
-use Hybridars\BioSounds\Service\SpectrogramService;
+use Hybridars\BioSounds\Service\ImageService;
 use Hybridars\BioSounds\Utils\Auth;
 
 /**
@@ -28,20 +28,20 @@ class FixController
     }
 
     /**
-      * @return array
+     * @param int $recordingId
      * @throws \Exception
      */
-    public function fix(int $soundId)
+    public function fix(int $recordingId)
     {
 		if (!Auth::isUserAdmin()){
 			throw new \Exception(ERROR_NO_ADMIN); 
 		} 
 		
 		try {
-            if (empty($sound = (new RecordingProvider())->getSimpleSound($soundId))) {
-                throw new FileNotFoundException($soundId);
+            if (empty($recording = (new RecordingProvider())->getBasic($recordingId))) {
+                throw new FileNotFoundException($recordingId);
             }
-            (new SpectrogramService())->generateImages($sound);
+            (new ImageService())->generateImages($recording);
         } catch (\PDOException $exception) {
 		    error_log($exception);
 		    throw new \Exception('There was an error when inserting in the database.');
