@@ -215,8 +215,9 @@ class RecordingController extends BaseController
 			$maxTime = filter_var($_POST['t_max'], FILTER_SANITIZE_STRING);
 			$minFrequency = filter_var($_POST['f_min'], FILTER_SANITIZE_STRING);
 			$maxFrequency = filter_var($_POST['f_max'], FILTER_SANITIZE_STRING);
-			if(isset($_POST['filter']))
-				$filter = filter_var($_POST['filter'], FILTER_VALIDATE_BOOLEAN);
+			if (isset($_POST['filter'])) {
+                $filter = filter_var($_POST['filter'], FILTER_VALIDATE_BOOLEAN);
+            }
 		}
 	    	    
 	    // Spectrogram Image Width

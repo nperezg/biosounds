@@ -1,13 +1,16 @@
 $(function() {
 
     let enableZoom = function() {
-        let filterElement = $("input[name=filter]");
+        let filterElement = $("label[for='filter']");
+        let filterCheckbox = $("input[name='filter']");
+
+        if (!filterCheckbox.prop("checked")) {
+            filterElement.trigger("click");
+        }
         $('#zoom-submit').prop("disabled", false);
-        filterElement.prop("checked", true);
-        filterElement.prop("disabled", false);
     }
 
-    setSelectionData = function(coordinates) {
+    let setSelectionData = function(coordinates) {
         let xmin = (coordinates.x / specWidth * selectionDuration + minTime).toFixed(1);
         let xmax = (coordinates.x2 / specWidth * selectionDuration + minTime).toFixed(1);
         let ymax = Math.round((coordinates.y / specHeight) *- (maxFrequency - minFrequency) + maxFrequency);
@@ -24,13 +27,16 @@ $(function() {
         $('#w').val(xmax);
         $('#y').val(ymin);
         $('#h').val(ymax);
+    }
 
+    selectData = function(coordinates) {
         enableZoom();
+        setSelectionData(coordinates);
     }
 
     $('#cropbox').Jcrop({
         onChange: setSelectionData,
-        onSelect: setSelectionData,
+        onSelect: selectData,
         addClass: 'custom',
         bgColor: 'black'
     });
