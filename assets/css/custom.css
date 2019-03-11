@@ -86,10 +86,6 @@ footer .container{
 	padding-top:20px;
 }
 
-div .active a {
-	color: #89517e;
-}
-
 .login {
   background-color: #ffffff;
   position: absolute;
@@ -270,3 +266,112 @@ span.tag-color > i {
 .form-check {
     padding-top: 50%;
 }
+
+.btn-primary {
+    background-color: #ffffff;
+    border-color: #51895C;
+    color: #51895C;
+    text-shadow: none;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #51895C;
+    background-position: 0 -15px;
+    border-color: #51895C;
+    text-shadow: none;
+}
+.btn-primary:active,
+.btn-primary.active {
+    background-color: #51895C;
+    border-color: #51895C;
+}
+
+.btn-danger {
+    background-image: none;
+    background-color: #FFFFFF;
+    border-color: #c12e2a;
+    color: #c12e2a;
+    text-shadow: none;
+}
+.btn-danger:hover,
+.btn-danger:focus {
+    background-color: #c12e2a;
+    background-position: 0 -15px;
+    border-color: #c12e2a;
+    text-shadow: none;
+}
+.btn-danger:active,
+.btn-danger.active {
+    background-color: #c12e2a;
+    border-color: #c12e2a;
+}
+.btn-danger.disabled,
+.btn-danger[disabled],
+fieldset[disabled] .btn-danger,
+.btn-danger.disabled:hover,
+.btn-danger[disabled]:hover,
+fieldset[disabled] .btn-danger:hover,
+.btn-danger.disabled:focus,
+.btn-danger[disabled]:focus,
+fieldset[disabled] .btn-danger:focus,
+.btn-danger.disabled.focus,
+.btn-danger[disabled].focus,
+fieldset[disabled] .btn-danger.focus,
+.btn-danger.disabled:active,
+.btn-danger[disabled]:active,
+fieldset[disabled] .btn-danger:active,
+.btn-danger.disabled.active,
+.btn-danger[disabled].active,
+fieldset[disabled] .btn-danger.active {
+    background-color: #c12e2a;
+    background-image: none;
+}
+
+.btn-link:hover{
+    color: #91dc5a;
+}
+
+a {
+    color: #000000;
+}
+
+a:hover {
+    color: #51895C;
+}
+
+.footer a {
+    color: #FFFFFF;
+}
+
+.footer a:hover {
+    color: #51895C;
+}
+
+.btn-link, .pagination > li > a {
+    color: #51895C;
+}
+
+.btn-link:hover{
+    color: #91dc5a;
+}
+
+.pagination{
+    color: #91dc5a;
+}
+
+div .active a {
+    color: #51895C;
+}
+
+.player-options .btn-link {
+    color: #000000;
+}
+
+.player-options .btn-link.active {
+    color: #51895C;
+}
+
+.player-options .btn-link:hover {
+    color: #51895C;
+}
+

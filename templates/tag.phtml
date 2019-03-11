@@ -83,9 +83,12 @@
 	    </div>	
 	</div>
 	<div class="modal-footer">
-		<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-		<button type="button" class="btn btn-danger <?php echo $this->displayDeleteBtn;?>" id="bdelete">Delete Mark</button>					
-		<button type="button" class="btn btn-primary <?php echo $this->displaySaveBtn;?>" id="bsave">Save changes</button>	
+		<button type="button" class="btn btn-primary <?php echo $this->displaySaveBtn;?>" id="bsave">
+            <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Save
+        </button>
+        <button type="button" class="btn btn-danger <?php echo $this->displayDeleteBtn;?>" id="bdelete">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete
+        </button>
 	</div>
     </div>
   </div>

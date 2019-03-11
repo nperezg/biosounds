@@ -5,11 +5,11 @@
                 <h1>{{ collection.name }} <small>{{ recordingNum }} sounds</small></h1>
             </div>
             <div class="col-md-5 text-right">
-                <a href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ page }}/gallery" type="button" class="btn btn-default btn-md view {{ display == 'gallery' ? 'active' : '' }}" title="Gallery view">
-                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+                <a href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ page }}/gallery" type="button" class="btn btn-primary btn-md view {{ display == 'gallery' ? 'active' : '' }}" title="Gallery view">
+                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Gallery View
                 </a>
-                <a href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ page }}/list" type="button" class="btn btn-default btn-md view {{ display == 'list' ? 'active' : '' }}" title="List view">
-                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                <a href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ page }}/list" type="button" class="btn btn-primary btn-md view {{ display == 'list' ? 'active' : '' }}" title="List view">
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List View
                 </a>
             </div>
         </div>

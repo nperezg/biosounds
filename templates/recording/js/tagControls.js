@@ -34,7 +34,7 @@ $(function() {
             let left = tagElement.left - canvasPosition.left;
             let top = tagElement.top - canvasPosition.top;
 
-            setSelectionData({
+            selectData({
                 x: left,
                 x2: left + tagElement.width,
                 y: top,

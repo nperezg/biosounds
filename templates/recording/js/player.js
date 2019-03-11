@@ -1,6 +1,6 @@
 $(function() {
 
-    let continuousPlaySelector = $("input[name=continuous_play]");
+    let continuousPlaySelector = $("input[name='continuous_play']");
 
     isContinuous = continuousPlaySelector.prop('checked');
     isDirectStart = false;
@@ -11,7 +11,7 @@ $(function() {
         isDirectStart = true;
     }
 
-    continuousPlaySelector.on('click', function () {
+    continuousPlaySelector.change(function () {
         isContinuous = this.checked;
     });
 
@@ -30,7 +30,12 @@ $(function() {
 
     setContinuousPlay = function(value) {
         isContinuous = value;
-        continuousPlaySelector.attr('checked', value);
+        continuousPlaySelector.prop('checked', value);
+        if (value) {
+            $("label[for='continuous-play']").addClass('active');
+        } else {
+            $("label[for='continuous-play']").removeClass('active');
+        }
     };
 
     savePlayLog = function() {
