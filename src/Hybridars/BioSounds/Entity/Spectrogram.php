@@ -35,10 +35,6 @@ class Spectrogram
      */
     private $fft;
 
-    /**
-     * @var string
-     */
-    private $creator;
 
     /**
      * @return int
@@ -145,24 +141,6 @@ class Spectrogram
     public function setFft(int $fft): Spectrogram
     {
         $this->fft = $fft;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCreator(): string
-    {
-        return $this->creator;
-    }
-
-    /**
-     * @param string $creator
-     * @return Spectrogram
-     */
-    public function setCreator(string $creator): Spectrogram
-    {
-        $this->creator = $creator;
         return $this;
     }
 
