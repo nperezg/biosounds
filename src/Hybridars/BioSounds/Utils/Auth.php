@@ -7,11 +7,14 @@ use Hybridars\BioSounds\Entity\User;
 class Auth
 {
     /**
-     * @return int
+     * @return int|null
      */
-	static function getUserLoggedID(): int
+	static function getUserLoggedID(): ?int
     {
-		return $_SESSION['user_id'];
+        if (isset($_SESSION['user_id'])) {
+            return $_SESSION['user_id'];
+        }
+        return null;
 	}
 
     /**

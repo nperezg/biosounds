@@ -392,7 +392,7 @@ class RecordingController extends BaseController
 		
 		if (!Auth::isUserAdmin()) {
 			$userPerm = new UserPermission(); 
-			$perm = $userPerm->getUserColPermission(
+			$perm = empty(Auth::getUserLoggedID()) ? null : $userPerm->getUserColPermission(
 			    Auth::getUserLoggedID(),
                 $this->recordingPresenter->getRecording()[Recording::COL_ID]
             );
