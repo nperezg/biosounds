@@ -52,6 +52,9 @@ class Session
         $cookieParams = session_get_cookie_params();
         session_set_cookie_params(1800, $cookieParams['path'], $cookieParams['domain'], $secure, $httpOnly);
 
+        header("Cache-Control: no cache");
+        session_cache_limiter("private_no_expire");
+
         // Sets the session name to the one set above.
         session_name($session_name);
         session_start();
