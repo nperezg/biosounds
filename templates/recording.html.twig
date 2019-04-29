@@ -120,16 +120,16 @@
 
                         <div class="form-group">
                             <div class="input-group input-group-sm">
-                              <span class="input-group-addon" id="basic-addon1">Time From</span>
-                              <input type="text" class="form-control" aria-describedby="basic-addon1" size="4" id="x" name="t_min" value="{{ player.minTime }}" title="Minimum time of selection">
-                              <span class="input-group-addon" id="basic-addon1">To</span>
-                              <input type="text" class="form-control" aria-describedby="basic-addon1" size="4" id="w" name="t_max" value="{{ player.maxTime }}" title="Maximum time of selection">
+                              <span class="input-group-addon" id="basic-addon1">Time</span>
+                              <input type="text" class="form-control" aria-describedby="basic-addon1" id="x" name="t_min" size="5" value="{{ player.minTime }}" title="Selection minimum time">
+                              <span class="input-group-addon" id="basic-addon2">To</span>
+                              <input type="text" class="form-control" aria-describedby="basic-addon2" id="w" name="t_max" size="5" value="{{ player.maxTime }}" title="Selection maximum time">
                             </div>
                             <div class="input-group input-group-sm">
-                              <span class="input-group-addon" id="basic-addon1">Freq From</span>
-                              <input type="text" class="form-control" aria-describedby="basic-addon1" size="4" id="y" name="f_min" value="{{ player.minFrequency }}" title="Minimum frequency of selection">
-                              <span class="input-group-addon" id="basic-addon1">To</span>
-                              <input type="text" class="form-control" aria-describedby="basic-addon1" size="4" id="h" name="f_max" value="{{ player.maxFrequency }}" title="Maximum frequency of selection">
+                              <span class="input-group-addon" id="basic-addon3">Freq</span>
+                              <input type="text" class="form-control" aria-describedby="basic-addon3" id="y" name="f_min" size="4" value="{{ player.minFrequency }}" title="Selection minimum frequency">
+                              <span class="input-group-addon" id="basic-addon4">To</span>
+                              <input type="text" class="form-control" aria-describedby="basic-addon4" id="h" name="f_max" size="4" value="{{ player.maxFrequency }}" title="Selection maximum frequency">
                             </div>
                         </div>
                         <div class="form-group player-options">
@@ -187,6 +187,6 @@
         {% include '/recording/js/player.js' %}
         {% include '/recording/js/recording.js' %}
         {% include '/recording/js/imageCrop.js' %}
-        {% include '/recording/js/coordinateControls.js' %}
+        {% include '/recording/js/coordinateExport.js' %}
     </script>
 {% endblock %}
