@@ -6,4 +6,4 @@ BioSounds is a sound analysis web application for biological scientific research
 
 ## Comments
 
-The application is still in development and refactoring process, so don't be surprised is certain parts are not yet clean code. We are working on it ;)
+The application is still under development and within the refactoring process, so don't be surprised if certain parts are not yet clean code. We are working on it ;)
