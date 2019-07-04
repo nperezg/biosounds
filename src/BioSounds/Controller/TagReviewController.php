@@ -31,7 +31,7 @@ class TagReviewController extends BaseController
 
 		$tagReview = new TagReview();
 
-        return $this->twig->render('tagReview.html.twig', [
+        return $this->twig->render('tag/tagReview.html.twig', [
             'disableReviewForm' => !Auth::isUserAdmin() && $tagReview->hasUserReviewed(Auth::getUserLoggedID(), $tagId),
             'reviews' => $tagReview->getListByTag($tagId),
             'tagId' => $tagId,

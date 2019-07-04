@@ -2,6 +2,8 @@
 
 namespace BioSounds\Controller;
 
+use Twig\Environment;
+
 class BaseController
 {
     const SECTION_TITLE = '';
@@ -11,9 +13,9 @@ class BaseController
 
     /**
      * BaseController constructor.
-     * @param \Twig_Environment $twig
+     * @param Environment $twig
      */
-    public function __construct(\Twig_Environment $twig)
+    public function __construct(Environment $twig)
     {
         $this->twig = $twig;
         $this->twig->addGlobal('title', sprintf(self::PAGE_TITLE, static::SECTION_TITLE));

@@ -3,3 +3,4 @@ sounds/
 tmp/
 logs/
 vendor/
+cache/

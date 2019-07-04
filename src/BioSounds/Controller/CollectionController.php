@@ -79,7 +79,7 @@ class CollectionController extends BaseController
             $this->filter['speciesName'] = filter_var($_POST['species-name'], FILTER_SANITIZE_STRING);
         }
 
-        return $this->twig->render('collection.html.twig', [
+        return $this->twig->render('collection/collection.html.twig', [
             'collection' => $this->collection,
             'pageNum' => $this->pageNum,
             'currentPage' => $this->page,
