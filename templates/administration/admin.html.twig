@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="container">
+		<nav aria-label="breadcrumb">
+			<ul class="breadcrumb bg-white mt-4">
+                <li class="breadcrumb-item" aria-current="page"><a href="{{ baseUrl }}">Home</a></li>
+				<li class="breadcrumb-item" aria-current="page"><a href="{{ baseUrl }}/admin/settings">Administration</a></li>
+				<li class="breadcrumb-item active" aria-current="page">{{ section }}</li>
+			</ul>
+		</nav>
+
+		<div class="row">
+			<div class="col-lg-2">
+				<ul class="nav nav-pills">
+					<li class="nav-item">
+					  <a class="nav-link" href="{{ baseUrl }}/admin/settings"><i class="fas fa-cog pr-1"></i> Settings</a>
+					</li>
+					<li class="nav-item">
+					  <a class="nav-link" href="{{ baseUrl }}/admin/collections"><i class="fas fa-music pr-1"></i> Collections</a>
+					</li>
+					<li class="nav-item">
+					  <a class="nav-link" href="{{ baseUrl }}/admin/users"><i class="fas fa-user pr-1"></i> Users</a>
+					</li>
+					<li class="nav-item">
+					  <a class="nav-link" href="{{ baseUrl }}/admin/recordings"><i class="fas fa-compact-disc pr-1"></i> Recordings</a>
+					</li>
+					<li class="nav-item">
+					  <a class="nav-link disabled"><i class="fas fa-bullhorn pr-1"></i> Sensors</a>
+					</li>
+					<li class="nav-item">
+					  <a class="nav-link disabled"><i class="fas fa-file-export pr-1"></i> Export</a>
+					</li>
+					<li class="nav-item">
+					  <a class="nav-link disabled"><i class="fas fa-star pr-1"></i> Quality Control</a>
+					</li>
+
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle disabled" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+							<i class="fas fa-wrench pr-1"></i> Maintenance
+						</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="#">Clear Cache</a>
+							<a class="dropdown-item" href="#">Generate Files</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+
+			<div class="col-lg-10">
+				{% block admin_content %}{% endblock %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

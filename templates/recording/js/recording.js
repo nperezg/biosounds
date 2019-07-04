@@ -70,40 +70,54 @@ $(function() {
         e.preventDefault();
     });
 
-    $(".toggleTag").click(function(e) {
-        let tagControls = $('.tag-controls');
+    $('.js-toggle-tags').click(function(e) {
+        let show = this.dataset.show;
+        this.dataset.show = show ? '' : 1;
+        document.getElementsByName('showTags')[0].value = !show;
 
-        if (tagControls.is(':visible')) {
-            $("input[name=showTags]").val(0);
-            tagControls.hide();
-            $('.panel-tag').hide();
-            $(this).html("<span title='Show tags' class='glyphicon glyphicon-eye-open'></span>");
+        $('.tag-controls').toggle();
+
+        if (show) {
+            $(this).find('i').removeClass('fa-eye-slash').addClass('fa-eye');
         } else {
-            $("input[name=showTags]").val(1);
-            tagControls.show();
-            $(this).html("<span title='Hide tags' class='glyphicon glyphicon-eye-close'></span>");
+            $(this).find('i').removeClass('fa-eye').addClass('fa-eye-slash');
         }
+
+
+        // if (tagControls.is(':visible')) {
+        //     $("input[name=showTags]").val(0);
+        //     tagControls.hide();
+        //     $('.js-panel-tag').hide();
+        //     $(this).find('i').removeClass('fa-eye-slash').addClass('fas fa-eye');
+        // } else {
+        //     $("input[name=showTags]").val(1);
+        //     tagControls.show();
+        //     $(this).find('i').removeClass('fa-eye').addClass('fas fa-eye-slash');
+        // }
         e.preventDefault();
     });
 
-    $('.new-tag').click(function(e) {
+    $('.js-new-tag').click(function(e) {
         if ($('#zoom-submit').is(':disabled')) {
-            alert("Please, select an area of the spectrogram.");
+            showAlert('Please, select an area of the spectrogram.');
         } else {
             $.ajax({
                 type: "POST",
                 url: this.href,
-                data: $('#recordingForm').serialize(),
-                success: function(data)
-                {
-                    $('#modalWindows').html(data);
+                data: $('#recordingForm').serialize()
+            })
+                .done(function(response) {
+                    $('#modalWindows').html(JSON.parse(response).data);
                     $('#modal-div').modal('show');
-                },
-                error: function(response){
-                    showMessage(response.responseJSON.message, true);
-                }
-            });
+                })
+                .fail(function(response){
+                    showAlert(JSON.parse(response.responseText).message);
+                });
         }
         e.preventDefault();
     });
-});
+
+     $('#recordingForm').on('submit', function(){
+         toggleLoading();
+     });
+ });

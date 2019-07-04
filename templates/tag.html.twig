@@ -1,0 +1,130 @@
+<div class="modal fade" id="modal-div" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tag {{ tag.id }} for recording {{ recordingName }} (ID {{ tag.recording }})</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div id="tag-panel" class="col-12">
+                        <form id="tagForm">
+                            <input name="tag_id" type="hidden" value="{{ tag.id }}">
+                            <input name="recording_id" type="hidden" value="{{ tag.recording }}">
+                            <input id='speciesId' name='species_id' type='hidden' value="{{ tag.species }}">
+
+                            <div class="form-row align-items-center">
+                                <div class="form-group col-auto">
+                                    <label class="col-form-label-sm" for="species_desc">Species</label>
+                                    <input id="speciesName" class="form-control form-control-sm mb-1 js-species-autocomplete" type="text" size="30" value="{{ tag.speciesName }}" required>
+                                    <div class="invalid-feedback">
+                                        Please select a species from the list.
+                                    </div>
+                                    <a class="col-form-label-sm" href="#" target="_blank" id="googleImages"> Images</a> | <a class="col-form-label-sm" href="#" target="_blank" id="xenoImages">Xeno-canto </a>
+                                </div>
+                                <div class="form-group col-auto">
+                                    <div class="form-check form-control-sm pt-2" id="uncertain_check">
+                                        <input class="form-check-input" id="uncertain" name="uncertain" type="checkbox" value="1" {{ tag.uncertain ? "checked" }}>
+                                        <label class="form-check-label" for="uncertain">Uncertain?</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label-sm" for="min_time">Time </label>
+                                <div class="form-inline">
+                                    <input id="min_time" class="form-control form-control-sm mr-2 ml-1" name="min_time" type="text" maxlength="100" value="{{ tag.minTime }}"> -
+                                    <input id="max_time" class="form-control form-control-sm ml-2 mr-2" name="max_time" type="text" maxlength="100" value="{{ tag.maxTime }}">
+                                    <label class="col-form-label-sm" for="max_time">sec</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label-sm" for="min_freq">Frequency </label>
+                                <div class="form-inline">
+                                    <input id="min_freq" class="form-control form-control-sm mr-2 ml-1" name="min_freq" type="text" maxlength="100" value="{{ tag.minFrequency }}"> -
+                                    <input id="max_freq" class="form-control form-control-sm ml-2 mr-2" name="max_freq" type="text" maxlength="100" value="{{ tag.maxFrequency }}">
+                                    <label class="col-form-label-sm" for="max_freq">Hz</label>
+                                </div>
+                            </div>
+
+                            <div class="form-row align-items-center mt-2" id="distance_group">
+                                <div class="form-group col-auto">
+                                    <label class="col-form-label-sm" for="call_distance">Call Distance </label>
+                                    <input id="call_distance" class="form-control form-control-sm" name="call_distance_m" type="number" value="{{ tag.callDistance }}">
+                                </div>
+                                <div class="form-group col-auto">
+                                    <div class="form-check form-control-sm pt-4" id="dist_check">
+                                        <input class="form-check-input" id='distance_not_estimable' name="distance_not_estimable" type="checkbox" value="1" {{ tag.distanceNotEstimable ? "checked" }}>
+                                        <label class="form-check-label" for="distance_not_estimable">
+                                            Distance not estimable
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-4" id="individuals_group">
+                                    <label class="col-form-label-sm" for="number_of_individuals">Number of individuals </label>
+                                    <input id="number_of_individuals" class="form-control form-control-sm" name="number_of_individuals" min="0" max="1000" type="number" value="{{ tag.numberIndividuals }}" required>
+                                    <div class="invalid-feedback">
+                                        Please introduce a valid number of individuals.
+                                    </div>
+                                </div>
+                                <div class="form-group col-4">
+                                    <label class="col-form-label-sm" for="type">Type </label>
+                                    <select id="type" name="type" class="custom-select custom-select-sm">
+                                        <option value="call" {{ tag.type == "call" ? "selected" }}>Call</option>
+                                        <option value="song" {{ tag.type == "song" ? "selected" }}>Song</option>
+                                        <option value="non-vocal" {{ tag.type == "non-vocal" ? "selected" }}>Non-vocal</option>
+                                        <option value="searching (bat)" {{ tag.type == "searching (bat)" ? "selected" }}>Searching (bat)</option>
+                                        <option value="feeding (bat)" {{ tag.type == "feeding (bat)" ? "selected" }}>Feeding (bat)</option>
+                                        <option value="social (bat)" {{ tag.type == "social (bat)" ? "selected" }}>Social (bat)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-4">
+                                    <div class="form-check form-control-sm pt-5" id="reference">
+                                        <input class="form-check-input" id="referenceCall" name="reference_call" type="checkbox" value="1" {{ tag.referenceCall ? "checked" }}>
+                                        <label class="form-check-label" for="referenceCall">Reference call</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="comments" class="sr-only">Comments</label>
+                                <textarea id="comments" name="comments" class="form-control form-control-sm" placeholder="Insert your comments" maxlength="200" rows="3">{{ tag.comments }}</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label-sm" for="user_full_name">Creation User: </label>
+                                <span id="user_full_name">{{ tag.userName }}</span>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="review-panel">
+                        {{ reviewPanel | raw }}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" {{ displaySaveButton }} id="bsave">
+                    <i class="fas fa-save" aria-hidden="true"></i> Save
+                </button>
+                <button type="button" class="btn btn-outline-danger" {{ displayDeleteButton }} id="deleteButton" data-tag-id="{{ tag.id }}">
+                    <i class="fas fa-trash-alt" aria-hidden="true"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+    <script type="text/javascript">
+        $(function() {
+            $("#tagForm :input").prop("disabled", {{ disableTagForm }});
+            $("#reviewForm :input").not("#review_animal_desc").prop("disabled", {{ disableReviewForm }});
+        });
+
+        {% include '/tag/js/tag.js' %}
+    </script>
+{% endblock %}

@@ -1,37 +1,31 @@
-{% block body %}
+<ul class="list-group list-group-flush my-4">
     {% for item in list %}
-        <div class="media">
-            <div class="media-body">
-                {% if item.recording.soundData is not empty  %}
-                    <h4 class="media-heading"><strong>{{ item.recording.soundData.speciesName }}</strong></h4>
-                    <h5>Type: <small>{{ item.recording.soundData.typeName }}</small></h5>
-                    <h5>Subtype: <small>{{ item.recording.soundData.subtype }}</small></h5>
-                    <h5>Rating: <small>{{ item.recording.soundData.rating }}</small></h5>
-                    <h5>Filename: <small>{{ item.recording.name }}</small></h5>
-                {% else %}
-                    <h4 class="media-heading"><strong>{{ item.recording.name }}</strong></h4>
-                {% endif %}
-                <h5>Date: <small>{{ item.recording.fileDate|date("d/m/Y") }}</small></h5>
-                <h5>Time: <small>{{ item.recording.fileTime }}</small></h5>
-                <h5>Notes: <small>{{ item.recording.note }}</small></h5>
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-auto mr-auto">
+                    {% if item.recording.soundData is not empty  %}
+                        <h5><strong>{{ item.recording.soundData.speciesName }}</strong></h5>
+                        <h6>Type: <small>{{ item.recording.soundData.typeName }}</small></h6>
+                        <h6>Subtype: <small>{{ item.recording.soundData.subtype }}</small></h6>
+                        <h6>Rating: <small>{{ item.recording.soundData.rating }}</small></h6>
+                        <h6>Filename: <small>{{ item.recording.name }}</small></h6>
+                    {% else %}
+                        <h5><strong>{{ item.recording.name }}</strong></h5>
+                    {% endif %}
+                    <h6>Date: <small>{{ item.recording.fileDate|date("d/m/Y") }}</small></h6>
+                    <h6>Time: <small>{{ item.recording.fileTime }}</small></h6>
+                    {% if item.recording.note is not empty %}
+                        <h6>Notes: <small>{{ item.recording.note }}</small></h6>
+                    {% endif %}
+                </div>
+                <div class="col-6">
+                    <div id="player-cursor" class="small-player-cursor" data-cursor-id="{{ item.recording.id }}"></div>
+                    <img class="small-player-image" src="{{ baseUrl }}/{{ item.playerImage }}">
+                    <audio id="player" data-id="{{ item.recording.id }}" controls>
+                        <source src="{{ baseUrl }}/{{ item.playerRecording }}" />
+                    </audio>
+                </div>
             </div>
-            <div class="media-right">
-                <div id="player-cursor-{{ item.recording.id }}" class="small-player-cursor"></div>
-                <img class="small-player-image" src="{{ baseUrl }}/{{ item.playerImage }}">
-                <audio id="player" data-id="{{ item.recording.id }}" controls>
-                    <source src="{{ baseUrl }}/{{ item.playerRecording }}" />
-                </audio>
-            </div>
-        </div>
+        </li>
     {% endfor %}
-{% endblock %}
-
-{% block scripts %}
-    <script type="text/javascript">
-        {% include '/collection/js/smallPlayer.js' %}
-    </script>
-{% endblock %}
-
-{% block head %}
-    <link rel="stylesheet" href="{{ baseUrl }}/templates/collection/css/smallPlayer.css" />
-{% endblock %}
+</ul>

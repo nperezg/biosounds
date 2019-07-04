@@ -1,0 +1,94 @@
+{% extends 'administration/admin.html.twig' %}
+
+{% block admin_content %}
+
+{% include 'administration/userForm.html.twig' %}
+
+<div class="card mb-3" id="usersList">
+	<div class="card-header border-light bg-white text-right">
+		<button
+				id="userFormButton"
+				class="btn btn-outline-primary btn-sm mt-2"
+				type="button"
+				data-toggle="collapse"
+				data-target="#userFormSection"
+				aria-expanded="false"
+				aria-controls="userFormSection"
+		>
+			<i class="fas fa-plus"></i> Add User
+		</button>
+	</div>
+	<div class="card-body">
+		<table class="table table-sm table-hover">
+			<thead class="table-borderless">
+				<tr>
+					<th scope="col">Name</th>
+					<th scope="col">Username</th>
+					<th scope="col">Email</th>
+					<th scope="col">Role</th>
+					<th scope="col">Active</th>
+					<th scope="col"></th>
+					<th scope="col"></th>
+					<th scope="col"></th>
+				</tr>
+			</thead>
+			<tbody class="form-control-sm js-save-user">
+				{% for user in users %}
+					<tr>
+						<td>
+							<input type="text" name="username" value="{{ user.username }}">
+							<input type="hidden" name="itemID" value="{{ user.user_id }}">
+						</td>
+						<td>{{ user.username }}</td>
+						<td>
+							<input type="email" name="email" value="{{ user.email }}">
+						</td>
+						<td>
+							<select name="role_id" class="form-control form-control-sm">
+								{% for role in roles %}
+									<option value="{{ role.role_id }}" {{ role.role_id == user.role_id ? "selected" }}>{{ role.name }}</option>
+								{% endfor %}
+							</select>
+						</td>
+						<td class="text-center">
+							<input name="active" type="checkbox" {{ user.active ? 'checked' }}>
+						</td>
+						<td>
+							<a href="{{ baseUrl }}/admin/users/editPassword" class="js-open-modal" data-id="{{ user.user_id }}" title="Edit Password">
+								<i class='fas fa-edit'></i>
+							</a>
+						</td>
+
+						<td>
+							<a href="{{ baseUrl }}/UserPermission/show/{{ user.user_id }}" class="js-open-modal" title="Collection Privileges" $privHidden>
+								<i class='fas fa-tasks'></i>
+							</a>
+						</td>
+
+						<td>
+							<input type="color" name="color" alt= "Tag color" value="{{ user.color is empty ? default_color : user.color }}">
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+	{{ parent() }}
+
+	<script>
+		/* Save users list */
+		$('.js-save-user').on('change', 'input, select, textarea', function() {
+			saveFormList($(this), 'admin/users/save');
+		});
+
+		$("#userFormSection").on('shown.bs.collapse', function () {
+            $("#usersList").hide();
+		}). on('hidden.bs.collapse', function () {
+			$("#usersList").show();
+		})
+	</script>
+{% endblock %}
