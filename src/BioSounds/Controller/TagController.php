@@ -18,7 +18,7 @@ class TagController extends BaseController
     {
 	    return json_encode([
 	        'errorCode' => 0,
-            'data' => $this->twig->render('callEstimation.html.twig', [
+            'data' => $this->twig->render('tag/callEstimation.html.twig', [
                 'tagId' => $tagId,
             ]),
         ]);
@@ -49,7 +49,7 @@ class TagController extends BaseController
 
             return json_encode([
                 'errorCode' => 0,
-                'data' => $this->twig->render('tag.html.twig', [
+                'data' => $this->twig->render('tag/tag.html.twig', [
                     'tag' => $tag,
                     'recordingName' => isset($_POST['recording_name']) ? $_POST['recording_name'] : null,
                 ]),
@@ -92,7 +92,7 @@ class TagController extends BaseController
             // USERS CONTROL
             $hasReviewPerm = false;
             $displaySaveBtn = '';
-            if (Auth::isUserAdmin() || ($tag[Tag::USER_ID] != Auth::getUserLoggedID())) {
+            if (Auth::isUserAdmin() || ($tag->getUser() != Auth::getUserLoggedID())) {
                 $permission = new Permission();
                 $hasReviewPerm = Auth::isUserAdmin() ?: $permission->isReviewPermission($_SESSION["user_col_permission"]);
                 $hasViewPerm = Auth::isUserAdmin() ?: $permission->isViewPermission($_SESSION["user_col_permission"]);
@@ -107,14 +107,14 @@ class TagController extends BaseController
             }
 
             $displayDeleteBtn = '';
-            if (!Auth::isUserAdmin() && $tag[Tag::USER_ID] != Auth::getUserLoggedID()) {
+            if (!Auth::isUserAdmin() && $tag->getUser() != Auth::getUserLoggedID()) {
                 $displayDeleteBtn = 'hidden';
             }
             //
 
             return json_encode([
                 'errorCode' => 0,
-                'data' => $this->twig->render('tag.html.twig', [
+                'data' => $this->twig->render('tag/tag.html.twig', [
                     'tag' => $tag,
                     'recordingName' => isset($_POST['recording_name']) ? $_POST['recording_name'] : null,
                     'displayDeleteButton' => $displayDeleteBtn,

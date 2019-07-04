@@ -84,8 +84,8 @@ class BaseClass
     protected function addGlobals()
     {
         $this->twig->addGlobal('logoUrl', LOGO);
-        $this->twig->addGlobal('images_url', IMAGES_URL);
-        $this->twig->addGlobal('project_images_url', PROJECT_IMAGES_URL);
+        $this->twig->addGlobal('imagesUrl', IMAGES_URL);
+        $this->twig->addGlobal('projectImagesUrl', PROJECT_IMAGES_URL);
         $this->twig->addGlobal('baseUrl', APP_URL);
         $this->twig->addGlobal('project_name', Utils::getSetting(Setting::PROJECT_NAME));
         $this->twig->addGlobal('project_description', Utils::getSetting(Setting::PROJECT_DESCRIPTION));

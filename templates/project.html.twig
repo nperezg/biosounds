@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container main">
+    <div class="container mt-5">
         <div class="row text-justify">
             <div class="col-lg-12">
                 <h3>What is SoundEFForTS?</h3>
@@ -23,30 +23,14 @@
                 are around Bukit Duabelas National Park, around Harapan Rainforest, and in Berbak National Park.</p>
             </div>
         </div>
-        <div class="row" style="margin-top:15px;">
-            <div class="col-lg-1"></div>
-            <div class="col-lg-2">
-                <img class="img-responsive center-block" src="{{ images_url }}/biosounds_logo_green.png"/>
-            </div>
-            <div class="col-lg-1">
-                <img class="img-responsive center-block" src="{{ project_images_url }}/dfg_logo.jpg"/>
-            </div>
-            <div class="col-lg-2">
-                <img class="img-responsive center-block" src="{{ project_images_url }}/xeno-canto_logo.png"/>
-            </div>
-            <div class="col-lg-1">
-                <img class="img-responsive center-block" src="{{ project_images_url }}/uni_logo.jpg"/>
-            </div>
-            <div class="col-lg-1">
-                <img class="img-responsive center-block" src="{{ project_images_url }}/ipb_logo.png"/>
-            </div>
-            <div class="col-lg-1">
-                <img class="img-responsive center-block" src="{{ project_images_url }}/unja_logo.jpg"/>
-            </div>
-            <div class="col-lg-1">
-                <img class="img-responsive center-block" src="{{ project_images_url }}/sub_logo.gif"/>
-            </div>
-            <div class="col-md-1"></div>
+        <div class="mt-5 mb-5 project-logo">
+            <img src="{{ imagesUrl }}/biosounds_logo_green.png" class="float-left" alt="BioSounds">
+            <img src="{{ projectImagesUrl }}/dfg_logo.jpg" alt="DFG">
+            <img src="{{ projectImagesUrl }}/ipb_logo.png" alt="IPB">
+            <img src="{{ projectImagesUrl }}/unja_logo.jpg" alt="Unja">
+            <img src="{{ projectImagesUrl }}/uni_logo.jpg" alt="Universitaet Goettingen">
+            <img src="{{ projectImagesUrl }}/xeno-canto_logo.png" alt="Xeno Canto">
+            <img src="{{ projectImagesUrl }}/sub_logo.gif" class="float-right" alt="Sub">
         </div>
     </div>
 {% endblock %}

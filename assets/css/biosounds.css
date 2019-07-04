@@ -320,3 +320,13 @@ div .active a {
 .ui-autocomplete .ui-menu-item-wrapper:hover {
     color: #51895C;
 }
+
+/* Project Logos */
+
+.project-logo > img {
+    height: 4em;
+}
+
+.project-logo > img:not(:last-child) {
+    margin-right: 3em;
+}
