@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}{{ title }}{% endblock %}</title>
+    {% block header %}{% include 'header.html.twig' %}{% endblock %}
+</head>
+<body class="d-flex flex-column">
+    {% block navbar %}{% include 'navigationBar.html.twig' %}{% endblock %}
+
+    {% block body %}{% endblock %}
+
+    {% block footer %}{% include 'footer.html.twig' %}{% endblock %}
+
+    {% block scripts %}{% include 'scripts.html.twig' %}{% endblock %}
+
+    <div id="modalWindows"></div>
+
+    {% include 'loading.html.twig' %}
+</body>
+</html>

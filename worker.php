@@ -3,8 +3,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
-use Hybridars\BioSounds\Service\FileService;
-use Hybridars\BioSounds\Database\Database;
+use BioSounds\Service\FileService;
 
 try {
     $connection = new AMQPStreamConnection('localhost', 5672, 'bioSounds', 'mAsr0xv18');
@@ -18,26 +17,19 @@ try {
 
     define('ABSOLUTE_DIR', $config['ABSOLUTE_DIR']);
     define('TMP_DIR', $config['TMP_DIR']);
+    define('DRIVER', $config['DRIVER']);
+    define('HOST', $config['HOST']);
+    define('DATABASE', $config['DATABASE']);
+    define('USER', $config['USER']);
+    define('PASSWORD', $config['PASSWORD']);
 
     $callback = function($msg) use ($config) {
-        Database::$connection = new \PDO(
-            $config['DRIVER'].':host='.$config['HOST'].';dbname='.$config['DATABASE'],
-            $config['USER'],
-            $config['PASSWORD'],
-            [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES => false,
-            ]
-        );
         echo ' [x] Received file id: ' . $msg->body , "\n";
         (new FileService())->process($msg->body);
-        Database::$connection = null;
         sleep(substr_count($msg->body, '.'));
         echo " [x] Done", "\n";
         $msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
     };
-
 
     $channel->basic_qos(null, 1, null);
     $channel->basic_consume('biosounds_file_upload', '', false, false, false, false, $callback);

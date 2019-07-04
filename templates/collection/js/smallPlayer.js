@@ -17,6 +17,7 @@ $(function() {
     function moveCursor(element)
     {
         let time = element.currentTime / element.duration;
-        $('#recording-cursor-'+element.getAttribute('data-id')).css('margin-left', time * spectrogramWidth + 'px');
+        let cursor = document.querySelector("[data-cursor-id='" + element.getAttribute('data-id') + "']");
+        cursor.style.setProperty('margin-left', time * spectrogramWidth + 'px');
     }
 });

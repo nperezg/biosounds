@@ -1,6 +1,9 @@
-{% block body %}
-	<table class="table table-condensed table-hover">
-		<thead>
+{% extends 'administration/admin.html.twig' %}
+
+{% block admin_content %}
+<div class="card card-body">
+	<table class="table table-sm table-hover">
+		<thead class="table-borderless">
 			<tr>
 				<th scope="col">#</th>
 				<th scope="col">Name</th>
@@ -19,8 +22,10 @@
 			{% endfor %}
 		</tbody>
 	</table>
+</div>
 {% endblock %}
 
-{% block head %}
-	<link rel="stylesheet" href="{{ base_url }}/templates/administration/css/collection.css" />
+{% block header %}
+    {{ parent() }}
+	<link rel="stylesheet" href="{{ baseUrl }}/templates/administration/css/collection.css" />
 {% endblock %}

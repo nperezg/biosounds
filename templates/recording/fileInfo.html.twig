@@ -1,0 +1,19 @@
+<div class="modal fade" id="modal-div" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">File Info</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<h6><strong>Name:</strong> {{ recording.name }}</h6>
+				<h6><strong>Size:</strong> {{ recording.fileSize }} bytes</h6>
+				<h6><strong>Channels:</strong> {{ recording.channelNum }}</h6>
+				<h6><strong>Duration:</strong> {{ recording.duration }} sec</h6>
+				<h6><strong>Sampling Rate:</strong> {{ recording.samplingRate }} Hz</h6>
+			</div>
+		</div>
+	</div>
+</div>

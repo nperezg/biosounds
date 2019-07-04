@@ -1,0 +1,44 @@
+<div class="collapse" id="userFormSection">
+    <div class="card">
+        <div class="card-body">
+            <button id="closeForm" class="close" type="button" data-toggle="collapse" data-target="#userFormSection" aria-expanded="false" aria-controls="userFormSection">
+                <span>&times;</span>
+            </button>
+            <form action="{{ baseUrl }}/admin/users/save" method="post">
+                <div class="form-group input-group-sm">
+                    <label for="username">Username</label>
+                    <input id="username" type="text" name="username_text" class="form-control" maxlength="20" required>
+                </div>
+                <div class="form-group input-group-sm">
+                    <label for="name">Full Name</label>
+                    <input id="name" type="text" name="name_text" class="form-control" maxlength="100" required>
+                </div>
+                <div class="form-group input-group-sm">
+                    <label for="email">Email Address</label>
+                    <input id="email" type="email" name="email_email" class="form-control" maxlength="100" required>
+                </div>
+                <div class="form-group input-group-sm">
+                    <label for="newpassword1">User Password</label>
+                    <input type="password" id="newpassword1" class="form-control" maxlength="20" required>
+                </div>
+                <div class="form-group input-group-sm">
+                    <label for="newpassword2">Please Retype Password</label>
+                    <input type="password" name="password_password" id="newpassword2" class="form-control" maxlength="20" required>
+                </div>
+                <div class="form-group input-group-sm">
+                    <label for="role_id">User Role</label>
+                    <select id="role_id" name="role_id_select-one" class="form-control" required>
+                        {% for role in roles %}
+                        <option value="{{ role.role_id }}">{{ role.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group text-right">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
