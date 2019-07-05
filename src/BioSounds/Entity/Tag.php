@@ -446,7 +446,7 @@ class Tag extends BaseProvider
     {
         $this->setId($values['tag_id']);
         $this->setRecording($values['recording_id']);
-        $this->setSpecies(isset($values['species_id']) && $values['species_id']);
+        $this->setSpecies(isset($values['species_id']) ? $values['species_id'] : null);
         $this->setUser($values['user_id']);
         $this->setMinTime($values['min_time']);
         $this->setMaxTime($values['max_time']);

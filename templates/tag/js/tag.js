@@ -40,6 +40,11 @@ $(function() {
     });
 
     $('#tagForm').submit(function(e) {
+
+        if ($("#tagForm :input").prop('disabled') === true) {
+            return;
+        }
+
         readyToClose = true;
 
         if (this.checkValidity() === false) {
@@ -47,7 +52,6 @@ $(function() {
             readyToClose = false;
         } else {
             let tagId = $("input[name='tag_id']").val();
-            let newTag = false;
 
             $.ajax({
                 type: 'POST',
@@ -59,7 +63,6 @@ $(function() {
 
                     if (jsonResponse.tagId && jsonResponse.tagId > 1) {
                         tagId = jsonResponse.tagId;
-                        console.log(tagId);
                         createTag(tagId);
                     }
                     updateTag(tagId);
@@ -119,15 +122,15 @@ $(function() {
     });
 
     $("#review-accept-btn").click(function(e){
-        $('#review_animal_desc').prop('disabled', true);
-        $('#review_animal_id').val('');
+        $('#reviewSpeciesName').prop('disabled', true);
+        $('#reviewSpeciesId').val('');
         $('#review_status').val(1);
         $('#state').html('Accepted');
         e.preventDefault();
     });
 
     $("#review-correct-btn").click(function(e){
-        $('#review_animal_desc')
+        $('#reviewSpeciesName')
             .prop('disabled', function(i, v) { return !v; })
             .prop('required', function(i, v) { return !v; });
         $('#review_status').val(2);
@@ -136,8 +139,8 @@ $(function() {
     });
 
     $("#review-delete-btn").click(function(e){
-        $('#review_animal_desc').prop('disabled', true);
-        $('#review_animal_id').val('');
+        $('#reviewSpeciesName').prop('disabled', true);
+        $('#reviewSpeciesId').val('');
         $('#review_status').val(3);
         $('#state').html('Deleted');
         e.preventDefault();
@@ -157,13 +160,13 @@ $(function() {
         minLength:3,
         change: function (event, ui) {
             if (!ui.item) {
-                $('#speciesName').val('');
-                $('#speciesId').val('');
+                $(this).val('');
+                $('#reviewSpeciesId').val('');
             }
         },
         select: function (e, ui) {
-            $('#speciesName').val(ui.item.label.split('(')[0]);
-            $('#speciesId').val(ui.item.value);
+            $(this).val(ui.item.label.split('(')[0]);
+            $('#reviewSpeciesId').val(ui.item.value);
             e.preventDefault();
         }
     });
@@ -172,7 +175,7 @@ $(function() {
         let reviewStatus = $('#review_status');
 
         if (this.checkValidity() === false
-            || (parseInt(reviewStatus.val()) === 2 && !$('#review_animal_id').val())
+            || (parseInt(reviewStatus.val()) === 2 && !$('#reviewSpeciesId').val())
         ){
             e.stopPropagation();
         } else {
@@ -182,8 +185,8 @@ $(function() {
                     url: baseUrl + '/tagReview/save',
                     data: $(this).serialize()
                 })
-                    .done(function(data) {
-                        showAlert('Changes saved');
+                    .done(function(response) {
+                        showAlert(JSON.parse(response).message);
                     })
                     .fail(function(response) {
                         showAlert(JSON.parse(response.responseText).message, true);
@@ -200,7 +203,7 @@ $(function() {
     });
 
     let createTag = function(tagId) {
-        let speciesName = $('#species_desc').val();
+        let speciesName = $('#reviewSpeciesName').val();
 
         let newTag = "<div class='tag-controls tag-dashed' id='" + tagId + "' style='z-index:800; border-color: white; left: ";
         newTag += left+"px; top: "+top+"px; height: "+height+"px; width: "+width+"px;'></div>";

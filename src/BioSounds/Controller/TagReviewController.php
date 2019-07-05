@@ -70,6 +70,7 @@ class TagReviewController extends BaseController
 
             return json_encode([
                 'errorCode' => 0,
+                'message' => 'Tag review saved successfully.',
             ]);
         } catch(\Exception $exception) {
             error_log($exception->getMessage());
