@@ -18,24 +18,33 @@ class RabbitQueueService
      */
     private $channel;
 
+    /**
+     * RabbitQueueService constructor.
+     */
     public function __construct()
     {
-        $this->connection = new AMQPStreamConnection('localhost', 5672, 'bioSounds', 'mAsr0xv18');
+        $this->connection = new AMQPStreamConnection(QUEUE_HOST, QUEUE_PORT, QUEUE_USER, QUEUE_PASSWORD);
         $this->channel = $this->connection->channel();
     }
 
+    /**
+     * @param int $fileId
+     */
     public function add(int $fileId)
     {
-        $this->channel->queue_declare('biosounds_file_upload', false, true, false, false);
+        $this->channel->queue_declare(QUEUE_NAME, false, true, false, false);
 
         $message = new AMQPMessage(
             $fileId,
             ['delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT]
         );
 
-        $this->channel->basic_publish($message, '', 'biosounds_file_upload');
+        $this->channel->basic_publish($message, '', QUEUE_NAME);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function closeConnection()
     {
         $this->channel->close();
