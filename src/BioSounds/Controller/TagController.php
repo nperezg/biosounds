@@ -161,7 +161,7 @@ class TagController extends BaseController
             }
 
             if (isset($data[Tag::ID]) && !empty($data[Tag::ID])) {
-                $tagId = (new TagProvider())->update($data);
+                (new TagProvider())->update($data);
                 return json_encode([
                     'errorCode' => 0,
                     'message' => 'Tag updated successfully.',
