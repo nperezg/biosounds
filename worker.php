@@ -6,13 +6,6 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 use BioSounds\Service\FileService;
 
 try {
-    $connection = new AMQPStreamConnection('localhost', 5672, 'bioSounds', 'mAsr0xv18');
-    $channel = $connection->channel();
-
-    $channel->queue_declare('biosounds_file_upload', false, true, false, false);
-
-    echo ' [*] Waiting for messages. To exit press CTRL+C', "\n";
-
     $config = parse_ini_file('config/config.ini');
 
     define('ABSOLUTE_DIR', $config['ABSOLUTE_DIR']);
@@ -22,6 +15,18 @@ try {
     define('DATABASE', $config['DATABASE']);
     define('USER', $config['USER']);
     define('PASSWORD', $config['PASSWORD']);
+    define('QUEUE_NAME', $config['QUEUE_NAME']);
+    define('QUEUE_HOST', $config['QUEUE_HOST']);
+    define('QUEUE_PORT', $config['QUEUE_PORT']);
+    define('QUEUE_USER', $config['QUEUE_USER']);
+    define('QUEUE_PASSWORD', $config['QUEUE_PASSWORD']);
+
+    $connection = new AMQPStreamConnection(QUEUE_HOST, QUEUE_PORT, QUEUE_USER, QUEUE_PASSWORD);
+
+    $channel = $connection->channel();
+    $channel->queue_declare($config['QUEUE_NAME'], false, true, false, false);
+
+    echo ' [*] Waiting for messages. To exit press CTRL+C', "\n";
 
     $callback = function($msg) use ($config) {
         echo ' [x] Received file id: ' . $msg->body , "\n";
@@ -32,7 +37,7 @@ try {
     };
 
     $channel->basic_qos(null, 1, null);
-    $channel->basic_consume('biosounds_file_upload', '', false, false, false, false, $callback);
+    $channel->basic_consume($config['QUEUE_NAME'], '', false, false, false, false, $callback);
 
     while(count($channel->callbacks)) {
         $channel->wait();
