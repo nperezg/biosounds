@@ -5,7 +5,7 @@ namespace BioSounds\Exception;
 
 class AuthenticationException extends \Exception
 {
-    const MESSAGE = 'Invalid username or password, try again.';
+    const MESSAGE = 'Invalid username or password, please try again.';
 
     public function __construct()
     {

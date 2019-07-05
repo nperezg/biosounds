@@ -71,7 +71,6 @@ class AppController extends BaseClass
             return $this->twig->render('index.html.twig', [
                 'title' => $this->title,
                 'error' => $e->getMessage(),
-                'showAlert' => 'show',
             ]);
         }
     }

@@ -1,0 +1,16 @@
+<div class="collapse card text-center position-absolute" id="loginForm">
+    <div class="card-body">
+      <form action="{{ baseUrl }}/login/login" method="post">
+        <div class="form-group">
+          <label for="username" class="sr-only">Username</label>
+          <input type="text" id="username" name="username" class="form-control form-control-sm" placeholder="Username" required autofocus>
+        </div>
+        <div class="form-group">
+          <label for="password" class="sr-only">Password</label>
+          <input type="password" id="password" name="password" class="form-control form-control-sm" placeholder="Password" required>
+        </div>
+        <button class="btn btn-sm btn-outline-primary" type="submit">Log In</button>
+      </form>
+    </div>
+  </div>
+</div>

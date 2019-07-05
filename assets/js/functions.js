@@ -1,4 +1,16 @@
-$(function() {
+document.addEventListener("DOMContentLoaded", function() {
+
+	if (error) {
+		showAlert(error);
+	}
+
+	$('#loginForm').on('show.bs.collapse', function () {
+		let alertBox = document.getElementById('alertBox');
+		if (!alertBox) {
+			return;
+		}
+		alertBox.classList.remove('show');
+	});
 
 	document.addEventListener('submit', (event) => {
 		if (event.target.matches('.js-async-form')) {
@@ -63,6 +75,9 @@ $(function() {
 });
 
 function showAlert(message) {
+	//TODO: Move hide login form to another place
+	$('#loginForm').collapse('hide');
+
 	let alertDiv = document.getElementById('alertBox');
 
 	if (alertDiv) {
