@@ -63,11 +63,11 @@
                         </li>
                     {% else %}
                         <li class=navbar-item">
-                            <a class="nav-link" href="#login-form" data-toggle="collapse">
+                            <a class="nav-link" href="#" data-target="#loginForm" data-toggle="collapse">
                                 <i class="fas fa-sign-in-alt"></i> Login
                             </a>
                         </li>
-                        {% block login %} {% include 'login.html.twig' %}{% endblock %}
+                        {% block login %} {% include 'login/login.html.twig' %}{% endblock %}
                     {% endif %}
                 </ul>
             </div>

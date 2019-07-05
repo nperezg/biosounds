@@ -13,8 +13,8 @@ class LoginController extends BaseController
      */
     public function login(): bool
     {
-		$userName = strtolower(filter_var($_POST["inputUsername"], FILTER_SANITIZE_STRING));
-		$password = filter_var($_POST["inputPassword"], FILTER_SANITIZE_STRING);
+		$userName = strtolower(filter_var($_POST["username"], FILTER_SANITIZE_STRING));
+		$password = filter_var($_POST["password"], FILTER_SANITIZE_STRING);
 
 		if (Auth::login($userName, $password)) {
             header('Location: '.APP_URL);
