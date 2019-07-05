@@ -3,6 +3,7 @@
 namespace BioSounds\Provider;
 
 use BioSounds\Entity\Collection;
+use BioSounds\Exception\Database\NotFoundException;
 
 class CollectionProvider extends BaseProvider
 {
@@ -49,19 +50,20 @@ class CollectionProvider extends BaseProvider
     {
         $this->database->prepareQuery('SELECT * FROM collection WHERE collection_id = :id');
 
-        if (!empty($result = $this->database->executeSelect([':id' => $id]))) {
-            $result = $result[0];
-
-            return (new Collection())
-                ->setId($result['collection_id'])
-                ->setName($result['name'])
-                ->setAuthor($result['author'])
-                ->setSource($result['source'])
-                ->setCitation($result['citation'])
-                ->setUrl($result['url'])
-                ->setNote($result['note'])
-                ->setView($result['view']);
+        if (empty($result = $this->database->executeSelect([':id' => $id]))) {
+            throw new NotFoundException($id);
         }
-        return null;
+
+        $result = $result[0];
+
+        return (new Collection())
+            ->setId($result['collection_id'])
+            ->setName($result['name'])
+            ->setAuthor($result['author'])
+            ->setSource($result['source'])
+            ->setCitation($result['citation'])
+            ->setUrl($result['url'])
+            ->setNote($result['note'])
+            ->setView($result['view']);
     }
 }

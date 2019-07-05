@@ -3,6 +3,7 @@
 namespace BioSounds\Provider;
 
 use BioSounds\Entity\Recording;
+use BioSounds\Exception\Database\NotFoundException;
 
 class RecordingProvider extends BaseProvider
 {
@@ -228,8 +229,9 @@ class RecordingProvider extends BaseProvider
 
         $this->database->prepareQuery($query);
         if (empty($result = $this->database->executeSelect([':id' => $id]))) {
-            throw new \Exception("Recording $id doesn't exist.");
+            throw new NotFoundException($id);
         }
+
         return $result[0];
     }
 
