@@ -14,6 +14,7 @@ use BioSounds\Provider\TagProvider;
 use BioSounds\Service\RecordingService;
 use BioSounds\Utils\Auth;
 use BioSounds\Utils\Utils;
+use Twig\Environment;
 
 class RecordingController extends BaseController
 {
@@ -34,9 +35,9 @@ class RecordingController extends BaseController
 
     /**
      * RecordingController constructor.
-     * @param \Twig_Environment $twig
+     * @param Environment $twig
      */
-    public function __construct(\Twig_Environment $twig)
+    public function __construct(Environment $twig)
     {
         parent::__construct($twig);
 

@@ -71,7 +71,6 @@ class BaseClass
         !defined('ERROR_EMPTY_ID') && define('ERROR_EMPTY_ID', $this->config['ERROR_EMPTY_ID']);
         !defined('ERROR_NOT_ALLOWED') && define('ERROR_NOT_ALLOWED', $this->config['ERROR_NOT_ALLOWED']);
         !defined('ERROR_NO_ADMIN') && define('ERROR_NO_ADMIN', $this->config['ERROR_NO_ADMIN']);
-        !defined('ERROR_UPLOAD_RUNNING') && define('ERROR_UPLOAD_RUNNING', $this->config['ERROR_UPLOAD_RUNNING']);
 
         if (!isset($_SESSION['settings'])) {
             $_SESSION['settings'] = (new Setting())->getList();

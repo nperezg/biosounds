@@ -4,6 +4,7 @@ namespace BioSounds\Controller;
 
 use BioSounds\Entity\Collection;
 use BioSounds\Entity\Sound;
+use BioSounds\Exception\Database\NotFoundException;
 use BioSounds\Provider\CollectionProvider;
 use BioSounds\Provider\RecordingProvider;
 use BioSounds\Service\RecordingService;
