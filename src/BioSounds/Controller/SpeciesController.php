@@ -20,7 +20,6 @@ class SpeciesController
 			$words = preg_split("/[\s,]+/", $terms);
 
 			$animal = new Species;
-			error_log($words);
 			$result = $animal->getList($words);
 
 			if (!empty($result)) {
