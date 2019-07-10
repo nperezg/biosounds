@@ -3,6 +3,7 @@
 namespace BioSounds\Controller;
 
 use BioSounds\Exception\File\FileNotFoundException;
+use BioSounds\Exception\ForbiddenException;
 use BioSounds\Provider\RecordingProvider;
 use BioSounds\Service\ImageService;
 use BioSounds\Utils\Auth;
@@ -20,7 +21,7 @@ class FixController
     public function __construct()
     {
 		if (!Auth::isUserAdmin()){
-			throw new \Exception(ERROR_NO_ADMIN); 
+			throw new ForbiddenException();
 		}
 
         define('ABSOLUTE_DIR', "/var/www/biosounds/");
@@ -34,7 +35,7 @@ class FixController
     public function fix(int $recordingId)
     {
 		if (!Auth::isUserAdmin()){
-			throw new \Exception(ERROR_NO_ADMIN); 
+			throw new ForbiddenException();
 		} 
 		
 		try {

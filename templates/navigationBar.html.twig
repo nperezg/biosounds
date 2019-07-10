@@ -40,7 +40,7 @@
                     </li>
                 {% endif %}
                 <li class="navbar-item">
-                    <a class="nav-link" href="{{ baseUrl}}/project">Project</a>
+                    <a class="nav-link" href="{{ baseUrl}}/project/show">Project</a>
                 </li>
             </ul>
             <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -55,7 +55,7 @@
                             </a>
                             <div class="dropdown-menu">
                                 {% if is_admin %}
-                                    <a href="{{ baseUrl }}/admin" class="dropdown-item">Administration</a>
+                                    <a href="{{ baseUrl }}/admin/create" class="dropdown-item">Administration</a>
                                 {% endif %}
                                 <div class="divider"></div>
                                 <a href="{{ baseUrl }}/login/logout" class="dropdown-item">Logout</a>

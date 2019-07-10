@@ -1,13 +1,16 @@
+#<IfModule mod_rewrite.c>
+#    RewriteEngine on
+#    RewriteCond %{REQUEST_FILENAME} !-d
+#    RewriteCond %{REQUEST_URI} /(.*)/$
+#    RewriteRule ^ /%1 [R=301,L]
+#    RewriteRule index.php
+#</IfModule>
+
 <IfModule mod_rewrite.c>
     RewriteEngine on
+    RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} /(.*)/$
-    RewriteRule ^ /%1 [R=301,L]
-    RewriteRule ^([A-Za-z0-9]+)$ index.php?class=$1
-    RewriteRule ^([A-Za-z0-9]+)/([A-Za-z0-9]+)$ index.php?class=$1&action=$2
-    RewriteRule ^([A-Za-z0-9]+)/([A-Za-z0-9]+)/([A-Za-z0-9]+)$ index.php?class=$1&action=$2&id=$3
-    RewriteRule ^([A-Za-z0-9]+)/([A-Za-z0-9]+)/([A-Za-z0-9]+)/([A-Za-z0-9]+)$ index.php?class=$1&action=$2&id=$3&param=$4
-    RewriteRule ^([A-Za-z0-9]+)/([A-Za-z0-9]+)/([A-Za-z0-9]+)/([A-Za-z0-9]+)/([A-Za-z0-9]+)$ index.php?class=$1&action=$2&id=$3&param=$4&type=$5
+    RewriteRule ^.*$ ./index.php [L,QSA]
 </IfModule>
 
 Options -Indexes

@@ -82,39 +82,17 @@ $(function() {
         } else {
             $(this).find('i').removeClass('fa-eye').addClass('fa-eye-slash');
         }
-
-
-        // if (tagControls.is(':visible')) {
-        //     $("input[name=showTags]").val(0);
-        //     tagControls.hide();
-        //     $('.js-panel-tag').hide();
-        //     $(this).find('i').removeClass('fa-eye-slash').addClass('fas fa-eye');
-        // } else {
-        //     $("input[name=showTags]").val(1);
-        //     tagControls.show();
-        //     $(this).find('i').removeClass('fa-eye').addClass('fas fa-eye-slash');
-        // }
         e.preventDefault();
     });
 
     $('.js-new-tag').click(function(e) {
+        e.preventDefault();
+
         if ($('#zoom-submit').is(':disabled')) {
             showAlert('Please, select an area of the spectrogram.');
-        } else {
-            $.ajax({
-                type: "POST",
-                url: this.href,
-                data: $('#recordingForm').serialize()
-            })
-                .done(function(response) {
-                    $('#modalWindows').html(JSON.parse(response).data);
-                    $('#modal-div').modal('show');
-                })
-                .fail(function(response){
-                    showAlert(JSON.parse(response.responseText).message);
-                });
+            return;
         }
-        e.preventDefault();
+        requestModal(this.href, $('#recordingForm').serialize(), false);
     });
 
      $('#recordingForm').on('submit', function(){

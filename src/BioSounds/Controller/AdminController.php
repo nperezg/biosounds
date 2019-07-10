@@ -3,6 +3,7 @@
 namespace BioSounds\Controller;
 
 use BioSounds\Controller\Administration\UserController;
+use BioSounds\Exception\ForbiddenException;
 use BioSounds\Utils\Auth;
 use BioSounds\Controller\Administration\CollectionController as CollectionController;
 use BioSounds\Controller\Administration\SettingController as SettingController;
@@ -17,7 +18,7 @@ class AdminController extends BaseController
     public function create()
     {
 		if (!Auth::isUserAdmin()){
-			throw new \Exception(ERROR_NO_ADMIN); 
+			throw new ForbiddenException();
 		}
 
 		return $this->settings();
@@ -65,18 +66,17 @@ class AdminController extends BaseController
     public function recordings(... $args)
     {
 		return (new RecordingController($this->twig))->show(
-            $args[0],
+            empty($args[0]) ? null : $args[0],
             empty($args[1]) ? 1 : $args[1]);
 	}
 
     /**
-     * @param string|null $action
+     * @param string $action
+     * @param int|null $id
      * @return mixed
      */
-	public function recordingManager(?string $action = null)
+	public function recordingManager(string $action, int $id = null)
     {
-        if (!empty($action)) {
-            return (new RecordingController($this->twig))->$action();
-        }
+        return (new RecordingController($this->twig))->$action($id);
     }
 }

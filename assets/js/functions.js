@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	document.addEventListener('submit', (event) => {
 		if (event.target.matches('.js-async-form')) {
 			event.preventDefault();
-			submitAsyncForm(event.target);
+			postRequest(event.target.action, $(event.target).serialize(), true);
 		}
 	});
 
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		if (this.dataset.id) {
 			data = {'id': this.dataset.id};
 		}
-		openModal(this.href, data);
+		requestModal(this.href, data);
 		e.preventDefault();		
 	});	
 	
@@ -48,29 +48,35 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     };
 
-	$('.js-species-autocomplete').autocomplete({
-		source: function( request, response ) {
-			$.post( baseUrl + '/species/getList', { term: request.term } )
-				.done(function(data) {
-					response(JSON.parse(data));
-				})
-				.fail(function(response) {
-					showAlert(JSON.parse(response.responseText).message);
-					response(null);
-				});
-		},
-		minLength:3,
-		change: function (event, ui) {
-			if (!ui.item) {
-				$('#speciesName').val('');
-				$('#speciesId').val('');
+	$(document).on('keydown.autocomplete', '.js-species-autocomplete', function() {
+		$(this).autocomplete ({
+			source: function (request, response) {
+				$.post(baseUrl + '/species/getList', {term: request.term})
+					.done(function (data) {
+						response(JSON.parse(data));
+					})
+					.fail(function (response) {
+						showAlert(JSON.parse(response.responseText).message);
+						response(null);
+					});
+			},
+			minLength: 3,
+			change: function (event, ui) {
+				if (!ui.item) {
+					$(this).val('');
+					let type = $(this).data('type');
+					$('.js-species-id[data-type=' + type + ']').val('');
+					//$('#reviewSpeciesId').val('');
+				}
+			},
+			select: function (e, ui) {
+				$(this).val(ui.item.label.split('(')[0]);
+				let type = $(this).data('type');
+				$('.js-species-id[data-type=' + type + ']').val(ui.item.value);
+				// $('#reviewSpeciesId').val(ui.item.value);
+				e.preventDefault();
 			}
-		},
-		select: function (e, ui) {
-			$('#speciesName').val(ui.item.label.split('(')[0]);
-			$('#speciesId').val(ui.item.value);
-			e.preventDefault();
-		}
+		});
 	});
 });
 
@@ -114,18 +120,60 @@ function toggleLoading() {
 	$('.loading').toggle();
 }
 
-function openModal(href, data = []) {
+function requestModal(href, data = [])
+{
+	postRequest(href, data, false, false, function (response) {
+		$('#modalWindows').html(response.data);
+		$("#modal-div").modal('show');
+	});
+}
+
+function postRequest(href, data = [], showMessage = false, showLoading = false, callback)
+{
+	asyncRequest('POST', href, data, showMessage, showLoading, callback);
+}
+
+function deleteRequest(href, data = [], showMessage = false, showLoading = false, callback)
+{
+	asyncRequest('DELETE', href, data, showMessage, showLoading, callback);
+}
+
+function asyncRequest(type, href, data = [], showMessage = false, showLoading = false, callback) {
+	if (showLoading) {
+		toggleLoading();
+	}
+
 	$.ajax({
-	    type: 'POST',
+	    type: type,
 	    url: href,
 		data: data,
+		dataType: 'json',
 	})
-	.done(function(response){
-		$('#modalWindows').html(JSON.parse(response).data);
-		$("#modal-div").modal('show');
+	.done(function(response) {
+		if (showMessage) {
+			console.log('entra')
+			showAlert(response.message);
+		}
+		if (callback && typeof callback === 'function') {
+			callback(response);
+		}
 	})
-	.fail(function(response){
-	    showAlert(JSON.parse(response.responseText).message);
+	.fail(function(response) {
+		if (response.status === 401) {
+			//showAlert('You are not authenticated. Please, log in.');
+			//window.location.href = baseUrl;
+		}
+
+		if (!response.responseJSON) {
+			showAlert('Error ' + response.status);
+			return;
+		}
+		showAlert(response.responseJSON.message);
+	})
+	.always(function() {
+		if (showLoading) {
+			toggleLoading();
+		}
 	});
 }
 
@@ -143,10 +191,6 @@ function getCookie(cname) {
         }
     }
     return '';
-}
-
-function deleteCookie(name) {
-	document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
 /*
@@ -170,27 +214,5 @@ function saveFormList(element, url)
 		values[item.name+"_"+item.type] = value;
 	});
 
-	$.ajax({
-	   type: 'POST',
-	   data: values,
-	   url: baseUrl + '/' + url,
-	})
-		.fail(function(response){
-			showAlert(JSON.parse(response.responseText).message);
-		});
-}
-
-function submitAsyncForm(form)
-{
-	$.ajax({
-		type: "POST",
-		url: form.action,
-		data: $(form).serialize(),
-	})
-		.done(function(response){
-			showAlert(JSON.parse(response).message);
-		})
-		.fail(function(response){
-			showAlert(JSON.parse(response.responseText).message);
-		});
+	postRequest(baseUrl + '/' + url, values, false);
 }

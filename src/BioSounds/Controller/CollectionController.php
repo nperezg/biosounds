@@ -4,7 +4,7 @@ namespace BioSounds\Controller;
 
 use BioSounds\Entity\Collection;
 use BioSounds\Entity\Sound;
-use BioSounds\Exception\Database\NotFoundException;
+use BioSounds\Exception\NotAuthenticatedException;
 use BioSounds\Provider\CollectionProvider;
 use BioSounds\Provider\RecordingProvider;
 use BioSounds\Service\RecordingService;
@@ -98,11 +98,11 @@ class CollectionController extends BaseController
     private function checkPermissions()
     {
         if (!Auth::isUserLogged() && !$this->openCollection) {
-            throw new \Exception(ERROR_NOT_LOGGED);
-        } else {
-            if (empty($this->colId)) {
-                throw new \Exception(ERROR_EMPTY_ID);
-            }
+            throw new NotAuthenticatedException();
+        }
+
+        if (empty($this->colId)) {
+            throw new \Exception(ERROR_EMPTY_ID);
         }
     }
 }

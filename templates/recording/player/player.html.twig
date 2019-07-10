@@ -49,8 +49,8 @@
                     } only %}
 
                     <div class="btn-group dark-buttons" role="group">
-                        <a href="#" id="export-coordinates" class="btn btn-link" title="Export coordinates to clipboard">
-                            <i class="fas fa-copy"></i>
+                        <a href="#" id="exportCoordinates" class="btn btn-link" title="Export coordinates to clipboard">
+                            <i class="fas fa-clipboard"></i>
                         </a>
                         <button id="zoom-submit" class="btn btn-link" type="button" title="Zoom" disabled>
                             <i class="fas fa-search-plus"></i>
@@ -72,22 +72,3 @@
     </div>
     {% include 'recording/player/frequencyScale.html.twig' %}
 </div>
-
-{% block scripts %}
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function(event) {
-
-            let recordingId = {{ player.recording.recording_id }};
-            let userId = {{ player.user }};
-            let frequency = {{ player.recording.sampling_rate }};
-            let channelNum = {{ player.recording.channel_num }};
-            let soundFilePath = '{{ player.filePath }}';
-
-            {% include 'recording/player/js/playbackRate.js' %}
-            {% include 'recording/player/js/player.js' %}
-            {% include 'recording/player/js/imageCrop.js' %}
-            {% include 'recording/player/js/coordinateExport.js' %}
-            {% include 'recording/player/js/tagControls.js' %}
-        });
-    </script>
-{% endblock %}

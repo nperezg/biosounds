@@ -3,6 +3,7 @@
 namespace BioSounds\Controller\Administration;
 
 use BioSounds\Controller\BaseController;
+use BioSounds\Exception\ForbiddenException;
 use BioSounds\Provider\CollectionProvider;
 use BioSounds\Utils\Auth;
 
@@ -17,7 +18,7 @@ class CollectionController extends BaseController
     public function show()
     {
         if (!Auth::isUserAdmin()) {
-            throw new \Exception(ERROR_NO_ADMIN);
+            throw new ForbiddenException();
         }
 
         return $this->twig->render('administration/collections.html.twig', [

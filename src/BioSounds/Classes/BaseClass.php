@@ -62,15 +62,18 @@ class BaseClass
         !defined('LOGO') && define('LOGO', IMAGES_URL . $this->config['LOGO']);
         !defined('TMP_DIR') && define('TMP_DIR', $this->config['TMP_DIR']);
 
+        !defined('QUEUE_NAME') && define('QUEUE_NAME', $this->config['QUEUE_NAME']);
+        !defined('QUEUE_HOST') && define('QUEUE_HOST', $this->config['QUEUE_HOST']);
+        !defined('QUEUE_PORT') && define('QUEUE_PORT', $this->config['QUEUE_PORT']);
+        !defined('QUEUE_USER') && define('QUEUE_USER', $this->config['QUEUE_USER']);
+        !defined('QUEUE_PASSWORD') && define('QUEUE_PASSWORD', $this->config['QUEUE_PASSWORD']);
+
         !defined('WINDOW_WIDTH') && define('WINDOW_WIDTH', $this->config['WINDOW_WIDTH']);
         !defined('SPECTROGRAM_LEFT') && define('SPECTROGRAM_LEFT', $this->config['SPECTROGRAM_LEFT']);
         !defined('SPECTROGRAM_RIGHT') && define('SPECTROGRAM_RIGHT', $this->config['SPECTROGRAM_RIGHT']);
         !defined('SPECTROGRAM_HEIGHT') && define('SPECTROGRAM_HEIGHT', $this->config['SPECTROGRAM_HEIGHT']);
 
-        !defined('ERROR_NOT_LOGGED') && define('ERROR_NOT_LOGGED', $this->config['ERROR_NOT_LOGGED']);
         !defined('ERROR_EMPTY_ID') && define('ERROR_EMPTY_ID', $this->config['ERROR_EMPTY_ID']);
-        !defined('ERROR_NOT_ALLOWED') && define('ERROR_NOT_ALLOWED', $this->config['ERROR_NOT_ALLOWED']);
-        !defined('ERROR_NO_ADMIN') && define('ERROR_NO_ADMIN', $this->config['ERROR_NO_ADMIN']);
 
         if (!isset($_SESSION['settings'])) {
             $_SESSION['settings'] = (new Setting())->getList();

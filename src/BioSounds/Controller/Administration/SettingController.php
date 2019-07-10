@@ -4,6 +4,7 @@ namespace BioSounds\Controller\Administration;
 
 use BioSounds\Controller\BaseController;
 use BioSounds\Entity\Setting;
+use BioSounds\Exception\ForbiddenException;
 use BioSounds\Utils\Auth;
 use BioSounds\Utils\Utils;
 
@@ -18,7 +19,7 @@ class SettingController extends BaseController
     public function show()
     {
 		if (!Auth::isUserAdmin()){
-			throw new \Exception(ERROR_NO_ADMIN);
+			throw new ForbiddenException();
 		}
 		echo Utils::getSetting('license');
 
@@ -43,29 +44,20 @@ class SettingController extends BaseController
      */
 	public function save()
     {
-        try {
-            if (!Auth::isUserAdmin()) {
-                throw new \Exception(ERROR_NO_ADMIN);
-            }
-            $setting = new Setting();
-            foreach ($_POST as $key => $value) {
-                $value = filter_var($value, FILTER_SANITIZE_STRING);
-                $setting->update($key, $value);
-            }
-
-            $_SESSION['settings'] = $setting->getList();
-            return json_encode([
-                'errorCode' => 0,
-                'message' => 'Settings saved successfully.',
-            ]);
-        } catch(\Exception $exception) {
-            error_log($exception->getMessage());
-            http_response_code(400);
-
-            return json_encode([
-                'errorCode' => $exception->getCode(),
-                'message' => $exception->getMessage(),
-            ]);
+        if (!Auth::isUserAdmin()) {
+            throw new ForbiddenException();
         }
+        $setting = new Setting();
+        foreach ($_POST as $key => $value) {
+            $value = filter_var($value, FILTER_SANITIZE_STRING);
+            $setting->update($key, $value);
+        }
+
+        $_SESSION['settings'] = $setting->getList();
+
+        return json_encode([
+            'errorCode' => 0,
+            'message' => 'Settings saved successfully.',
+        ]);
     }
 }
