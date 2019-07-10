@@ -50,12 +50,13 @@
                     </div>
                     <div class="form-group">
                         <label for="speciesName" class="col-form-label-sm">Species</label>
-                        <input id="speciesId" name="species" type="hidden">
+                        <input class="js-species-id" name="species" type="hidden" data-type="upload">
                         <input id="speciesName"
                                class="form-control form-control-sm js-reference-field js-field-required js-species-autocomplete"
                                type="text"
                                size="50"
                                placeholder="Insert the species name for searching"
+                               data-type="upload"
                                disabled
                         >
                     </div>
@@ -92,11 +93,3 @@
         </div>
     </div>
 </form>
-
-{% block scripts %}
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function(event) {
-            {% include 'administration/js/upload.js' %}
-        });
-    </script>
-{% endblock %}

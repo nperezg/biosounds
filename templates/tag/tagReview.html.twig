@@ -1,4 +1,4 @@
-<form id="reviewForm">
+<form id="reviewForm" data-disabled="{{ disableReviewForm }}">
 	<div class="row">
 		<div class="col-md-2"><h6 id="state"></h6></div>
 		<div class="col-md-10">
@@ -9,13 +9,13 @@
 			</div>	
 		</div>
 	</div>		
-	<input id="reviewSpeciesId" name="species_id" type="hidden">
+	<input class="js-species-id" data-type="review" name="species_id" type="hidden">
 	<input name="tag_id" type="hidden" value="{{ tagId }}">
 	<input id="review_status" name="tag_review_status_id" type="hidden" value="">
 
 	<div class="form-group" id="review_animal_group">
 		<label for="reviewSpeciesName" class="col-form-label-sm">New Review Species</label>
-		<input id="reviewSpeciesName" class="form-control form-control-sm js-species-autocomplete" type="text" disabled>
+		<input id="reviewSpeciesName" data-type="review" class="form-control form-control-sm js-species-autocomplete" type="text" disabled>
 		<div class="invalid-feedback">
 			Please select a species from the list.
 		</div>

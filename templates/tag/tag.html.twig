@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-div" tabindex="-1" role="dialog">
+<div class="modal fade" id="modal-div" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -8,15 +8,23 @@
             <div class="modal-body">
                 <div class="row">
                     <div id="tag-panel" class="col-12">
-                        <form id="tagForm">
+                        <form id="tagForm" data-disabled="{{ disableTagForm }}">
                             <input name="tag_id" type="hidden" value="{{ tag.id }}">
                             <input name="recording_id" type="hidden" value="{{ tag.recording }}">
-                            <input id='speciesId' name='species_id' type='hidden' value="{{ tag.species }}">
+                            <input class='js-species-id' data-type="edit" name='species_id' type='hidden' value="{{ tag.species }}">
 
                             <div class="form-row align-items-center">
                                 <div class="form-group col-auto">
-                                    <label class="col-form-label-sm" for="species_desc">Species</label>
-                                    <input id="speciesName" class="form-control form-control-sm mb-1 js-species-autocomplete" type="text" size="30" value="{{ tag.speciesName }}" required>
+                                    <label class="col-form-label-sm" for="speciesName">Species</label>
+                                    <input id="speciesName"
+                                           data-type="edit"
+                                           class="form-control form-control-sm mb-1 js-species-autocomplete"
+                                           type="text"
+                                           size="30"
+                                           value="{{ tag.speciesName }}"
+                                           required
+                                           autofocus
+                                    >
                                     <div class="invalid-feedback">
                                         Please select a species from the list.
                                     </div>
@@ -51,12 +59,12 @@
                             <div class="form-row align-items-center mt-2" id="distance_group">
                                 <div class="form-group col-auto">
                                     <label class="col-form-label-sm" for="call_distance">Call Distance </label>
-                                    <input id="call_distance" class="form-control form-control-sm" name="call_distance_m" type="number" value="{{ tag.callDistance }}">
+                                    <input id="call_distance" class="form-control form-control-sm" name="call_distance_m" type="number" value="{{ tag.callDistance }}" readonly>
                                 </div>
                                 <div class="form-group col-auto">
                                     <div class="form-check form-control-sm pt-4" id="dist_check">
-                                        <input class="form-check-input" id='distance_not_estimable' name="distance_not_estimable" type="checkbox" value="1" {{ tag.distanceNotEstimable ? "checked" }}>
-                                        <label class="form-check-label" for="distance_not_estimable">
+                                        <input class="form-check-input" id='distanceNotEstimable' name="distance_not_estimable" type="checkbox" value="1" {{ tag.distanceNotEstimable ? "checked" }}>
+                                        <label class="form-check-label" for="distanceNotEstimable">
                                             Distance not estimable
                                         </label>
                                     </div>
@@ -97,7 +105,7 @@
 
                             <div class="form-group">
                                 <label class="col-form-label-sm" for="user_full_name">Creation User: </label>
-                                <span id="user_full_name">{{ tag.userName }}</span>
+                                <span id="user_full_name"><small>{{ tag.userName }}</small></span>
                             </div>
                         </form>
                     </div>
@@ -107,7 +115,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-primary" {{ displaySaveButton }} id="bsave">
+                <button type="button" class="btn btn-outline-primary" {{ displaySaveButton }} id="saveButton">
                     <i class="fas fa-save" aria-hidden="true"></i> Save
                 </button>
                 <button type="button" class="btn btn-outline-danger" {{ displayDeleteButton }} id="deleteButton" data-tag-id="{{ tag.id }}">
@@ -117,14 +125,3 @@
         </div>
     </div>
 </div>
-
-{% block scripts %}
-    <script type="text/javascript">
-        $(function() {
-            $("#tagForm :input").prop("disabled", {{ disableTagForm }});
-            $("#reviewForm :input").not("#review_animal_desc").prop("disabled", {{ disableReviewForm }});
-        });
-
-        {% include '/tag/js/tag.js' %}
-    </script>
-{% endblock %}

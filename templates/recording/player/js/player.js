@@ -36,20 +36,29 @@ let setContinuousPlay = function(value) {
 };
 
 savePlayLog = function() {
-    $.post(baseUrl + "/PlayLog/save",
+    postRequest(
+        baseUrl + '/api/PlayLog/save',
         {
             recordingId:  recordingId,
             userId: userId,
             startTime: getCookie('playStartTime'),
             stopTime: new Date().valueOf() / 1000,
-        })
-        .fail(function(xhr, textStatus, errorThrown) {
-            console.log('Error while saving play log: ' + xhr.responseText);
-        })
-        .done(function(data) {
-            if(data.error) {
-                console.log('Error while saving play log: ' + data.error);
-            }
-            deleteCookie('playStartTime');
-        });
+        }
+    );
+    // $.post(baseUrl + "/PlayLog/save",
+    //     {
+    //         recordingId:  recordingId,
+    //         userId: userId,
+    //         startTime: getCookie('playStartTime'),
+    //         stopTime: new Date().valueOf() / 1000,
+    //     })
+    //     .fail(function(xhr, textStatus, errorThrown) {
+    //         console.log('Error while saving play log: ' + xhr.responseText);
+    //     })
+    //     .done(function(data) {
+    //         if(data.error) {
+    //             console.log('Error while saving play log: ' + data.error);
+    //         }
+    //         deleteCookie('playStartTime');
+    //     });
 };

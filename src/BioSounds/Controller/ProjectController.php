@@ -10,7 +10,7 @@ class ProjectController extends BaseController
      * @return string
      * @throws \Exception
      */
-    public function create()
+    public function show()
     {
         return $this->twig->render('project.html.twig', [
             'title' => self::TITLE,

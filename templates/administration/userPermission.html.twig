@@ -90,21 +90,14 @@
 				});
 			});
 
-			$.ajax({
-				url: '{{ baseUrl }}/UserPermission/save',
-				method: "post",
-				data: {'rows': JSON.stringify(rows)},
-				dataType: 'json',
-			})
-				.done(function() {
-					$('#modal-div').modal('hide');
-				})
-				.fail(function(response){
-					console.log(JSON.parse(response.responseText).message);
-				})
-				.always(function(){
-					$('#modal-div').modal('hide');
-				});
+			postRequest(
+					'{{ baseUrl }}/api/UserPermission/save',
+					{'rows': JSON.stringify(rows)},
+					true,
+					false,
+					function () {
+						$('#modal-div').modal('hide');
+					});
 
 			e.preventDefault();
 		});

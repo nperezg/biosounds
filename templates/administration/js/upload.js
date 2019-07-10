@@ -34,27 +34,20 @@ $("#file-uploader").pluploadQueue({
 
 $('#uploadForm')
     .submit(function(e){
-        toggleLoading();
         $('#save_button').toggleDisabled();
         let values = $(this).serialize();
         values["colID"] = $("#collection").val();
 
-        $.ajax({
-            type: 'POST',
-            url: baseUrl + '/file/upload/' + uploadDir,
-            data: values,
-            success: function(data){
-                showAlert(data.message, true);
-                $("#hiddenForm").toggle();
-                $("#upload_btn").toggle();
-                toggleLoading();
-
-            },
-            error: function(response) {
-                showAlert(response.responseJSON.message, true);
-                toggleLoading();
+        postRequest(
+            baseUrl + '/api/file/upload/' + uploadDir,
+            values,
+            true,
+            true,
+            function() {
+                $('#hiddenForm').toggle();
+                $('#upload_btn').toggle();
             }
-        });
+        );
         e.preventDefault();
     })
     .on('show.bs.collapse', function () {
@@ -63,22 +56,6 @@ $('#uploadForm')
     .on('hide.bs.collapse', function () {
         document.getElementById('uploadButton').style.display = 'block';
     });
-
-
-$('#speciesName').autocomplete({
-    source: baseUrl + '/species/getList', minLength:3,
-    change: function (event, ui) {
-        if (!ui.item) {
-            $('#species-name').val('');
-            $('#species').val('');
-        }
-    },
-    select: function (event, ui) {
-        event.preventDefault();
-        var label = ui.item.label.split('(')[0];
-        $('#species-name').val(label);
-        $('#species').val(ui.item.value);
-    }});
 
 $("#reference").change(function(e) {
     let referenceFields = $('.js-reference-field');

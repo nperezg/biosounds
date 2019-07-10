@@ -3,12 +3,14 @@
 namespace BioSounds\Controller;
 
 use BioSounds\Classes\BaseClass;
+use BioSounds\Exception\InvalidActionException;
+use BioSounds\Listener\Exception\ApiExceptionListener;
+use BioSounds\Listener\Exception\ExceptionListener;
 use BioSounds\Utils\Utils;
 use BioSounds\Security\Session as Session;
 
 class AppController extends BaseClass
 {
-    private $error = '';
     private $title = 'BioSounds';
 
     /**
@@ -27,52 +29,33 @@ class AppController extends BaseClass
      */
     public function start()
     {
-        try {
-            $class = isset($_GET['class']) ? $_GET['class'] : null;
-            $action = isset($_GET['action']) ? $_GET['action'] : null;
-            $id = isset($_GET['id']) ? $_GET['id'] : null;
-            $param = isset($_GET['param']) ? $_GET['param'] : null;
-            $type = isset($_GET['type']) ? $_GET['type'] : null;
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $slugs = array_filter(explode('/', substr($uri, 1)));
 
-            if (!empty($class)) {
-                $className = 'BioSounds\\Controller\\'.ucfirst($class) . 'Controller';
-                $sectionController = new $className($this->twig);
-
-                if (!empty($action)) {
-                    if (!empty($id)) {
-                        if (!empty($param)) {
-                            if(!empty($type)) {
-                                return $sectionController->$action($id, $param, $type);
-                            } else {
-                                return $sectionController->$action($id, $param);
-                            }
-                        } else {
-                            return $sectionController->$action($id);
-                        }
-                    } else {
-                        return $sectionController->$action();
-                    }
-                }
-
-//                if (!empty($action)) {
-//                    return $sectionController->$action($id, $param, $type);
-//                }
-
-                return $sectionController->create();
-            }
-
+        if (count($slugs) === 1) {
             return $this->twig->render('index.html.twig', [
                 'title' => $this->title,
-            ]);
-
-        } catch(\Exception $e){
-            error_log($e);
-
-            return $this->twig->render('index.html.twig', [
-                'title' => $this->title,
-                'error' => $e->getMessage(),
             ]);
         }
+
+        foreach($slugs as $key => $slug) {
+            $slugs[$key] = htmlspecialchars(strip_tags($slug));
+        }
+
+        if ($slugs[1] === 'api') {
+            set_exception_handler([new ApiExceptionListener(), 'handleException']);
+            return (new ApiController())->route($this->twig, array_slice($slugs, 2));
+        }
+
+        set_exception_handler([new ExceptionListener($this->twig, $this->title), 'handleException']);
+
+        $controllerName =  __NAMESPACE__ . '\\' . ucfirst($slugs[1]) . 'Controller';
+        $controller = new $controllerName($this->twig);
+
+        if (!method_exists($controller, $slugs[2]) || !is_callable([$controller, $slugs[2]])) {
+            throw new InvalidActionException($slugs[2]);
+        }
+        return call_user_func_array([$controller, $slugs[2]], array_slice($slugs, 3));
     }
 
     /**
@@ -80,12 +63,8 @@ class AppController extends BaseClass
      */
     private function initApp()
     {
-        try {
-           (new Session())->startSecureSession();
+       (new Session())->startSecureSession();
 
-            Utils::deleteOldTmpFiles();
-        } catch(\Exception $e) {
-            $this->error = $e->getMessage();
-        }
+        Utils::deleteOldTmpFiles();
     }
 }

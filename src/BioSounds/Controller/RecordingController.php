@@ -6,9 +6,11 @@ use BioSounds\Entity\Recording;
 use BioSounds\Entity\UserPermission;
 use BioSounds\Entity\Permission;
 use BioSounds\Entity\User;
+use BioSounds\Exception\NotAuthenticatedException;
 use BioSounds\Presenter\FrequencyScalePresenter;
 use BioSounds\Presenter\RecordingPresenter;
 use BioSounds\Presenter\TagPresenter;
+use BioSounds\Provider\CollectionProvider;
 use BioSounds\Provider\RecordingProvider;
 use BioSounds\Provider\TagProvider;
 use BioSounds\Service\RecordingService;
@@ -72,8 +74,11 @@ class RecordingController extends BaseController
         }
 
         if (!Auth::isUserLogged() && !$this->isOpen) {
-            throw new \Exception(ERROR_NOT_LOGGED);
+            throw new NotAuthenticatedException();
         }
+
+        //TODO: Remove when recording is an Entity. Add to it.
+        $recordingData['collection'] = (new CollectionProvider())->get($recordingData[Recording::COL_ID]);
 
 		$this->recordingPresenter->setRecording($recordingData);
 
@@ -103,36 +108,25 @@ class RecordingController extends BaseController
     /**
      * @param int $id
      * @return false|string
+     * @throws \Exception
      */
 	public function details(int $id)
     {
-        try
-        {
-            if (empty($id)) {
-                throw new \Exception(ERROR_EMPTY_ID);
-            }
+        if (empty($id)) {
+            throw new \Exception(ERROR_EMPTY_ID);
+        }
 
-            $recording = (new RecordingProvider())->getSimple($id);
-            if ($recording->getCollection() != 1 && $recording->getCollection() != 3 && !Auth::isUserLogged()) {
-                throw new \Exception(ERROR_NOT_LOGGED);
-            }
+        $recording = (new RecordingProvider())->getSimple($id);
+        if ($recording->getCollection() != 1 && $recording->getCollection() != 3 && !Auth::isUserLogged()) {
+            throw new NotAuthenticatedException();
+        }
 
-            return json_encode([
-                'errorCode' => 0,
-                'data' => $this->twig->render('recording/fileInfo.html.twig', [
-                    'recording' => $recording,
-                ]),
-            ]);
-
-        } catch(\Exception $exception) {
-            error_log($exception->getMessage());
-            http_response_code(400);
-            
-            return json_encode([
-                'errorCode' => $exception->getCode(),
-                'message' => $exception->getMessage(),
-            ]);
-        }        
+        return json_encode([
+            'errorCode' => 0,
+            'data' => $this->twig->render('recording/fileInfo.html.twig', [
+                'recording' => $recording,
+            ]),
+        ]);
 	}
 
     /**

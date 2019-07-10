@@ -3,6 +3,8 @@
 namespace BioSounds\Controller;
 
 use BioSounds\Entity\TagReview;
+use BioSounds\Exception\ForbiddenException;
+use BioSounds\Exception\NotAuthenticatedException;
 use BioSounds\Utils\Auth;
 
 class TagReviewController extends BaseController
@@ -15,7 +17,7 @@ class TagReviewController extends BaseController
 	public function show(int $tagId)
     {
 		if (!Auth::isUserLogged()) {
-			throw new \Exception(ERROR_NOT_LOGGED);
+			throw new NotAuthenticatedException();
 		}
 
 		if (empty($tagId)) {
@@ -26,7 +28,7 @@ class TagReviewController extends BaseController
             (!isset($_SESSION['user_col_permission']) ||
                 empty($_SESSION['user_col_permission']))
         ) {
-			throw new \Exception(ERROR_NOT_ALLOWED);
+			throw new ForbiddenException();
 		}
 
 		$tagReview = new TagReview();
@@ -44,42 +46,32 @@ class TagReviewController extends BaseController
      */
 	public function save()
     {
-        try {
-            if (!Auth::isUserLogged()) {
-                throw new \Exception(ERROR_NOT_LOGGED);
-            }
-
-            if(!Auth::isUserAdmin() &&
-                (!isset($_SESSION['user_col_permission']) ||
-                    empty($_SESSION['user_col_permission']))
-            ) {
-                throw new \Exception(ERROR_NOT_ALLOWED);
-            }
-
-            $data[TagReview::USER] = Auth::getUserLoggedID();
-
-            foreach ($_POST as $key => $value) {
-                $data[$key] = htmlentities(strip_tags(filter_var($value, FILTER_SANITIZE_STRING)), ENT_QUOTES);
-            }
-
-            if (empty($data[TagReview::SPECIES])) {
-                unset($data[TagReview::SPECIES]);
-            }
-
-            (new TagReview())->insert($data);
-
-            return json_encode([
-                'errorCode' => 0,
-                'message' => 'Tag review saved successfully.',
-            ]);
-        } catch(\Exception $exception) {
-            error_log($exception->getMessage());
-            http_response_code(400);
-
-            return json_encode([
-                'errorCode' => $exception->getCode(),
-                'message' => $exception->getMessage(),
-            ]);
+        if (!Auth::isUserLogged()) {
+            throw new NotAuthenticatedException();
         }
-	}	
+
+        if(!Auth::isUserAdmin() &&
+            (!isset($_SESSION['user_col_permission']) ||
+                empty($_SESSION['user_col_permission']))
+        ) {
+            throw new ForbiddenException();
+        }
+
+        $data[TagReview::USER] = Auth::getUserLoggedID();
+
+        foreach ($_POST as $key => $value) {
+            $data[$key] = htmlentities(strip_tags(filter_var($value, FILTER_SANITIZE_STRING)), ENT_QUOTES);
+        }
+
+        if (empty($data[TagReview::SPECIES])) {
+            unset($data[TagReview::SPECIES]);
+        }
+
+        (new TagReview())->insert($data);
+
+        return json_encode([
+            'errorCode' => 0,
+            'message' => 'Tag review saved successfully.',
+        ]);
+	}
 }

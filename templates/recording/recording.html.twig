@@ -6,9 +6,9 @@
             <div class="col-10">
                 <nav aria-label="breadcrumb">
                     <ul class="breadcrumb bg-white">
-                        <li class="breadcrumb-item" aria-current="page"><a href="{{ baseUrl }}">Home</a></li>
                         <li class="breadcrumb-item" aria-current="page">
-                            <a href="{{ baseUrl }}/collection/show/{{ player.recording.col_id }}/{{ collection_page }}/gallery">Collection
+                            <a href="{{ baseUrl }}/collection/show/{{ player.recording.col_id }}/{{ collection_page }}/gallery">
+                                {{ player.recording.collection.name }}
                             </a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">{{ player.recording.name }}</li>
@@ -31,10 +31,10 @@
         <hr>
 
         <div class="row">
-            <div class="col-2 mr-auto text-center">
+            <div id="recordingNav" class="col-2 mr-auto text-center">
                 <ul class="nav flex-column nav-pills nav-fill">
                     <li class="nav-item">
-                        <a class="nav-link js-new-tag" href="{{ baseUrl }}/tag/create" title="New tag">
+                        <a class="nav-link js-new-tag" href="{{ baseUrl }}/api/tag/create" title="New tag">
                             <i class="fas fa-tag"></i>
                         </a>
                     </li>
@@ -81,17 +81,32 @@
                 <input id="playback-rate" class="custom-range js-playback-rate-control" type="range" min="0.05" max="1" step="0.01" value="1">
                 <label for="playback-rate">Speed: <span class="playback-rate-value">1.0</span>x</label>
             </div>
-            <div class="col-auto">
+            <div class="col-10-auto">
                 {% include 'recording/player/player.html.twig' %}
             </div>
         </div>
     </div>
 {% endblock %}
 
+{% block header %}
+    {{ parent() }}
+
+    <script src="{{ baseUrl }}/templates/recording/js/recording.js" defer></script>
+
+    <script src="{{ baseUrl }}/assets/js/jquery.Jcrop.min.js" defer></script>
+    <script src="{{ baseUrl }}/templates/recording/player/js/imageCrop.js" defer></script>
+
+    <script src="{{ baseUrl }}/templates/recording/player/js/playbackRate.js" defer></script>
+    <script src="{{ baseUrl }}/templates/recording/player/js/player.js" defer></script>
+    <script src="{{ baseUrl }}/templates/recording/player/js/coordinateExport.js" defer></script>
+    <script src="{{ baseUrl }}/templates/recording/player/js/tagControls.js" defer></script>
+    <script src="{{ baseUrl }}/templates/tag/js/tag.js" defer></script>
+{% endblock %}
+
 {% block scripts %}
     {{ parent() }}
 
-    <script type="text/javascript">
+    <script>
         var currentTime = 0;
         var fileDuration = {{ player.duration }};
         var minTime = {{ player.minTime }};
@@ -104,6 +119,26 @@
         var specWidth = {{ player.spectrogramWidth }};
         var specHeight = {{ player.spectrogramHeight }};
 
-        {% include 'recording/js/recording.js' %}
+        let recordingId = {{ player.recording.recording_id }};
+        let userId = {{ player.user }};
+        let frequency = {{ player.recording.sampling_rate }};
+        let channelNum = {{ player.recording.channel_num }};
+        let soundFilePath = '{{ player.filePath }}';
+
+        $(function() {
+            document.addEventListener('submit', function(e) {
+                if (e.target && e.target.id === 'callDistanceForm') {
+                    $('#modal-div').modal('hide');
+                }
+            });
+
+            document.addEventListener('click', function(e) {
+                if (e.target && e.target.id === 'distance') {
+                    let input = document.getElementById('callDistance');
+                    input.value = null;
+                    input.readOnly = this.checked;
+                }
+            });
+        });
     </script>
 {% endblock %}

@@ -115,7 +115,7 @@ function stop()
 
     //Distance estimation popup after playing
     if (estimateDistID && estimateDistID > 0 && !isContinuous) {
-        openModal(baseUrl + '/tag/showCallDistance/' + estimateDistID);
+        requestModal(baseUrl + '/tag/showCallDistance/' + estimateDistID);
     }
 }
 

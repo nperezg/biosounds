@@ -185,6 +185,7 @@ h1 {
 	border-width: thin;
 	position: absolute;
 	border-style: solid;
+    cursor: pointer;
 }
 
 .tag-dashed {
@@ -310,17 +311,6 @@ div .active a {
     background-color: #51895C;
 }
 
-/* JQuery Ui Autocomplete */
-
-.ui-autocomplete {
-    font-size: 1em;
-    font-family: Roboto, sans-serif;
-}
-
-.ui-autocomplete .ui-menu-item-wrapper:hover {
-    color: #51895C;
-}
-
 /* Project Logos */
 
 .project-logo > img {
@@ -330,4 +320,12 @@ div .active a {
 
 .project-logo > img:not(:last-child) {
     margin-right: 3em;
+}
+
+#recordingNav {
+    margin-top: 2.7em;
+}
+
+#modal-div .modal-dialog {
+    min-width: 34em;
 }

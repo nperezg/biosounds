@@ -1,35 +1,53 @@
-<div class="collapse" id="userFormSection">
+<div class="collapse mb-5" id="userFormSection">
     <div class="card">
         <div class="card-body">
             <button id="closeForm" class="close" type="button" data-toggle="collapse" data-target="#userFormSection" aria-expanded="false" aria-controls="userFormSection">
                 <span>&times;</span>
             </button>
-            <form action="{{ baseUrl }}/admin/users/save" method="post">
-                <div class="form-group input-group-sm">
-                    <label for="username">Username</label>
-                    <input id="username" type="text" name="username_text" class="form-control" maxlength="20" required>
+            <form id="userForm" novalidate>
+                <div class="form-group">
+                    <label for="username" class="col-form-label-sm">Username</label>
+                    <input id="username" type="text" name="username_text" class="form-control form-control-sm" maxlength="20" required>
+                    <div class="invalid-feedback">
+                        Please provide a username.
+                    </div>
                 </div>
-                <div class="form-group input-group-sm">
-                    <label for="name">Full Name</label>
-                    <input id="name" type="text" name="name_text" class="form-control" maxlength="100" required>
+                <div class="form-group">
+                    <label for="name" class="col-form-label-sm">Full Name</label>
+                    <input id="name" type="text" name="name_text" class="form-control form-control-sm" maxlength="100" required>
+                    <div class="invalid-feedback">
+                        Please provide the full name.
+                    </div>
                 </div>
-                <div class="form-group input-group-sm">
-                    <label for="email">Email Address</label>
-                    <input id="email" type="email" name="email_email" class="form-control" maxlength="100" required>
+                <div class="form-group">
+                    <label for="email" class="col-form-label-sm">Email Address</label>
+                    <input id="email" type="email" name="email_email" class="form-control form-control-sm" required>
+                    <div class="invalid-feedback">
+                        Please provide a valid email address.
+                    </div>
                 </div>
-                <div class="form-group input-group-sm">
-                    <label for="newpassword1">User Password</label>
-                    <input type="password" id="newpassword1" class="form-control" maxlength="20" required>
+                <div class="form-group">
+                    <label for="user_new_pwd1" class="col-form-label-sm">Password</label>
+                    <input type="password" id="user_new_pwd1" class="form-control form-control-sm" maxlength="20" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                    <div class="invalid-feedback">
+                        Please provide a valid password.
+                    </div>
+                    <small id="passwordHelpBlock" class="form-text text-muted">
+                        Min 8 characters long, 1 uppercase letter and 1 number. Special characters allowed.
+                    </small>
                 </div>
-                <div class="form-group input-group-sm">
-                    <label for="newpassword2">Please Retype Password</label>
-                    <input type="password" name="password_password" id="newpassword2" class="form-control" maxlength="20" required>
+                <div class="form-group">
+                    <label for="user_new_pwd2" class="col-form-label-sm">Confirm Password</label>
+                    <input type="password" name="password_password" id="user_new_pwd2" class="form-control form-control-sm" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" maxlength="20" required>
+                    <div class="invalid-feedback">
+                        Passwords do not match.
+                    </div>
                 </div>
-                <div class="form-group input-group-sm">
-                    <label for="role_id">User Role</label>
-                    <select id="role_id" name="role_id_select-one" class="form-control" required>
+                <div class="form-group">
+                    <label for="role_id" class="col-form-label-sm">User Role</label>
+                    <select id="role_id" name="role_id_select-one" class="form-control form-control-sm" required>
                         {% for role in roles %}
-                        <option value="{{ role.role_id }}">{{ role.name }}</option>
+                            <option value="{{ role.role_id }}">{{ role.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
