@@ -6,9 +6,9 @@ BioSounds is a sound analysis web application for biological scientific research
 
 ## Quick start
 
-BioSounds uses [Docker](https://www.docker.com) which provides a solution based on containers where the app can run easily in your machine. That avoids having to manually install all libraries, database and other components necessary for BioSounds. For facilitating the process, we have added a Makefile with the necessary commands.
+BioSounds uses [Docker](https://www.docker.com) which provides a solution based on containers where the app can run easily in your computer. That avoids having to manually install all libraries, database and other components necessary for BioSounds. For facilitating the process, we have added a Makefile with the necessary commands.
 
-You need to install Docker and docker-compose directly in your machine. Follow the instructions depending on your operating system.
+You need to [install Docker](https://docs.docker.com/engine/install) and [docker-compose](https://docs.docker.com/compose/install) directly in your machine. Follow the instructions depending on your operating system.
 
 ### Install BioSounds (only the first time)
 
