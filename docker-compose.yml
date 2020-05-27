@@ -1,0 +1,49 @@
+---
+version: "3.7"
+
+x-volumes: &volumes
+  - ./src:/var/www/html:cached
+  - biosounds-vendor:/var/www/html/vendor
+
+services:
+  database:
+    image: mysql
+    volumes:
+      - /var/lib/mysql
+    ports:
+      - 13306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: biosounds
+      MYSQL_PASSWORD: biosounds
+      MYSQL_DATABASE: biosounds
+
+  queue:
+    image: biosounds-queue
+    build:
+      context: src
+      target: queue
+    ports:
+      - 15672:5672
+    environment:
+      RABBITMQ_USER: biosounds
+      RABBITMQ_PASSWORD: biosounds
+      QUEUE_NAME: biosounds_file_upload
+
+  apache:
+    image: biosounds-apache
+    build:
+      context: src
+      target: apache
+    volumes: *volumes
+    depends_on:
+      - database
+      - queue
+    ports:
+      - 8080:80
+    environment:
+      QUEUE_HOST: queue
+      QUEUE_PORT: 5672
+
+volumes:
+  biosounds-vendor:
