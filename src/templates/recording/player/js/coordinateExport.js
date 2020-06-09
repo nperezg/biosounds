@@ -1,12 +1,13 @@
 document.getElementById('exportCoordinates').addEventListener('click', function() {
     let minTime = $('#x').val();
     let maxTime = $('#w').val();
-    let duration = (maxTime - minTime).toFixed(2);
+    let minFrequency = $('#y').val();
+    let maxFrequency = $('#h').val();
     let message = 'Data copied to clipboard successfully.'
-
+    
     const input = document.createElement('input');
     document.body.appendChild(input);
-    input.value = minTime + ', ' + maxTime + ', ' + $('#y').val() + ', ' + $('#h').val() + ', ' + duration;
+    input.value = minTime + '\t' + maxTime + '\t' + minFrequency + '\t' + maxFrequency;
     input.focus();
     input.select();
 
