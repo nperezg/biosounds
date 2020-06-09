@@ -85,7 +85,6 @@ INSERT INTO `sound_type` (`sound_type_id`, `name`) VALUES
 --
 
 INSERT INTO `species` (`species_id`, `binomial`, `genus`, `family`, `taxon_order`, `class`, `common_name`, `level`, `region`) VALUES
-(0, 'binomial', 'genus', 'family', 'taxon_order', 'class', 'common_name', 0, 'region'),
 (1, 'Test tag', '', '', '', '', 'Fill in your species table', 0, 'none');
 
 --
