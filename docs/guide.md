@@ -3,14 +3,17 @@
 Recordings are organised in collections that you can access from the top drop-down menu. All logged in users have access to all collections, but some are open and publicly available.
 
 In list view, recordings can be played back directly and some of their meta-data are displayed. It is possible to search for recordings that have been assigned to specific species or a particular rating. The list view is the default view for reference collections.
+
 ![list_view](images/list_view.png "Tag window")
 
 In gallery view, recordings can be opened in the player by clicking their thumbnails. It can take long to load large files with weveral hundreds of MB, even with a fast internet connection.
+
 ![gallery_view](images/gallery_view.png "Tag window")
 
 # Player
 
 Once you opened a file in the player, you have different options. Buttons that are enabled are shown with green shading.
+
 ![player](images/player.png "Player")
 
 ## Main spectrogram
@@ -40,6 +43,7 @@ Three actions appear after clicking tags:
 
 ## Tag window
 Any spectrogram selection can be used to create a tag by clicking on the tag button (tag icon) to the left of the main spectrogram. This, like editing tags, will bring up the following window:
+
 ![Tag_window](images/tag_window.png "Tag window")
 
 In the species box, you can start typing in the English or Latin name of the animal and choose the corresponding matches from the list of animals that you have uploaded in your Biosounds installation.
@@ -57,6 +61,6 @@ If the user has reviewing privileges (or is an administrator), the right pane of
 
 Call distance must be filled only after hearing an unfiltered (frequency-wise) version of the call ([reference](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13031)). Otherwise, filtered audio sounds too unnatural so that the distance estimation could be biased. Distance estimation works only by clicking the distance estimation button (horn icon) after the tag is created, by clicking on the tag.
 
-This zooms in to the first 30 s of the tag and plays it back over the entire frequency range. In parallel, users should listen to the recording's corresponding sound transmission recording to gauge their own hearing to the location's and microphones' specific sound transmission ([reference](https://www.sciencedirect.com/science/article/pii/S0006320716302452).
+This zooms in to the first 30 s of the tag and plays it back over the entire frequency range. In parallel, users should listen to the recording's corresponding sound transmission recording to gauge their own hearing to the location's and microphones' specific sound transmission ([reference](https://www.sciencedirect.com/science/article/pii/S0006320716302452)).
 
 Note that for bats, the "distance not estimable" checkbox should be checked. As long as tags have no distance data or not explicitly not estimable distance, they will stand our with an orange shading.
