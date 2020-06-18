@@ -22,6 +22,10 @@ You need to [install Docker](https://docs.docker.com/engine/install) and [docker
 
 ```make stop```
 
+## Using Biosounds
+
+We wrote a [guide](docs/guide.md) for users.
+
 ## Comments
 
 The application is still under development and within the refactoring process, so don't be surprised if certain parts are not yet clean code. We are working on it ;)
