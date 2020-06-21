@@ -23,7 +23,7 @@ class RabbitQueueService
      */
     public function __construct()
     {
-        $this->connection = new AMQPStreamConnection(getenv('QUEUE_HOST'), getenv('QUEUE_PORT'), QUEUE_USER, QUEUE_PASSWORD);
+        $this->connection = new AMQPStreamConnection(QUEUE_HOST, QUEUE_PORT, QUEUE_USER, QUEUE_PASSWORD);
         $this->channel = $this->connection->channel();
     }
 

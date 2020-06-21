@@ -16,8 +16,8 @@ try {
     define('USER', $config['USER']);
     define('PASSWORD', $config['PASSWORD']);
     define('QUEUE_NAME', $config['QUEUE_NAME']);
-    define('QUEUE_HOST', 'queue');
-    define('QUEUE_PORT', 5672);
+    define('QUEUE_HOST', $config['QUEUE_HOST']);
+    define('QUEUE_PORT', $config['QUEUE_PORT']);
     define('QUEUE_USER', $config['QUEUE_USER']);
     define('QUEUE_PASSWORD', $config['QUEUE_PASSWORD']);
 

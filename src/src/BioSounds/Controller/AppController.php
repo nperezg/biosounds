@@ -31,39 +31,38 @@ class AppController extends BaseClass
      */
     public function start()
     {
-        try {
-            $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-            $slugs = array_filter(explode('/', substr($uri, 1)));
+        set_exception_handler([new ExceptionListener($this->twig, $this->title), 'handleException']);
 
-            if (count($slugs) === 1) {
-                return $this->twig->render('index.html.twig', [
-                    'title' => $this->title,
-                ]);
-            }
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $slugs = array_filter(explode('/', substr($uri, 1)));
 
-            foreach ($slugs as $key => $slug) {
-                $slugs[$key] = htmlspecialchars(strip_tags($slug));
-            }
-
-            if ($slugs[0] === 'api') {
-                set_exception_handler([new ApiExceptionListener(), 'handleException']);
-                return (new ApiController())->route($this->twig, array_slice($slugs, 1));
-            }
-
-            set_exception_handler([new ExceptionListener($this->twig, $this->title), 'handleException']);
-
-            $controllerName =  __NAMESPACE__ . '\\' . ucfirst($slugs[0]) . 'Controller';
-            $controller = new $controllerName($this->twig);
-
-            if (!method_exists($controller, $slugs[1]) || !is_callable([$controller, $slugs[1]])) {
-                throw new InvalidActionException($slugs[1]);
-            }
-
-            return call_user_func_array([$controller, $slugs[1]], array_slice($slugs, 2));
-        } catch (Throwable $exception) {
-            http_response_code($exception->getCode());
-            return $exception;
+        if (count($slugs) === 1) {
+            return $this->twig->render('index.html.twig', [
+                'title' => $this->title,
+            ]);
         }
+
+        foreach ($slugs as $key => $slug) {
+            $slugs[$key] = htmlspecialchars(strip_tags($slug));
+        }
+
+        $className = $slugs[0];
+        if ($className === 'api') {
+            set_exception_handler([new ApiExceptionListener(), 'handleException']);
+            return (new ApiController())->route($this->twig, array_slice($slugs, 1));
+        }
+
+        set_exception_handler([new ExceptionListener($this->twig, $this->title), 'handleException']);
+
+        $controllerName =  __NAMESPACE__ . '\\' . ucfirst($className) . 'Controller';
+        $controller = new $controllerName($this->twig);
+
+        $methodName = $slugs[1];
+        if (!method_exists($controller, $methodName) || !is_callable([$controller, $methodName])) {
+            throw new InvalidActionException($methodName);
+        }
+
+        return call_user_func_array([$controller, $methodName], array_slice($slugs, 2));
     }
 
     /**

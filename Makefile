@@ -3,7 +3,7 @@ EXEC = exec apache
 EXEC_USER = exec -T -u www-data apache
 
 #Initializes BioSounds (only first install)
-init: start composer-install create-database chown wait run-worker
+init: start composer-install create-database
 
 #Runs BioSounds
 run: start chown wait run-worker

@@ -10,15 +10,15 @@ BioSounds uses [Docker](https://www.docker.com) which provides a solution based 
 
 You need to [install Docker](https://docs.docker.com/engine/install) and [docker-compose](https://docs.docker.com/compose/install) directly in your machine. Follow the instructions depending on your operating system.
 
-### Install BioSounds (only the first time)
+### Installation
 
 ```make init```
 
-### Run BioSounds (every other time)
+### Run
 
 ```make run```
 
-### Stop BioSounds
+### Stop
 
 ```make stop```
 
