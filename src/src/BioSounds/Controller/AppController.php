@@ -52,8 +52,6 @@ class AppController extends BaseClass
             return (new ApiController())->route($this->twig, array_slice($slugs, 1));
         }
 
-        set_exception_handler([new ExceptionListener($this->twig, $this->title), 'handleException']);
-
         $controllerName =  __NAMESPACE__ . '\\' . ucfirst($className) . 'Controller';
         $controller = new $controllerName($this->twig);
 

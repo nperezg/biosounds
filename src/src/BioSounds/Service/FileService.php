@@ -18,6 +18,7 @@ use BioSounds\Provider\SoundProvider;
 use BioSounds\Service\Queue\RabbitQueueService;
 use BioSounds\Utils\Auth;
 use BioSounds\Utils\Utils;
+use Exception;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
@@ -62,7 +63,7 @@ class FileService
      * @param array $request
      * @param string $uploadPath
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function upload(array $request, string $uploadPath): array
     {
@@ -108,9 +109,9 @@ class FileService
                 }
 
                 //Check that the extension is valid
-//                if (substr_count(Utils::getSoundExtensions(), strtolower(pathinfo($fileName, PATHINFO_EXTENSION))) < 1) {
-//                    throw new ExtensionInvalidException(strtolower(pathinfo($fileName, PATHINFO_EXTENSION)), $fileName);
-//                }
+                if (substr_count(Utils::getSoundExtensions(), strtolower(pathinfo($fileName, PATHINFO_EXTENSION))) < 1) {
+                    throw new ExtensionInvalidException(strtolower(pathinfo($fileName, PATHINFO_EXTENSION)), $fileName);
+                }
 
                 if ($dateFromFile) {
                     if (!preg_match($this::DATE_TIME_PATTERN, $fileName, $dateTime)) {
@@ -141,7 +142,7 @@ class FileService
 
                 $this->queueService->add($this->fileProvider->insert($file));
             }
-        } catch(\Exception $exception) {
+        } catch(Exception $exception) {
             Utils::deleteDirContents($uploadPath);
             throw $exception;
         } finally {
@@ -153,7 +154,7 @@ class FileService
 
     /**
      * @param int $fileId
-     * @throws \Exception
+     * @throws Exception
      */
     public function process(int $fileId)
     {
@@ -260,7 +261,7 @@ class FileService
                     $soundId,
                     'Command failed : ' . $exception->getProcess()->getCommandLine());
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             error_log($exception);
             if (!empty($file)) {
                 $this->updateFileStatus($file, File::STATUS_ERROR, $soundId, $exception->getMessage());
@@ -273,7 +274,7 @@ class FileService
      * @param int $status
      * @param int|null $recordingId
      * @param string|null $errorMessage
-     * @throws \Exception
+     * @throws Exception
      */
     private function updateFileStatus(
         File $file, int $status,
