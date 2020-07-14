@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let time_min = $('#min_time').val();
             let time_max = $('#max_time').val();
 
-            time_max = time_max > viewTotalTime ? viewTotalTime : time_max;
+            time_max = time_max > maxTime ? maxTime : time_max;
             time_min = time_min < minTime ? minTime : time_min;
             freq_max = freq_max > maxFrequency ? maxFrequency : freq_max;
             freq_min = freq_min < minFrequency ? minFrequency : freq_min;

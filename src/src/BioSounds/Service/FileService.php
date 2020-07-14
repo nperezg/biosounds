@@ -109,9 +109,9 @@ class FileService
                 }
 
                 //Check that the extension is valid
-                if (substr_count(Utils::getSoundExtensions(), strtolower(pathinfo($fileName, PATHINFO_EXTENSION))) < 1) {
-                    throw new ExtensionInvalidException(strtolower(pathinfo($fileName, PATHINFO_EXTENSION)), $fileName);
-                }
+//                if (substr_count(Utils::getSoundExtensions(), strtolower(pathinfo($fileName, PATHINFO_EXTENSION))) < 1) {
+//                    throw new ExtensionInvalidException(strtolower(pathinfo($fileName, PATHINFO_EXTENSION)), $fileName);
+//                }
 
                 if ($dateFromFile) {
                     if (!preg_match($this::DATE_TIME_PATTERN, $fileName, $dateTime)) {
@@ -226,7 +226,7 @@ class FileService
             }
 
             if (!is_dir(ABSOLUTE_DIR . 'sounds/sounds/' . $file->getCollection()) &&
-                !mkdir(ABSOLUTE_DIR . 'sounds/sounds/' . $file->getCollection())
+                !mkdir(ABSOLUTE_DIR . 'sounds/sounds/' . $file->getCollection(), 0777, true)
             ) {
                 throw new FolderCreationException(ABSOLUTE_DIR . 'sounds/sounds/' . $file->getCollection());
             }
