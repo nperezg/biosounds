@@ -2,13 +2,19 @@
 
 ## Description
 
-BioSounds is a sound analysis web application for biological scientific research that generates sound spectrograms and allows animal tagging. Originally based on Pumilio, it has evolved into a new project. The code is being completely refactored and lots of new functionalities have been added. It still uses the Python spectrogram generation code from the original application, but this should be removed in the future, as we intend to fully use Web Audio API. Developed together with [Kevin Darras](https://github.com/kdarras), from the University of Goettingen.
+BioSounds is a web application for ecoacoustics that archives and organises soundscape collections, hosts reference recording collections, generates navigable sound spectrograms, and allows annotation of animal vocalisations or other sounds.
 
-## Quick start
+## Credits and re-use
+
+Developed with [Kevin Darras](https://github.com/kdarras), from the University of Goettingen.
+Biosounds is licensed under the [GNU General Public License, v3](https://www.gnu.org/licenses/gpl-3.0.en.html).
+The corresponding citable, updateable scientific publication will be available soon in [F1000Research](https://f1000research.com/).
+
+## Quick start (for developers)
 
 BioSounds uses [Docker](https://www.docker.com) which provides a solution based on containers where the app can run easily in your computer. That avoids having to manually install all libraries, database and other components necessary for BioSounds. For facilitating the process, we have added a Makefile with the necessary commands.
 
-You need to [install Docker](https://docs.docker.com/engine/install) and [docker-compose](https://docs.docker.com/compose/install) directly in your machine. Follow the instructions depending on your operating system.
+You need to [install Docker](https://docs.docker.com/engine/install) and [docker-compose](https://docs.docker.com/compose/install) directly in your machine.
 
 ### Installation
 
@@ -22,10 +28,11 @@ You need to [install Docker](https://docs.docker.com/engine/install) and [docker
 
 ```make stop```
 
-## Using Biosounds
+### Technical notes
 
-We wrote a [guide](docs/guide.md) for users.
+Originally based on the archived [Pumilio](https://github.com/ljvillanueva/pumilio), it has evolved into a new, refactored project with new functionalities. Biosounds still uses the original Python spectrogram generation code, but we intend to fully use Web Audio API in the future. We will tackle the implementation of automated detection of sounds next.
 
-## Comments
+## Quick start (for end users)
 
-The application is still under development and within the refactoring process, so don't be surprised if certain parts are not yet clean code. We are working on it ;)
+A working instance of Biosounds can be accessed [here](https://soundefforts.uni-goettingen.de/biosounds/) with limited functionality within the open collections.
+We also wrote a [guide](docs/guide.md) for end users explaining the basic functionality.
