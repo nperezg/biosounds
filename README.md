@@ -6,7 +6,7 @@ BioSounds is a web application for ecoacoustics that archives and organises soun
 
 ## Credits and re-use
 
-Developed with [Kevin Darras](https://kevindarras.weebly.com/), from the University of Goettingen.
+Developed with [Kevin Darras](https://github.com/kdarras), from the University of Goettingen.
 Biosounds is licensed under the [GNU General Public License, v3](https://www.gnu.org/licenses/gpl-3.0.en.html).
 The corresponding citable, updateable scientific publication will be available soon in [F1000Research](https://f1000research.com/).
 
