@@ -28,6 +28,11 @@ You need to [install Docker](https://docs.docker.com/engine/install) and [docker
 
 ```make stop```
 
+### Running BioSounds
+
+Open http://localhost:8080
+Log in with username: admin, password: Administrator20
+
 ### Technical notes
 
 Originally based on the archived [Pumilio](https://github.com/ljvillanueva/pumilio), it has evolved into a new, refactored project with new functionalities. Biosounds still uses the original Python spectrogram generation code, but we intend to fully use Web Audio API in the future. We will tackle the implementation of automated detection of sounds next.
