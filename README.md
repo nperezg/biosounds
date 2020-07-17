@@ -31,6 +31,7 @@ You need to [install Docker](https://docs.docker.com/engine/install) and [docker
 ### Running BioSounds
 
 Open http://localhost:8080
+
 Log in with username: admin, password: Administrator20
 
 ### Technical notes
