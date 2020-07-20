@@ -1,12 +1,12 @@
 <div class="row">
     <div class="col-6-auto">
-        <div class="row timescale">
-            {% for second in player.timeScaleSeconds %}
-                <div class='col-1'>
-                    <small><img src="{{ baseUrl }}/assets/images/vert_line.png" alt="cursor"> {{ second }} s</small>
-                </div>
-            {% endfor %}
-        </div>
+{#        <div class="row timescale">#}
+{#            {% for second in player.timeScaleSeconds %}#}
+{#                <div class='col-1'>#}
+{#                    <small><img src="{{ baseUrl }}/assets/images/vert_line.png" alt="cursor"> {{ second }} s</small>#}
+{#                </div>#}
+{#            {% endfor %}#}
+{#        </div>#}
 
         <div id="myCanvas" class="canvas">
             {% include 'recording/player/tagBoxes.html.twig' with {'tags': player.tags, 'show_tags': player.isShowTags} %}
@@ -70,5 +70,5 @@
             </div>
         </div>
     </div>
-    {% include 'recording/player/frequencyScale.html.twig' %}
+{#    {% include 'recording/player/frequencyScale.html.twig' %}#}
 </div>

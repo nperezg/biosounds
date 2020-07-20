@@ -72,6 +72,7 @@ footer p:not(:last-child) {
 #loginForm {
     top: 5rem;
     right: 1rem;
+    z-index: 3000;
 }
 
 form label {
@@ -322,8 +323,8 @@ div .active a {
     margin-right: 3em;
 }
 
-#recordingNav {
-    margin-top: 2.7em;
+.recording-navigation {
+    margin-top: 1.2em;
 }
 
 #modal-div .modal-dialog {

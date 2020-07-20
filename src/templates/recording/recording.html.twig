@@ -30,8 +30,8 @@
         </div>
         <hr>
 
-        <div class="row">
-            <div id="recordingNav" class="col-2 ml-md-auto text-center" style="padding-right:35px;">
+        <div class="row mb-5">
+            <div class="col-auto ml-auto mr-5 text-center recording-navigation">
                 <ul class="nav flex-column nav-pills nav-fill">
                     <li class="nav-item">
                         <a class="nav-link js-new-tag" href="{{ baseUrl }}/api/tag/create" title="New tag">
@@ -81,7 +81,7 @@
                 <input id="playback-rate" class="custom-range js-playback-rate-control" type="range" min="0.05" max="1" step="0.01" value="1">
                 <label for="playback-rate">Speed: <span class="playback-rate-value">1.0</span>x</label>
             </div>
-            <div class="col-10-auto mr-auto" style="padding-left:35px;">
+            <div class="col-12-auto mr-auto">
                 {% include 'recording/player/player.html.twig' %}
             </div>
         </div>
