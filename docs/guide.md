@@ -2,11 +2,11 @@
 
 Recordings are organised in collections that you can access from the top drop-down menu. All logged in users have access to all collections, but some are open and publicly available.
 
-In list view, recordings can be played back directly and some of their meta-data are displayed. It is possible to search for recordings that have been assigned to specific species or a particular rating. The list view is the default view for reference collections.
+In list view, recordings can be played back directly and some of their meta-data are displayed. It is possible to search for recordings that have been assigned to specific species or a particular rating. The list view is the default view for reference collections, and you can open a recording in the player by clicking its thumbnail.
 
 ![list_view](images/list_view.png "Tag window")
 
-In gallery view, recordings can be opened in the player by clicking their thumbnails. It can take long to load large files with several hundreds of MB, even with a fast internet connection.
+In gallery view, recordings are arranged in a grid. It can take long to load large files with several hundreds of MB, even with a fast internet connection. A recording can be opened in the player by clicking its thumbnail.
 
 ![gallery_view](images/gallery_view.png "Tag window")
 
