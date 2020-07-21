@@ -50,7 +50,7 @@ nav.menu .navbar-nav .nav-link {
     width: 16%;
     right: 0;
     word-wrap: break-word;
-    z-index: 3000;
+    z-index: 2000;
 }
 
 .goTop {
