@@ -21,7 +21,7 @@
                 <div class="col-6">
                     <div id="player-cursor" class="small-player-cursor" data-cursor-id="{{ item.recording.id }}"></div>
                     <a href="{{ baseUrl }}/recording/show/{{ item.recording.id }}/{{ page }}" title="BioSounds player">
-                    <img class="small-player-image" src="{{ baseUrl }}/{{ item.playerImage }}">
+                        <img class="small-player-image" src="{{ baseUrl }}/{{ item.playerImage }}">
                     </a>
                     <audio id="player" data-id="{{ item.recording.id }}" controls>
                         <source src="{{ baseUrl }}/{{ item.playerRecording }}" />
