@@ -85,7 +85,7 @@ class Tag extends BaseProvider
     /**
      * @var integer
      */
-    private $numberIndividuals;
+    private $numberIndividuals = 1;
 
     /**
      * @var string
