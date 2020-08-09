@@ -19,7 +19,7 @@ Originally based on the archived [Pumilio](https://github.com/ljvillanueva/pumil
 BioSounds uses [Docker](https://www.docker.com) which provides a solution based on containers where the app can run easily in your computer. That avoids having to manually install all libraries, database and other components necessary for running BioSounds. 
 For facilitating the process, we have added a couple of files: install.sh and run.sh with all necessary commands. There is also a Makefile with some extra helpful commands to access the docker containers.
 
-You need to [install Docker](https://docs.docker.com/engine/install) and [docker-compose](https://docs.docker.com/compose/install) directly in your machine. Please read docker and docker-compose documentation carefully and follow its instructions to install them properly. We are not supporting users in this regard.
+You need to install [docker](https://docs.docker.com/engine/install) and [docker-compose](https://docs.docker.com/compose/install) directly in your machine. Please read docker and docker-compose documentation carefully and follow its instructions to install them properly. We are not supporting users in this regard.
 
 Important! This setup is intended for developing and testing purposes **ONLY**. It's in no way ready for production. Please read the _Server Installation_ section.
 

@@ -6,7 +6,7 @@ BioSounds can be installed in your server without using Docker. In this guide we
 
 ### Server
 
-We assume you have a Linux server with PHP 7 installed. For our Docker configuration we have used **PHP 7.4**, which is the recommended version.
+We assume you have a Linux server with PHP 7 installed. For our Docker configuration we have used **PHP 7.4**, which is the latest version.
 
 ### PHP Extensions
 
@@ -19,7 +19,7 @@ We assume you have a Linux server with PHP 7 installed. For our Docker configura
 Several libraries need to be installed in your server for BioSounds to run properly. For all libraries the latest version should be installed, except where indicated otherwise.
 
 * Python, [Numpy](https://numpy.org), Python Setuptools, PIP
-* libsndfile1-dev libasound2-dev 
+* libsndfile1-dev, libasound2-dev 
 * [ImageMagick](https://imagemagick.org/)
 * [Montage](https://imagemagick.org/script/montage.php)
 * [Sox](http://sox.sourceforge.net)
