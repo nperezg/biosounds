@@ -74,8 +74,6 @@ class BaseClass
         !defined('SPECTROGRAM_RIGHT') && define('SPECTROGRAM_RIGHT', $this->config['SPECTROGRAM_RIGHT']);
         !defined('SPECTROGRAM_HEIGHT') && define('SPECTROGRAM_HEIGHT', $this->config['SPECTROGRAM_HEIGHT']);
 
-        !defined('ERROR_EMPTY_ID') && define('ERROR_EMPTY_ID', $this->config['ERROR_EMPTY_ID']);
-
         if (!isset($_SESSION['settings'])) {
             $_SESSION['settings'] = (new Setting())->getList();
         }

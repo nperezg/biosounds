@@ -10,7 +10,7 @@ ADD https://getcomposer.org/download/1.7.3/composer.phar /usr/local/bin/composer
 RUN chmod a+rx /usr/local/bin/composer
 
 RUN apt-get update
-RUN apt-get install -y git zip unzip
+RUN apt-get install -y git zip unzip netcat
 RUN docker-php-ext-install pdo_mysql bcmath sockets
 
 RUN composer install --no-plugins --no-scripts --optimize-autoloader --no-dev --no-progress

@@ -5,15 +5,15 @@ namespace BioSounds\Exception;
 use Exception;
 
 /**
- * Class NotAuthenticatedException
+ * Class EmptyIdException
  * @package BioSounds\Exception
  */
-class NotAuthenticatedException extends Exception
+class EmptyIdException extends Exception
 {
-    private const MESSAGE = 'User not authenticated. Please, log in.';
+    private const MESSAGE = 'The provided ID is empty.';
 
     /**
-     * NotAuthenticatedException constructor.
+     * EmptyIdException constructor.
      */
     public function __construct()
     {

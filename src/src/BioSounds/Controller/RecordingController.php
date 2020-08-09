@@ -6,6 +6,7 @@ use BioSounds\Entity\Recording;
 use BioSounds\Entity\UserPermission;
 use BioSounds\Entity\Permission;
 use BioSounds\Entity\User;
+use BioSounds\Exception\EmptyIdException;
 use BioSounds\Exception\NotAuthenticatedException;
 use BioSounds\Presenter\FrequencyScalePresenter;
 use BioSounds\Presenter\RecordingPresenter;
@@ -58,7 +59,7 @@ class RecordingController extends BaseController
     public function show(int $id, int $collectionPage = 1)
     {
         if (empty($id)) {
-            throw new \Exception(ERROR_EMPTY_ID);
+            throw new EmptyIdException();
         }
 
         $this->recordingId = $id;
@@ -113,7 +114,7 @@ class RecordingController extends BaseController
 	public function details(int $id)
     {
         if (empty($id)) {
-            throw new \Exception(ERROR_EMPTY_ID);
+            throw new EmptyIdException();
         }
 
         $recording = (new RecordingProvider())->getSimple($id);

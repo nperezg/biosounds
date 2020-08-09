@@ -4,6 +4,7 @@ namespace BioSounds\Controller;
 
 use BioSounds\Entity\Tag;
 use BioSounds\Entity\Permission;
+use BioSounds\Exception\EmptyIdException;
 use BioSounds\Exception\ForbiddenException;
 use BioSounds\Exception\NotAuthenticatedException;
 use BioSounds\Provider\TagProvider;
@@ -75,7 +76,7 @@ class TagController extends BaseController
         }
 
         if (empty($tagId)) {
-            throw new \Exception(ERROR_EMPTY_ID);
+            throw new EmptyIdException();
         }
 
         if (!Auth::isUserAdmin()

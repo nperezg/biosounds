@@ -4,6 +4,7 @@ namespace BioSounds\Controller;
 
 use BioSounds\Entity\Collection;
 use BioSounds\Entity\Sound;
+use BioSounds\Exception\EmptyIdException;
 use BioSounds\Exception\NotAuthenticatedException;
 use BioSounds\Provider\CollectionProvider;
 use BioSounds\Provider\RecordingProvider;
@@ -102,7 +103,7 @@ class CollectionController extends BaseController
         }
 
         if (empty($this->colId)) {
-            throw new \Exception(ERROR_EMPTY_ID);
+            throw new EmptyIdException();
         }
     }
 }

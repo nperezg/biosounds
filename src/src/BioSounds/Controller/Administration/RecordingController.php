@@ -6,6 +6,7 @@ use BioSounds\Controller\BaseController;
 use BioSounds\Entity\Recording;
 use BioSounds\Entity\Sensor;
 use BioSounds\Entity\Site;
+use BioSounds\Exception\EmptyIdException;
 use BioSounds\Exception\ForbiddenException;
 use BioSounds\Provider\CollectionProvider;
 use BioSounds\Provider\RecordingProvider;
@@ -120,7 +121,7 @@ class RecordingController extends BaseController
         }
 
         if (empty($id)) {
-            throw new \Exception(ERROR_EMPTY_ID);
+            throw new EmptyIdException();
         }
 
         $recordingProvider = new RecordingProvider();

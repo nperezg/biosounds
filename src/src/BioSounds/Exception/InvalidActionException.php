@@ -2,13 +2,22 @@
 
 namespace BioSounds\Exception;
 
+use Exception;
 
-class InvalidActionException extends \Exception
+/**
+ * Class InvalidActionException
+ * @package BioSounds\Exception
+ */
+class InvalidActionException extends Exception
 {
-    const MESSAGE = 'Action %s not found.';
+    private const MESSAGE = 'Action %s not found.';
 
-    public function __construct($action)
+    /**
+     * InvalidActionException constructor.
+     * @param string $action
+     */
+    public function __construct(string $action)
     {
-        parent::__construct(sprintf($this::MESSAGE, $action));
+        parent::__construct(sprintf(self::MESSAGE, $action));
     }
 }
