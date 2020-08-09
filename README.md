@@ -7,21 +7,28 @@ BioSounds is a web application for ecoacoustics that archives and organises soun
 ## Credits and license
 
 Developed by [Noemi Perez](https://github.com/nperezg) and [Kevin Darras](https://github.com/kdarras), from the University of Goettingen.
+
 Biosounds is licensed under the [GNU General Public License, v3](https://www.gnu.org/licenses/gpl-3.0.en.html).
+
 The corresponding citable, updatable scientific publication will be available soon in [F1000Research](https://f1000research.com/).
 
 ### Technical notes
 
-Originally based on the archived [Pumilio](https://github.com/ljvillanueva/pumilio) project, it has evolved into a new, refactored project with new functionalities. Biosounds still uses the original Python spectrogram generation code, but we intend to fully use Web Audio API in the future if it can fulfill all BioSounds needs. We will tackle the implementation of automated detection of sounds next.
+Originally based on the archived [Pumilio](https://github.com/ljvillanueva/pumilio) project, it has evolved into a new, refactored project with new functionalities. 
+
+Biosounds still uses the original Python spectrogram generation code (copyright by Luis J. Villanueva), but we intend to fully use Web Audio API in the future if it can fulfill all BioSounds needs. 
+
+We will tackle the implementation of automated detection of sounds next.
 
 ## Quick start (for developers)
 
 BioSounds uses [Docker](https://www.docker.com) which provides a solution based on containers where the app can run easily in your computer. That avoids having to manually install all libraries, database and other components necessary for running BioSounds. 
+
 For facilitating the process, we have added a couple of files: install.sh and run.sh with all necessary commands. There is also a Makefile with some extra helpful commands to access the docker containers.
 
-You need to install [docker](https://docs.docker.com/engine/install) and [docker-compose](https://docs.docker.com/compose/install) directly in your machine. Please read docker and docker-compose documentation carefully and follow its instructions to install them properly. We are not supporting users in this regard.
+You need to install [docker](https://docs.docker.com/engine/install) and [docker-compose](https://docs.docker.com/compose/install) directly in your machine. Please read the documentation and follow the instructions carefully. We don't offer support for docker installation and configuration.
 
-Important! This setup is intended for developing and testing purposes **ONLY**. It's in no way ready for production. Please read the _Server Installation_ section.
+Important: this setup is intended for developing and testing purposes **ONLY**. It is in no way ready for production. Please read the _Server Installation_ section.
 
 ### Installation
 
@@ -39,13 +46,17 @@ Important! This setup is intended for developing and testing purposes **ONLY**. 
 
 Open http://localhost:8080
 
-Log in with username: admin, password: Administrator20. Important! Please **change the password** of this administrator user or **delete** it once you have BioSounds running on production and have your own admin users.
+Log in with username: admin, password: Administrator20
+
+Important: please **change the password** of this administrator user or **delete** it once you have BioSounds running on production and have your own admin users.
 
 ## Server installation
 
 ### With Docker
 
-If you want to use Docker for your own server installation, please consult with a devOps engineer or someone with the necessary knowledge to manage it properly, depending on your hosting setup. The current Docker configuration [Dockerfile](src/Dockerfile) can be used for your preferred setup.
+If you want to use Docker for your own server installation, please consult with a devOps engineer or someone with the necessary knowledge to manage it properly, depending on your hosting setup. 
+
+The current Docker configuration [Dockerfile](src/Dockerfile) can be used for your preferred setup.
 
 ### Without Docker
 
