@@ -1,0 +1,31 @@
+{% extends 'administration/admin.html.twig' %}
+
+{% block admin_content %}
+<div class="card card-body">
+	<table class="table table-sm table-hover">
+		<thead class="table-borderless">
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Name</th>
+				<th scope="col">Author</th>
+				<th scope="col">Notes</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for collection in collections %}
+				<tr>
+					<th scope='row'>{{ collection.id }}</th>
+					<td>{{ collection.name }}</td>
+					<td>{{ collection.author }}</td>
+					<td>{{ collection.note }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+	<link rel="stylesheet" href="{{ baseUrl }}/templates/administration/css/collection.css" />
+{% endblock %}

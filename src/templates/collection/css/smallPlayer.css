@@ -1,0 +1,15 @@
+.small-player-cursor {
+    position:absolute;
+    width:1px;
+    height:240px;
+    background-color:red;
+    border:solid 1px red;
+    float:left;
+    z-index:1000;
+    margin-left:0;
+}
+
+.small-player-image {
+    width: 600px;
+    height: 240px;
+}

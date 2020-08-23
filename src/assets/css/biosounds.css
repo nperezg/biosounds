@@ -1,0 +1,332 @@
+html, body {
+    height: 100%;
+}
+
+.container {
+	min-width: 95%;
+}
+
+nav.menu {
+    background-color: #51895C;
+}
+
+nav.menu .navbar-nav .nav-link {
+    color: #ffffff;
+}
+
+.ui-autocomplete {
+  z-index:2147483647;
+}
+
+/* Loading Modal */
+
+.loading {
+  height: 100%;
+  width: 100%;
+  top:0;
+  left:0;
+  position: absolute;
+  background-color: white;
+  z-index: 90000000;
+  opacity: .9;
+}
+
+.loading > div {
+  position: absolute;
+  left: 45%;
+  top: 40%;
+ }
+
+.loading .spinner-grow {
+    width: 4rem;
+    height: 4rem;
+}
+
+/*--------*/
+
+#alertBox {
+    position: absolute;
+    top: 65px;
+    width: 16%;
+    right: 0;
+    word-wrap: break-word;
+    z-index: 2000;
+}
+
+.goTop {
+  right: 10px;
+  bottom: 50px;
+  position:fixed;
+}
+
+footer {
+    background-color: #E6E6E6;
+	/*color: #f8f8f8;*/
+    font-size: .875rem;
+}
+
+footer p:not(:last-child) {
+    margin-bottom: 1em;
+}
+
+#loginForm {
+    top: 5rem;
+    right: 1rem;
+    z-index: 3000;
+}
+
+form label {
+    font-weight: bold;
+}
+
+.table input {
+	border:none;
+}
+
+.table input[type=email] {
+	width:270px;
+}
+
+.table input[type=text] {
+	width:200px;
+}
+
+body .modal-tag {
+    width: 1000px;
+    left: -200px;
+}
+
+body .line-right {
+	border-right: thin solid #000000;
+}
+
+.review-table {
+    height: 350px !important;
+    overflow: auto;
+}
+
+div .inline {
+	display: inline;
+	margin-right: 25px;
+}
+
+.hidden-form {
+	border-bottom: thin solid #000000;
+	margin-bottom: 30px;
+}
+
+.btn-group.no-wrap {
+	display: flex;
+}
+
+.canvas .card {
+	z-index:8000; 
+	position: absolute;
+}
+
+.canvas .card .card-header{
+  padding: 5px;
+}
+
+.canvas .card .card-body {
+  font-size: 12px;
+  padding: 5px;
+}
+
+/* Player */
+.canvas {
+  position:relative; 
+  left: 0;
+  display: inline-block;
+}
+
+.player-line {
+    position:absolute;
+    width:1px;
+    height:400px;
+    background-color:red;
+    border:solid 1px red;
+    top:0;
+    float:left;
+    z-index:1000;
+    margin-left:0;
+}
+
+.timescale {
+  width:950px;
+}
+
+.dropdown-menu {
+   z-index:2000; 
+}
+
+h1 {
+	padding: 0;
+	margin: 0;
+}
+
+.sound-list-item {
+	height: 220px;
+}
+
+.sound-list-item:hover {
+	opacity: 0.4;
+}
+
+.sound-list-item a, .sound-list-item span{
+	display:block;
+	text-align: center;
+}
+
+.sound-list-item span{
+	padding-top: 2px;
+}
+
+.tag-controls {
+	border-width: thin;
+	position: absolute;
+	border-style: solid;
+    cursor: pointer;
+}
+
+.tag-dashed {
+	border-style: dashed;
+}
+
+.tag-orange {
+	background-color: rgba(231,192,97, 0.4);
+}
+
+span.tag-color {
+	border-style: none;
+	padding: 0;
+}
+
+span.tag-color > i {
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+}
+
+a {
+    color: #000000;
+}
+
+a:hover {
+    color: #51895C;
+}
+
+.footer a {
+    color: #FFFFFF;
+}
+
+.footer a:hover {
+    color: #51895C;
+}
+
+.pagination{
+    color: #91dc5a;
+}
+
+div .active a {
+    color: #51895C;
+}
+
+.dark-buttons .btn-link {
+    color: #000000;
+}
+
+.dark-buttons .btn-link.active {
+    color: #51895C;
+}
+
+.dark-buttons .btn-link:hover {
+    color: #51895C;
+}
+
+/* Pagination */
+
+.page-item.active .page-link {
+    background-color: #51895C;
+    border-color: #51895C;
+}
+
+.page-link:hover {
+    color: #51895C;
+}
+
+/* ---- */
+
+/* Buttons */
+
+/* Outline Primary */
+
+.btn-outline-primary:not(:disabled):not(.disabled),
+.btn-outline-primary:disabled {
+    background-color: #ffffff;
+    border-color: #51895C;
+    color: #51895C;
+}
+.btn-outline-primary:not(:disabled):not(.disabled):hover,
+.btn-outline-primary:not(:disabled):not(.disabled):focus {
+    background-color: #4fa560;
+    color: #ffffff;
+    border-color: #4fa560;
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled).active {
+    background-color: #4fa560;
+    border-color: #4fa560;
+}
+
+/* ---- */
+
+.btn-link:hover {
+    color: #91dc5a;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-link.focus {
+    text-decoration: none;
+}
+
+.btn-link, .pagination > li > a {
+    color: #51895C;
+    text-decoration: none;
+}
+
+/* ---- */
+
+/* Elements */
+
+.custom-range::-webkit-slider-thumb {
+    background-color: #51895C;
+}
+
+.custom-range::-moz-range-thumb {
+    background-color: #51895C;
+}
+
+.custom-range::-ms-thumb {
+    background-color: #51895C;
+}
+
+/* Project Logos */
+
+.project-logo > img {
+    height: 3.5em;
+    margin-top: 2em;
+}
+
+.project-logo > img:not(:last-child) {
+    margin-right: 3em;
+}
+
+.recording-navigation {
+    margin-top: 1.2em;
+}
+
+#modal-div .modal-dialog {
+    min-width: 34em;
+}

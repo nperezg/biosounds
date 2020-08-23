@@ -1,0 +1,74 @@
+<div class="row">
+    <div class="col-6-auto">
+{#        <div class="row timescale">#}
+{#            {% for second in player.timeScaleSeconds %}#}
+{#                <div class='col-1'>#}
+{#                    <small><img src="{{ baseUrl }}/assets/images/vert_line.png" alt="cursor"> {{ second }} s</small>#}
+{#                </div>#}
+{#            {% endfor %}#}
+{#        </div>#}
+
+        <div id="myCanvas" class="canvas">
+            {% include 'recording/player/tagBoxes.html.twig' with {'tags': player.tags, 'show_tags': player.isShowTags} %}
+            <div id="playerCursor" class="player-line"></div>
+            <img src="{{ player.imageFilePath }}" id="cropbox" />
+        </div>
+
+        <div class="row no-gutters mt-1">
+            <div class="col-auto mr-auto">
+                <div>
+                    <button id="play" class="btn btn-link" data-playing="false" role="switch" aria-checked="false" disabled>
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button id="stop" class="btn btn-link"><i class="fas fa-stop"></i></button>
+                    <h8>
+                        <span id="time_sec_div">{{ player.minTime > 0 ? player.minTime|round: 0 }}</span> /
+                        <span id="duration">{{ (player.maxTime - player.minTime|round) }} s</span>
+                    </h8>
+                </div>
+            </div>
+            <div class="col-auto">
+                <form class="form-inline" id="recordingForm" action="{{ baseUrl }}/recording/show/{{ player.recording.recording_id }}" method="post">
+                    <input type="hidden" name="channel" value="{{ player.channel }}">
+                    <input type='hidden' name='showTags' value="{{ player.showTags }}">
+                    <input type='hidden' name='estimateDistID' value="{{ player.estimateDistID }}">
+                    <input type="hidden" name="recording_id" value="{{ player.recording.recording_id }}">
+                    <input type="hidden" name="recording_name" value="{{ player.recording.name }}">
+                    <input type="hidden" name="specWidth" value="{{ player.spectrogramWidth }}">
+                    <input type="hidden" name="specHeight" value="{{ player.spectrogramHeight }}">
+                    <input type="hidden" name="minTimeView" value="{{ player.minTime }}">
+                    <input type="hidden" name="maxTimeView" value="{{ player.maxTime }}">
+                    <input type="hidden" name="minFreqView" value="{{ player.minFrequency }}">
+                    <input type="hidden" name="maxFreqView" value="{{ player.maxFrequency }}">
+
+                    {% include 'recording/player/timeBoxes.html.twig' with {
+                        'minTime': player.minTime,
+                        'maxTime': player.maxTime,
+                        'minFrequency': player.minFrequency,
+                        'maxFrequency': player.maxFrequency,
+                    } only %}
+
+                    <div class="btn-group dark-buttons" role="group">
+                        <a href="#" id="exportCoordinates" class="btn btn-link" title="Export coordinates to clipboard">
+                            <i class="fas fa-clipboard"></i>
+                        </a>
+                        <button id="zoom-submit" class="btn btn-link" type="button" title="Zoom" disabled>
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-toggle dark-buttons" data-toggle="buttons">
+                        <label for="continuous-play" class="btn btn-link {{ player.isContinuousPlay ? 'active':'' }}" title="Continuous playback">
+                            <input type="checkbox" id="continuous-play" name="continuous_play" autocomplete="off" {{ player.isContinuousPlay ? 'checked':'' }}>
+                            <i class="fas fa-redo-alt"></i>
+                        </label>
+                        <label for="filter" class="btn btn-link" title="Filter">
+                            <input type="checkbox" id="filter" name="filter">
+                            <i class="fas fa-filter"></i>
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{#    {% include 'recording/player/frequencyScale.html.twig' %}#}
+</div>

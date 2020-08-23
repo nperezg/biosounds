@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block header %}
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{{ title }}</title>
+        {% include 'styles.html.twig' %}
+        {% include 'scripts.html.twig' %}
+    {% endblock %}
+</head>
+<body class="d-flex flex-column">
+    {% block navbar %}{% include 'navigationBar.html.twig' %}{% endblock %}
+
+    {% block body %}{% endblock %}
+
+    <div id="modalWindows"></div>
+
+    {% block footer %}{% include 'footer.html.twig' %}{% endblock %}
+
+    {% block scripts %}
+        <script>
+            const baseUrl = '{{ baseUrl }}';
+            const error = '{{ error }}'
+        </script>
+    {% endblock %}
+
+    {% include 'loading.html.twig' %}
+</body>
+</html>
