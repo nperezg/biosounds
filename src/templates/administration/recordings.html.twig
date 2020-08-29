@@ -30,6 +30,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">Date</th>
                 <th scope="col">Time</th>
+                <th scope="col">Site ID</th>
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -41,6 +42,7 @@
                     <td><input type='text' title="Name" name="name" value="{{ recording.name }}"></td>
                     <td><input type='date' title="Date" name="file_date" value="{{ recording.fileDate }}"></td>
                     <td><input type='time' title="Time" name="file_time" min="00:00:00" max="23:59:59" step="1" value="{{ recording.fileTime }}"></td>
+                    <td><input type='text' title="Site ID" name="site_id" value="{{ recording.site_id }}"></td>
                     <td>
                         <a class="js-delete-button" href="#" data-id="{{ recording.id }}" title="Delete recording">
                             <span class="fas fa-trash"></span>
