@@ -83,7 +83,7 @@ class RecordingController extends BaseController
 
 		$this->recordingPresenter->setRecording($recordingData);
 
-        if(isset($_POST['showTags'])) {
+        if (isset($_POST['showTags'])) {
             $this->recordingPresenter->setShowTags(filter_var($_POST['showTags'], FILTER_VALIDATE_BOOLEAN));
         }
 
@@ -253,7 +253,7 @@ class RecordingController extends BaseController
 			}
 
 			/* Generation MP3 File */
-			if(!file_exists($zoomedFilePlayer)) {
+			if (!file_exists($zoomedFilePlayer)) {
                 $zoomedFilePlayer = $zoomedFilePath;
 
                 if ($samplingRate <= 44100) {
