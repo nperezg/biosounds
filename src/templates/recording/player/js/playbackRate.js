@@ -1,7 +1,15 @@
+import { AudioContext, OfflineAudioContext } from 'https://jspm.dev/standardized-audio-context';
 let playButton = $('#play');
 let playbackControl = document.querySelector('.js-playback-rate-control');
 let playbackValue = document.querySelector('.playback-rate-value');
 let context = new AudioContext();
+
+// Quick fix for Firefox and Safari
+if (frequency < 48000) {
+    frequency = 48000;
+} else if (frequency > 192000) {
+     frequency = 192000;
+}
 let offctx = new OfflineAudioContext(channelNum, 512, frequency);  // length (512) doesn't matter, just non-zero
 let source = null;
 let bufferPlay = null;
