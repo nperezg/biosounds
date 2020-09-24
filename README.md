@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/289528634.svg)](https://zenodo.org/badge/latestdoi/289528634)
+
 # BioSounds
 
 ## Description
