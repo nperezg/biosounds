@@ -83,6 +83,6 @@ Additionally to controls over recordings, admins can access other functions.
 
 ## Users
 
-Users can be created in the users pane of the administration interface. Their password is set by the admin, and the default color of their tags can be changed. Privileges for seeing, reviewing, and editing tags of specific collections can be set here.
+Users can be created by admininstrators in the users pane of the administration interface. Their password is set by the administrator, the default color of their tags can be changed, and their status as users or administrators can de declared. User-level privileges for seeing, reviewing, and editing tags of other users within specific collections are set here.
 
 ![users_admin](images/users_admin.png "Users administrative interface")
