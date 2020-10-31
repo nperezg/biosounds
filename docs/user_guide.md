@@ -6,7 +6,7 @@ Administrators can access the administration interface and upload recordings to 
 
 When the recording is a reference audio for a particular species, the corresponding box can be checked, and the rating, call type, subtype, and species be indicated. The recording is inserted into the database (for creating the MP3 preview and spectrogram) by clicking the "save" button. Recordings will appear in the corresponding collection after some processing time elapsed.
 
-![list_view](images/recordings_admin.png "Recordings administrative interface")
+![recordings_admin](images/recordings_admin.png "Recordings administrative interface")
 
 Recordings can be deleted from this interface, their time and date set a posteriori, and their names in BioSounds edited.
 
@@ -55,7 +55,7 @@ Three actions appear after clicking tags:
 ## Tag window
 Any spectrogram selection can be used to create a tag by clicking on the tag button (tag icon) to the left of the main spectrogram. This, like editing tags, will bring up the following window:
 
-![Tag_window](images/tag_window.png "Tag window")
+![tag_window](images/tag_window.png "Tag window")
 
 In the species box, you can start typing in the English or Latin name of the animal and choose the corresponding matches from the list of animals that you have uploaded in your BioSounds installation.
 
@@ -85,4 +85,4 @@ Additionally to controls over recordings, admins can access other functions.
 
 Users can be created in the users pane of the administration interface. Their password is set by the admin, and the default color of their tags can be changed. Privileges for seeing, reviewing, and editing tags of specific collections can be set here.
 
-![User_management](images/users.png "Users")
+![users_admin](images/users_admin.png "Users administrative interface")
