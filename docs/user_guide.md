@@ -2,7 +2,9 @@
 
 ## Recordings upload
 
-Administrators can access the administration interface and upload recordings to specific collections by clicking the "upload" button. The date and time of a recording can be automatically extracted from the filename when in the format YYYMMDD_HHMMSS. When the recording is a reference audio for a particular species, the corresponding box can be checked, and the rating, type, subtype, and species be indicated. The recording is inserted into the database (for creating the MP3 preview and spectrogram) by clicking the "save" button.
+Administrators can access the administration interface and upload recordings to specific collections by clicking the "upload" button. The date and time of a recording can be automatically extracted from the filename when in the format YYYMMDD_HHMMSS.
+
+When the recording is a reference audio for a particular species, the corresponding box can be checked, and the rating, call type, subtype, and species be indicated. The recording is inserted into the database (for creating the MP3 preview and spectrogram) by clicking the "save" button. Recordings will appear in the corresponding collection after some processing time elapsed.
 
 ![list_view](images/recordings_admin.png "Recordings administrative interface")
 
@@ -27,7 +29,7 @@ Once you opened a file in the player, you have different options. Buttons that a
 
 ## Main spectrogram
 The spectrogram is the most prominent part of the player. It visualises sound like a music score: time on the X axis, frequency on the Y axis, and amplitude as a color code (black: silent, red: loud). The current default setting is a window size of 1024 for the FFT-derived spectrogram.
-If your recording has two audio channels, clicking on the L/R letters next to the main spectrogram switches between the two channels.
+If your recording has two audio channels, clicking on the L/R letters left of the main spectrogram switches between the two channels.
 The current spectrogram frame, if it only shows a part of the recording, can be shifted with the left and right arrow buttons to the left of the main spectrogram.
 
 ## Playback
@@ -37,7 +39,7 @@ Continuous playback can be enabled by clicking the circular arrow below the spec
 By clicking on the reading mode button to the left of the spectrogram (CD icon), playback will be started from the start of the recording, over all frequencies, with continuous playback mode enabled.
 
 ## Selection
-Any part of the spectrogram can be selected. The coordinates of the selection will be reflected inside the text boxes below the spectrogram. These values can be copied (delimited by tabs) with the clipboard button next to them and inserted directly into any spreadsheet.
+Any part of the spectrogram can be selected. The coordinates of the selection are shown inside the text boxes below the spectrogram. These values can be copied (delimited by tabs) with the clipboard button next to them and inserted directly into any spreadsheet for further analysis.
 
 Clicking the zoom button (magnifying glass icon) will zoom into any selected part of the spectrogram. By default, the filtering option is enabled (filter icon), which will filter out frequencies outside of the selection (what you see is what you hear).
 You can return to the overview by clicking on the spectrogram thumbnail to the left of the main spectrogram.
@@ -46,16 +48,16 @@ You can return to the overview by clicking on the spectrogram thumbnail to the l
 
 Tags appear as boxes overlaid on the spectrogram. Tags can be hidden and displayed using the hide tags button (eye icon) left of the main spectrogram. Only the user's own tags can be seen, but every user can be given viewing privileges to see all other user's tags by administrators.
 Three actions appear after clicking tags:
-1. edit tag: opens you to the tag window
-2. zoom tag: zooms into the audio within the tag, prompts for a distance estimate
-3. estimate call distance: starts the dedicated call estimation playback
+1. edit tag: opens the tag window
+2. zoom tag: zooms into the audio within the tag
+3. estimate call distance: starts the dedicated call estimation playback, prompts for a distance estimate
 
 ## Tag window
 Any spectrogram selection can be used to create a tag by clicking on the tag button (tag icon) to the left of the main spectrogram. This, like editing tags, will bring up the following window:
 
 ![Tag_window](images/tag_window.png "Tag window")
 
-In the species box, you can start typing in the English or Latin name of the animal and choose the corresponding matches from the list of animals that you have uploaded in your Biosounds installation.
+In the species box, you can start typing in the English or Latin name of the animal and choose the corresponding matches from the list of animals that you have uploaded in your BioSounds installation.
 
 If you are unsure of the ID, check the box “uncertain”. Species identities can be checked by clicking the Google Images link or the Xeno-Canto link.
 
@@ -68,8 +70,19 @@ If the user has reviewing privileges (or is an administrator), the right pane of
 
 ## Call distance estimation
 
-Call distance must be filled only after hearing an unfiltered (frequency-wise) version of the call ([reference](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13031)). Otherwise, filtered audio sounds too unnatural so that the distance estimation could be biased. Distance estimation works only by clicking the distance estimation button (horn icon) after the tag is created.
-
-This zooms in to the first 30 s of the tag and plays it back over the entire frequency range. In parallel, users should listen to the recording's corresponding sound transmission recording to gauge their own hearing to the location's and microphones' specific sound transmission ([reference](https://www.sciencedirect.com/science/article/pii/S0006320716302452)).
+Call distance must be filled only after hearing an unfiltered (frequency-wise) version of the call. Otherwise, filtered audio sounds too unnatural so that the distance estimation could be biased. Distance estimation works only by clicking the distance estimation button (horn icon) after the tag is created. This zooms in to the first 30 s of the tag and plays it back over the entire frequency range. In parallel, users should listen to the recording's corresponding sound transmission recording to gauge their own hearing to the location's and microphones' specific sound transmission.
+References:
+[Darras et al. 2018](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13031)
+[Darras et al. 2016](https://www.sciencedirect.com/science/article/pii/S0006320716302452)
 
 Note that for bats, the "distance not estimable" checkbox should be checked. As long as tags have no distance data or not explicitly not estimable distance, they will stand our with an orange shading.
+
+# Administration
+
+Additionally to controls over recordings, admins can access other functions.
+
+## Users
+
+Users can be created in the users pane of the administration interface. Their password is set by the admin, and the default color of their tags can be changed. Privileges for seeing, reviewing, and editing tags of specific collections can be set here.
+
+![User_management](images/users.png "Users")
