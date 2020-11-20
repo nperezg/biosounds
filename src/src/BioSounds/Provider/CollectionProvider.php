@@ -24,9 +24,9 @@ class CollectionProvider extends BaseProvider
     public function getList(string $order = 'name'): array
     {
         $data = [];
-        $this->database->prepareQuery('SELECT * FROM collection ORDER BY :order');
+        $this->database->prepareQuery('SELECT * FROM collection ORDER BY ' . $order);
 
-        $result = $this->database->executeSelect([':order' => $order]);
+        $result = $this->database->executeSelect();
         foreach($result as $item) {
             $data[] = (new Collection())
                 ->setId($item['collection_id'])
