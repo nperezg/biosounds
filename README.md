@@ -12,7 +12,7 @@ Developed by [Noemi Perez](https://github.com/nperezg) and [Kevin Darras](https:
 
 Biosounds is licensed under the [GNU General Public License, v3](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
-The corresponding citable, updatable scientific publication will be available soon in [F1000Research](https://f1000research.com/).
+The corresponding citable, updatable scientific publication is in [F1000Research](https://f1000research.com/articles/9-1224/v1).
 
 ### Technical notes
 
