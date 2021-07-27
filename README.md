@@ -2,21 +2,25 @@
 
 # ecoSound-web
 
+## Description
+
+Web application for ecoacoustics to archive and manage soundscapes, host reference recordings, navigate spectrograms, annotate and review animal vocalisations or other sounds.
+
 ## Credits and license
 
-Developed by [Noemi Perez](https://github.com/nperezg) and [Kevin Darras](https://github.com/kdarras), from the University of Goettingen.
+Developed by [Noemi Perez](https://github.com/nperezg) and [Kevin Darras](https://github.com/kdarras). ecoSound-web was forked from [BioSounds](https://github.com/nperezg/biosounds) and is licensed under the [GNU General Public License, v3](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
-The current repository was forked from [BioSounds](https://github.com/nperezg/biosounds).
+The corresponding updatable scientific publication is in [F1000Research](https://f1000research.com/).
 
-ecoSounds is licensed under the [GNU General Public License, v3](https://www.gnu.org/licenses/gpl-3.0.en.html).
+## Quick start (for end users)
 
-The corresponding citable, updatable scientific publication is in [F1000Research](https://f1000research.com/).
+A working instance of ecoSound-web can be accessed [here](https://soundefforts.uni-goettingen.de/biosounds) with limited functionality within the open collections.
+
+You may learn about the basic functionality in the user guide (see Wiki).
 
 ## Quick start (for developers)
 
-BioSounds uses [Docker](https://www.docker.com) which provides a solution based on containers where the app can run easily in your computer. That avoids having to manually install all libraries, database and other components necessary for running BioSounds. 
-
-For facilitating the process, we have added a couple of files: install.sh and run.sh with all necessary commands. There is also a Makefile with some extra helpful commands to access the docker containers.
+We use [Docker](https://www.docker.com) to run the app in your computer. We provide install.sh and run.sh files with all necessary commands, and a Makefile with extra commands to access the docker containers.
 
 You need to install [docker](https://docs.docker.com/engine/install) and [docker-compose](https://docs.docker.com/compose/install) directly in your machine. Please read the documentation and follow the instructions carefully. We don't offer support for docker installation and configuration.
 
@@ -34,13 +38,13 @@ Important: this setup is intended for developing and testing purposes **ONLY**. 
 
 ```docker-compose stop```
 
-### Using BioSounds
+### Using ecoSound-web
 
 Open http://localhost:8080
 
 Log in with username: admin, password: Administrator20
 
-Important: please **change the password** of this administrator user or **delete** it once you have BioSounds running on production and have your own admin users.
+Important: please **change the password** of this administrator user or **delete** it once you have ecoSound-web running on production and have your own admin users.
 
 ## Server installation
 
@@ -52,16 +56,8 @@ The current Docker configuration [Dockerfile](src/Dockerfile) can be used for yo
 
 ### Without Docker
 
-Like any other web app, BioSounds can be installed without Docker. Please read the dedicated documentation [here](docs/installation.md).
+Like any other web app, ecoSound-web can be installed without Docker (see Wiki).
 
 ### Configuration file
 
 For both cases (with and without Docker), you'll need to set the configuration values in the [config.ini](src/config/config.ini) file, according to your server setup. 
-
-## Live version (SoundEfforts Project - University of Goettingen)
-
-A working instance of Biosounds can be accessed [here](https://soundefforts.uni-goettingen.de/biosounds) with limited functionality within the open collections.
-
-## User guide
-
-We also wrote a [guide](docs/user_guide.md) for end users explaining the basic functionality.
