@@ -1,26 +1,16 @@
 [![DOI](https://zenodo.org/badge/289528634.svg)](https://zenodo.org/badge/latestdoi/289528634)
 
-# BioSounds
-
-## Description
-
-BioSounds is a web application for ecoacoustics that archives and organises soundscape collections, hosts reference recording collections, generates navigable sound spectrograms, and allows annotation of animal vocalisations or other sounds.
+# ecoSound-web
 
 ## Credits and license
 
 Developed by [Noemi Perez](https://github.com/nperezg) and [Kevin Darras](https://github.com/kdarras), from the University of Goettingen.
 
-Biosounds is licensed under the [GNU General Public License, v3](https://www.gnu.org/licenses/gpl-3.0.en.html).
+The current repository was forked from [BioSounds](https://github.com/nperezg/biosounds).
 
-The corresponding citable, updatable scientific publication will be available soon in [F1000Research](https://f1000research.com/).
+ecoSounds is licensed under the [GNU General Public License, v3](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
-### Technical notes
-
-Originally based on the archived [Pumilio](https://github.com/ljvillanueva/pumilio) project, it has evolved into a new, refactored project with new functionalities. 
-
-Biosounds still uses the original Python spectrogram generation code (copyright by Luis J. Villanueva), but we intend to fully use Web Audio API in the future if it can fulfill all BioSounds needs. 
-
-We will tackle the implementation of automated detection of sounds next.
+The corresponding citable, updatable scientific publication is in [F1000Research](https://f1000research.com/).
 
 ## Quick start (for developers)
 
