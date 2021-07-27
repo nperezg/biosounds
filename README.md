@@ -12,13 +12,15 @@ Developed by [Noemi Perez](https://github.com/nperezg) and [Kevin Darras](https:
 
 The corresponding updatable scientific publication is in [F1000Research](https://f1000research.com/).
 
-## Quick start (for end users)
+## Quick start for end users
 
 A working instance of ecoSound-web can be accessed [here](https://soundefforts.uni-goettingen.de/biosounds) with limited functionality within the open collections.
 
 You may learn about the basic functionality in the user guide (see Wiki).
 
-## Quick start (for developers)
+[Contact us](mailto:kdarras@westlake.edu.cn) for a collaboration.
+
+## Quick start for developers
 
 We use [Docker](https://www.docker.com) to run the app in your computer. We provide install.sh and run.sh files with all necessary commands, and a Makefile with extra commands to access the docker containers.
 
