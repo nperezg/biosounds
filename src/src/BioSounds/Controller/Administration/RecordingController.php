@@ -3,10 +3,10 @@
 namespace BioSounds\Controller\Administration;
 
 use BioSounds\Controller\BaseController;
+use BioSounds\Entity\License;
 use BioSounds\Entity\Recording;
 use BioSounds\Entity\Sensor;
 use BioSounds\Entity\Site;
-use BioSounds\Exception\EmptyIdException;
 use BioSounds\Exception\ForbiddenException;
 use BioSounds\Provider\CollectionProvider;
 use BioSounds\Provider\RecordingProvider;
@@ -61,6 +61,7 @@ class RecordingController extends BaseController
             'sites' => (new Site())->getBasicList(),
             'sensors' => (new Sensor())->getBasicList(),
             'soundTypes' => (new SoundTypeProvider())->getList(),
+            'license' => (new License())->getBasicList(),
             'currentPage' => ($page > $pages) ?: $page,
             'pages' => $pages,
         ]);
@@ -121,7 +122,7 @@ class RecordingController extends BaseController
         }
 
         if (empty($id)) {
-            throw new EmptyIdException();
+            throw new \Exception(ERROR_EMPTY_ID);
         }
 
         $recordingProvider = new RecordingProvider();

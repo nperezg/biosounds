@@ -18,7 +18,6 @@ use BioSounds\Provider\SoundProvider;
 use BioSounds\Service\Queue\RabbitQueueService;
 use BioSounds\Utils\Auth;
 use BioSounds\Utils\Utils;
-use Exception;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
@@ -63,7 +62,7 @@ class FileService
      * @param array $request
      * @param string $uploadPath
      * @return array
-     * @throws Exception
+     * @throws \Exception
      */
     public function upload(array $request, string $uploadPath): array
     {
@@ -77,6 +76,10 @@ class FileService
         $time = isset($request['time']) ? filter_var($request['time']) : null;
         $date = isset($request['date'])
             ? filter_var($request['date'], FILTER_SANITIZE_NUMBER_INT) : null;
+        $doi = isset($request['doi']) && !empty($request['doi'])
+            ? filter_var($request['doi'], FILTER_SANITIZE_STRING) : null;
+        $license = isset($request['license'])
+            ? filter_var($request['license'], FILTER_SANITIZE_STRING) : null;
 
         $reference = isset($request['reference'])
             ? filter_var($request['reference'], FILTER_VALIDATE_BOOLEAN) : false;
@@ -88,6 +91,7 @@ class FileService
             ? filter_var($request['subtype'], FILTER_SANITIZE_STRING) : null;
         $rating = isset($request['rating']) && !empty($request['rating'])
             ? filter_var($request['rating'], FILTER_SANITIZE_STRING) : null;
+
 
         if (!is_dir($uploadPath) || !$handle = opendir($uploadPath)) {
             throw new FileNotFoundException($uploadPath);
@@ -131,6 +135,8 @@ class FileService
                     ->setSensor($sensor)
                     ->setSite($site)
                     ->setName($fileName)
+                    ->setDoi($doi)
+                    ->setLicense($license)
                     ->setUser(Auth::getUserID());
 
                 if ($reference) {
@@ -142,7 +148,7 @@ class FileService
 
                 $this->queueService->add($this->fileProvider->insert($file));
             }
-        } catch(Exception $exception) {
+        } catch(\Exception $exception) {
             Utils::deleteDirContents($uploadPath);
             throw $exception;
         } finally {
@@ -154,7 +160,7 @@ class FileService
 
     /**
      * @param int $fileId
-     * @throws Exception
+     * @throws \Exception
      */
     public function process(int $fileId)
     {
@@ -204,7 +210,10 @@ class FileService
                 Recording::BITRATE => Utils::getFileBitRate($wavFilePath),
                 Recording::NAME => $file->getName(),
                 Recording::DURATION => floatval(Utils::getFileDuration($wavFilePath)),
-                Recording::MD5_HASH => $fileHash
+                Recording::MD5_HASH => $fileHash,
+                Recording::DOI => $file->getDoi(),
+                Recording::LICENSE_ID => $file->getLicense(),
+                Recording::USER_ID => $file->getUser()
             ];
 
             if (!empty($file->getSpecies())) {
@@ -226,7 +235,7 @@ class FileService
             }
 
             if (!is_dir(ABSOLUTE_DIR . 'sounds/sounds/' . $file->getCollection()) &&
-                !mkdir(ABSOLUTE_DIR . 'sounds/sounds/' . $file->getCollection(), 0777, true)
+                !mkdir(ABSOLUTE_DIR . 'sounds/sounds/' . $file->getCollection())
             ) {
                 throw new FolderCreationException(ABSOLUTE_DIR . 'sounds/sounds/' . $file->getCollection());
             }
@@ -261,7 +270,7 @@ class FileService
                     $soundId,
                     'Command failed : ' . $exception->getProcess()->getCommandLine());
             }
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             error_log($exception);
             if (!empty($file)) {
                 $this->updateFileStatus($file, File::STATUS_ERROR, $soundId, $exception->getMessage());
@@ -274,7 +283,7 @@ class FileService
      * @param int $status
      * @param int|null $recordingId
      * @param string|null $errorMessage
-     * @throws Exception
+     * @throws \Exception
      */
     private function updateFileStatus(
         File $file, int $status,

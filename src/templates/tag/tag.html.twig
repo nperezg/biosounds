@@ -82,12 +82,16 @@
                                 <div class="form-group col-4">
                                     <label class="col-form-label-sm" for="type">Type </label>
                                     <select id="type" name="type" class="custom-select custom-select-sm">
-                                        <option value="call" {{ tag.type == "call" ? "selected" }}>Call</option>
+                                     {# <option value="call" {{ tag.type == "call" ? "selected" }}>Call</option>
                                         <option value="song" {{ tag.type == "song" ? "selected" }}>Song</option>
                                         <option value="non-vocal" {{ tag.type == "non-vocal" ? "selected" }}>Non-vocal</option>
                                         <option value="searching (bat)" {{ tag.type == "searching (bat)" ? "selected" }}>Searching (bat)</option>
                                         <option value="feeding (bat)" {{ tag.type == "feeding (bat)" ? "selected" }}>Feeding (bat)</option>
                                         <option value="social (bat)" {{ tag.type == "social (bat)" ? "selected" }}>Social (bat)</option>
+                                     #}
+                                        {% for soundType in soundTypes %}
+                                            <option value="{{ soundType.soundTypeId }}" {{ tag.type == soundType.soundTypeId ? "selected" }}">{{ soundType.name }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                                 <div class="form-group col-4">

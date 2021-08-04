@@ -22,6 +22,32 @@ class Recording
 	const SAMPLING_RATE = "sampling_rate";
 	const BITRATE = 'bitrate';
 	const MD5_HASH = 'md5_hash';
+	const DOI = "doi";
+	//const LICENSE ="license";
+    const LICENSE_ID ="license_id";
+    const LICENSE_NAME ="license_name";
+    const SITE_NAME ="site_name";
+    const USER_ID = 'user_id';
+
+    /**
+     * @var string
+     */
+    private $site_name;
+
+    /**
+     * @var integer
+     */
+    private $license;
+
+    /**
+     * @var string
+     */
+    private $license_name;
+
+    /**
+     * @var string
+     */
+    private $doi;
 
     /**
      * @var int
@@ -103,6 +129,19 @@ class Recording
      * @var Sound
      */
     private $soundData;
+
+
+
+    /**
+     *
+     * @var int
+     */
+    private $user_id;
+
+    /**
+     * @var string
+     */
+    private $user_full_name;
 
     /**
      * @return int
@@ -218,6 +257,14 @@ class Recording
     public function getSound(): ?int
     {
         return $this->sound;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserId(): int
+    {
+        return $this->user_id;
     }
 
     /**
@@ -393,11 +440,117 @@ class Recording
     }
 
     /**
+     * @param string|null $user_full_name
+     * @return Recording
+     */
+    public function setUserFullName(?string $user_full_name): Recording
+    {
+        $this->user_full_name = $user_full_name;
+        return $this;
+    }
+
+
+    /**
+     * @return null|string
+     */
+    public function getUserFullName(): ?string
+    {
+        return $this->user_full_name;
+    }
+
+    /**
+     * @param int $user_id
+     * @return Recording
+     */
+    public function setUserId(int $user_id): Recording
+    {
+        $this->user_id = $user_id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDoi(): ?string
+    {
+        return $this->doi;
+    }
+
+    /**
+     * @param string $doi
+     * @return Recording
+     */
+    public function setDoi(?string $doi): Recording
+    {
+        $this->doi = $doi;
+        return $this;
+    }
+
+    /**
+     * @return null|int
+     */
+    public function getLicense(): ?int
+    {
+        return $this->license;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLicenseName(): string
+    {
+        return $this->license_name;
+    }
+
+
+
+    /**
+     * @param null|int $license
+     * @return Recording
+     */
+    public function setLicense(?int $license): Recording
+    {
+        $this->license = $license;
+        return $this;
+    }
+
+    /**
+     * @param null|string $license_name
+     * @return Recording
+     */
+    public function setLicenseName(?string $license_name): Recording
+    {
+        $this->license_name = $license_name;
+        return $this;
+    }
+
+
+    /**
+     * @return null|string
+     */
+    public function getSiteName(): ?string
+    {
+        return $this->site_name;
+    }
+
+
+    /**
+     * @param null|string $site_name
+     * @return Recording
+     */
+    public function setSiteName(?string $site_name): Recording
+    {
+        $this->site_name = $site_name;
+        return $this;
+    }
+
+    /**
      * @param array $values
      * @return $this
      */
     public function createFromValues(array $values)
     {
+
         $this->setId($values['recording_id']);
         $this->setName($values['name']);
         $this->setCollection($values['col_id']);
@@ -413,6 +566,16 @@ class Recording
         $this->setChannelNum($values['channel_num']);
         $this->setSamplingRate($values['sampling_rate']);
         $this->setDuration($values['duration']);
+        $this->setDoi($values['doi']);
+        $this->setSiteName($values['site_name']);
+        $this->setLicense($values['license']);
+        $this->setLicenseName($values['license_name']);
+        $this->setUserId($values['user_id']);
+
         return $this;
     }
+
+
+
+
 }
