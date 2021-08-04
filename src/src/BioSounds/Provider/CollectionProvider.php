@@ -24,9 +24,10 @@ class CollectionProvider extends BaseProvider
     public function getList(string $order = 'name'): array
     {
         $data = [];
-        $this->database->prepareQuery('SELECT * FROM collection ORDER BY ' . $order);
+        $this->database->prepareQuery("SELECT * FROM collection ORDER BY $order");
 
         $result = $this->database->executeSelect();
+
         foreach($result as $item) {
             $data[] = (new Collection())
                 ->setId($item['collection_id'])
@@ -35,7 +36,8 @@ class CollectionProvider extends BaseProvider
                 ->setSource($item['source'])
                 ->setCitation($item['citation'])
                 ->setUrl($item['url'])
-                ->setNote($item['note']);
+                ->setNote($item['note'])
+                ->setProject($item['project_id']);
         }
 
         return $data;
