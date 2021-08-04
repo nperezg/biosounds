@@ -4,9 +4,9 @@ namespace BioSounds\Controller;
 
 use BioSounds\Entity\Tag;
 use BioSounds\Entity\Permission;
-use BioSounds\Exception\EmptyIdException;
 use BioSounds\Exception\ForbiddenException;
 use BioSounds\Exception\NotAuthenticatedException;
+use BioSounds\Provider\SoundTypeProvider;
 use BioSounds\Provider\TagProvider;
 use BioSounds\Utils\Auth;
 
@@ -54,12 +54,15 @@ class TagController extends BaseController
             ->setUserName(Auth::getUserName())
             ->setUser(Auth::getUserLoggedID());
 
+
+
         return json_encode([
             'errorCode' => 0,
             'data' => $this->twig->render('tag/tag.html.twig', [
                 'tag' => $tag,
                 'displayDeleteButton' => 'hidden',
                 'recordingName' => isset($_POST['recording_name']) ? $_POST['recording_name'] : null,
+                'soundTypes' => (new SoundTypeProvider())->getList(),
             ]),
         ]);
 	}
@@ -76,7 +79,7 @@ class TagController extends BaseController
         }
 
         if (empty($tagId)) {
-            throw new EmptyIdException();
+            throw new \Exception(ERROR_EMPTY_ID);
         }
 
         if (!Auth::isUserAdmin()
@@ -117,6 +120,7 @@ class TagController extends BaseController
                 'displaySaveButton' => $displaySaveButton,
                 'disableTagForm' => !Auth::isUserAdmin() && !$isUserTagOwner,
                 'reviewPanel' => $isReviewGranted ? (new TagReviewController($this->twig))->show($tagId) : '',
+                'soundTypes' => (new SoundTypeProvider())->getList(),
             ]),
         ]);
     }

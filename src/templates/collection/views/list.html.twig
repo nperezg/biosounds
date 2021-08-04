@@ -1,8 +1,13 @@
 <ul class="list-group list-group-flush my-4">
+
+
+
     {% for item in list %}
+
         <li class="list-group-item">
             <div class="row">
                 <div class="col-auto mr-auto">
+
                     {% if item.recording.soundData is not empty  %}
                         <h5><strong>{{ item.recording.soundData.speciesName }}</strong></h5>
                         <h6>Type: <small>{{ item.recording.soundData.typeName }}</small></h6>
@@ -14,6 +19,14 @@
                     {% endif %}
                     <h6>Date: <small>{{ item.recording.fileDate|date("d/m/Y") }}</small></h6>
                     <h6>Time: <small>{{ item.recording.fileTime }}</small></h6>
+                    <h6>User: <small>{{ item.recording.getUserFullName}}
+                             </small></h6>
+                    <h6>DOI: <small>{{ item.recording.doi }} </small></h6>
+                    <h6>Site: <small>{{ item.recording.siteName }} </small></h6>
+                    <h6>License: <small>{{ item.recording.licenseName }} </small></h6>
+                    {% if item.recording.siteData is not empty  %}
+                    	<h6>Site: <small>{{ item.recording.siteData.name }}</small></h6>
+                    {% endif %}
                     {% if item.recording.note is not empty %}
                         <h6>Notes: <small>{{ item.recording.note }}</small></h6>
                     {% endif %}

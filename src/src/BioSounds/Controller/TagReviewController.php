@@ -3,7 +3,6 @@
 namespace BioSounds\Controller;
 
 use BioSounds\Entity\TagReview;
-use BioSounds\Exception\EmptyIdException;
 use BioSounds\Exception\ForbiddenException;
 use BioSounds\Exception\NotAuthenticatedException;
 use BioSounds\Utils\Auth;
@@ -22,7 +21,7 @@ class TagReviewController extends BaseController
 		}
 
 		if (empty($tagId)) {
-			throw new EmptyIdException();
+			throw new \Exception(ERROR_EMPTY_ID);
 		}
 
 		if(!Auth::isUserAdmin() &&

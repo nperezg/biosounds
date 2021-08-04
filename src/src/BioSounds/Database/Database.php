@@ -20,21 +20,6 @@ class Database
     private $stmt;
 
     /**
-     * @var string
-     */
-    private $dsn;
-
-    /**
-     * @var string
-     */
-    private $user;
-
-    /**
-     * @var string
-     */
-    private $password;
-
-    /**
      * Database constructor.
      * @param string $driver
      * @param string $host
@@ -44,9 +29,16 @@ class Database
      */
     public function __construct(string $driver, string $host, string $database, string $user, string $password)
     {
-        $this->dsn = sprintf(self::CONNECTION_STRING, $driver, $host, $database);
-        $this->user = $user;
-        $this->password = $password;
+        $this->connection = new PDO(
+            sprintf(self::CONNECTION_STRING, $driver, $host, $database),
+            $user,
+            $password,
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false,
+            ]
+        );
     }
 
     /**
@@ -55,7 +47,6 @@ class Database
      */
     public function prepareQuery(string $query)
     {
-        $this->initConnection();
         $this->stmt = $this->connection->prepare($query);
     }
 
@@ -65,7 +56,7 @@ class Database
      */
     public function executeSelect(array $values = null)
     {
-        return $this->executeQuery(1, $values);
+        return $this->executeQuery($values, 1);
     }
 
     /**
@@ -75,7 +66,7 @@ class Database
      */
     public function executeInsert(array $values = null)
     {
-        return $this->executeQuery(2, $values);
+        return $this->executeQuery($values, 2);
     }
 
     /**
@@ -85,7 +76,7 @@ class Database
      */
     public function executeUpdate(array $values = null)
     {
-        return $this->executeQuery(3, $values);
+        return $this->executeQuery($values, 3);
     }
 
     /**
@@ -95,51 +86,27 @@ class Database
      */
     public function executeDelete(array $values = null)
     {
-        return $this->executeQuery(4, $values);
+        return $this->executeQuery($values, 4);
     }
 
     /**
+     * @param array $values
      * @param int $queryType
-     * @param array|null $values
      * @return array|int|string
      */
-    private function executeQuery(int $queryType, array $values = null)
+    private function executeQuery(array $values = null, int $queryType)
     {
         $this->stmt->execute($values);
 
-        $result = null;
-
         switch ($queryType) {
             case 1:
-                $result = $this->stmt->fetchAll();
-                break;
+                return $this->stmt->fetchAll();
             case 2:
-                $result = $this->connection->lastInsertId();
-                break;
+                return $this->connection->lastInsertId();
             case 3:
+                return $this->stmt->rowCount();
             case 4:
-                $result = $this->stmt->rowCount();
-        }
-
-        // Close connection
-        $this->stmt = null;
-        $this->connection = null;
-        return $result;
-    }
-
-    private function initConnection()
-    {
-        if ($this->connection === null) {
-            $this->connection = new PDO(
-                $this->dsn,
-                $this->user,
-                $this->password,
-                [
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                    PDO::ATTR_EMULATE_PREPARES => false,
-                ]
-            );
+                return $this->stmt->rowCount();
         }
     }
 }

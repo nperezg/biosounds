@@ -42,6 +42,21 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="doi" class="col-form-label-sm">DOI (optional)</label>
+                            <input id="doi" type="text" name="doi" class="form-control form-control-sm" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="license" class="col-form-label-sm">License </label>
+                            <select id="license" name="license" class="form-control form-control-sm">
+                                {% for licensed in license %}
+                                    <option value="{{ licensed.license_id }}">{{ licensed.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <div class="form-control-sm">
                             <input id="reference" name="reference" type="checkbox">
