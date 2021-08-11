@@ -46,21 +46,21 @@ class AppController extends BaseClass
             $slugs[$key] = htmlspecialchars(strip_tags($slug));
         }
 
-        if ($slugs[1] === 'api') {
+        $className = $slugs[0];
+        if ($className === 'api') {
             set_exception_handler([new ApiExceptionListener(), 'handleException']);
-            return (new ApiController())->route($this->twig, array_slice($slugs, 2));
+            return (new ApiController())->route($this->twig, array_slice($slugs, 1));
         }
 
-        $controllerName =  __NAMESPACE__ . '\\' . ucfirst($slugs[1]) . 'Controller';
+        $controllerName =  __NAMESPACE__ . '\\' . ucfirst($className) . 'Controller';
         $controller = new $controllerName($this->twig);
 
-
-        $method = $slugs[2];
-        if (!method_exists($controller, $method) || !is_callable([$controller, $method])) {
-            throw new InvalidActionException($method);
+        $methodName = $slugs[1];
+        if (!method_exists($controller, $methodName) || !is_callable([$controller, $methodName])) {
+            throw new InvalidActionException($methodName);
         }
 
-        return call_user_func_array([$controller, $method], array_slice($slugs, 3));
+        return call_user_func_array([$controller, $methodName], array_slice($slugs, 2));
     }
 
     /**

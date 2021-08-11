@@ -3,9 +3,8 @@
 namespace BioSounds\Controller;
 
 use BioSounds\Entity\Collection;
-use BioSounds\Entity\Recording;
-use BioSounds\Entity\Site;
 use BioSounds\Entity\Sound;
+use BioSounds\Exception\EmptyIdException;
 use BioSounds\Exception\NotAuthenticatedException;
 use BioSounds\Provider\CollectionProvider;
 use BioSounds\Provider\RecordingProvider;
@@ -42,7 +41,7 @@ class CollectionController extends BaseController
         $this->colId = $id;
 
         //TODO: Set open collections in administration (not hard-coded)
-        if ($id == 1 || $id == 3 || $id == 18 || $id == 31 || $id == 19 || $id == 39) {
+        if ($id == 1 || $id == 3 || $id == 18 || $id == 31) {
             $this->openCollection = true;
         }
 
@@ -62,16 +61,6 @@ class CollectionController extends BaseController
             $this->filter[Sound::RATING] = filter_var($_POST['rating'], FILTER_SANITIZE_STRING);
         }
 
-        if (isset($_POST['site']) && !empty($_POST['site'])) {
-            $this->filter[Site::PRIMARY_KEY] = filter_var($_POST['site'], FILTER_VALIDATE_INT);
-        }
-
-        if (isset($_POST['doi']) && !empty($_POST['doi'])) {
-            $this->filter[Recording::DOI] = filter_var($_POST['doi'], FILTER_SANITIZE_STRING);
-        }
-
-
-
         $this->recordingNum = (new RecordingProvider())->countReady($this->colId, $this->filter);
         if ($this->recordingNum > 0) {
             $this->pageNum = ceil($this->recordingNum / self::ITEMS_PAGE);
@@ -87,10 +76,6 @@ class CollectionController extends BaseController
             self::ITEMS_PAGE * ($this->page - 1),
             $this->filter
         );
-
-        if (isset($_POST['site-name'])) {
-            $this->filter['siteName'] = filter_var($_POST['site-name'], FILTER_SANITIZE_STRING);
-        }
 
         if (isset($_POST['species-name'])) {
             $this->filter['speciesName'] = filter_var($_POST['species-name'], FILTER_SANITIZE_STRING);
@@ -118,7 +103,7 @@ class CollectionController extends BaseController
         }
 
         if (empty($this->colId)) {
-            throw new \Exception(ERROR_EMPTY_ID);
+            throw new EmptyIdException();
         }
     }
 }

@@ -104,6 +104,7 @@ class Utils
 
         try {
             $process = new Process("sox $filePath $resultFilePath");
+            $process->setTimeout(120);
 //            if (self::getFileFormat($filePath) === 'flac') {
 //                $process = new Process("flac -dFf  $filePath -o $wavFilePath");
 //            }
@@ -131,6 +132,7 @@ class Utils
         try {
             //$process = new Process("oggenc $filePath -q 10 -o $resultFilePath");
             $process = new Process("sox $filePath -C 10 $resultFilePath");
+            $process->setTimeout(120);
 //            if (self::getFileFormat($filePath) === 'flac') {
 //                //$process = new Process("flac -Ff --best $filePath -o $resultFilePath");
 //                $process = new Process("oggenc $filePath -q 10 -o $resultFilePath");
@@ -158,6 +160,7 @@ class Utils
 
         try {
             $process = new Process("lame --noreplaygain -f -b 128 $filePath $resultFilePath");
+            $process->setTimeout(120);
 //            if (self::getFileFormat($filePath) === 'flac') {
 //                //$process = new Process("flac -Ff --best $filePath -o $resultFilePath");
             $process->mustRun();

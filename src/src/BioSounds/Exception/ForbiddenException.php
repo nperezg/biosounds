@@ -1,8 +1,8 @@
 <?php
 
-
 namespace BioSounds\Exception;
 
+use Exception;
 
 /**
  * Class ForbiddenException

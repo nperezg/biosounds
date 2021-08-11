@@ -2,6 +2,7 @@
 
 namespace BioSounds\Service\Queue;
 
+use Exception;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -43,7 +44,7 @@ class RabbitQueueService
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function closeConnection()
     {

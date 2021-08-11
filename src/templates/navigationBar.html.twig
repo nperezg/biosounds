@@ -5,13 +5,28 @@
                 <img src="{{ logoUrl }}" alt="BioSounds">
             </a>
             <ul class="nav navbar-nav">
-                {% if isUserLogged %}
-                    <li class="navbar-item">
-                        <a class="nav-link" target="_blank" href="{{ guide_url }}">Guide</a>
+                <li class="navbar-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Open Collections</a>
+                    <div class="dropdown-menu">
+                        <a href="{{ baseUrl }}/collection/show/1" class="dropdown-item">
+                            Demo Collection
+                        </a>
+                    </div>
+                </li>
+                {% if collections and isUserLogged %}
+                    <li class="navbar-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Collections</a>
+                        <div class="dropdown-menu">
+                            {% for collection in collections %}
+                                <a href="{{ baseUrl}}/collection/show/{{ collection.id }}" class="dropdown-item">
+                                    {{ collection.name }}
+                                </a>
+                            {% endfor %}
+                        </div>
                     </li>
                 {% endif %}
                 <li class="navbar-item">
-                    <a class="nav-link" href="{{ baseUrl}}/project/show">Projects</a>
+                    <a class="nav-link" href="{{ baseUrl}}/project/show">Project</a>
                 </li>
             </ul>
             <div class="collapse navbar-collapse" id="navbarCollapse">

@@ -2,11 +2,13 @@
 
 namespace BioSounds\Exception\File;
 
+use Exception;
+
 /**
  * Class FolderCreationException
  * @package BioSounds\Exception\File
  */
-class FolderCreationException extends \Exception
+class FolderCreationException extends Exception
 {
     const MESSAGE = 'Folder %s cannot be created.';
 
@@ -16,6 +18,6 @@ class FolderCreationException extends \Exception
      */
     public function __construct(string $folderPath)
     {
-        parent::__construct(sprintf($this::MESSAGE));
+        parent::__construct(sprintf($this::MESSAGE, $folderPath));
     }
 }

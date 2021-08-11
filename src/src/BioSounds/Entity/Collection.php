@@ -52,11 +52,6 @@ class Collection
 	private $view = self::GALLERY_VIEW;
 
     /**
-     * @var int
-     */
-    private $project;
-
-    /**
      * @return int
      */
     public function getId(): int
@@ -108,14 +103,6 @@ class Collection
     {
         $this->author = $author;
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getProject(): int
-    {
-        return $this->project;
     }
 
     /**
@@ -205,16 +192,6 @@ class Collection
     public function setView(string $view): Collection
     {
         $this->view = $view;
-        return $this;
-    }
-
-    /**
-     * @param int $id
-     * @return Collection
-     */
-    public function setProject(int $id): Collection
-    {
-        $this->project = $id;
         return $this;
     }
 }

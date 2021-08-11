@@ -95,16 +95,6 @@ class File
     private $rating;
 
     /**
-     * @var string
-     */
-    private $doi;
-
-    /**
-     * @var int
-     */
-    private $license;
-
-    /**
      * @return null|int
      */
     public function getId(): ?int
@@ -410,44 +400,6 @@ class File
         return $this;
     }
 
-    /**
-     * @return null|string
-     */
-    public function getDoi(): ?string
-    {
-        return $this->doi;
-    }
-
-
-    /**
-     * @param null|string $doi
-     * @return File
-     */
-    public function setDoi(?string $doi): File
-    {
-        $this->doi = $doi;
-        return $this;
-    }
-
-    /**
-     * @return null|integer
-     */
-    public function getLicense(): ?int
-    {
-        return $this->license;
-    }
-
-
-    /**
-     * @param null|integer $license
-     * @return File
-     */
-    public function setLicense(?int $license): File
-    {
-        $this->license = $license;
-        return $this;
-    }
-
     public function getDatabaseValues(): array
     {
         return [
@@ -465,8 +417,6 @@ class File
             ':soundType' => $this->getSoundType(),
             ':subtype' => $this->getSubtype(),
             ':rating' => $this->getRating(),
-            ':doi' => $this->getDoi(),
-            ':license' => $this->getLicense()
         ];
     }
 }
