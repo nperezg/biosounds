@@ -36,10 +36,6 @@ Important: this setup is intended for developing and testing purposes **ONLY**. 
 
 ```sh run.sh```
 
-### Stop
-
-```docker-compose stop```
-
 ### Using ecoSound-web
 
 Open http://localhost:8080
@@ -47,6 +43,14 @@ Open http://localhost:8080
 Log in with username: admin, password: Administrator20
 
 Important: please **change the password** of this administrator user or **delete** it once you have ecoSound-web running on production and have your own admin users.
+
+### Stop
+
+```docker-compose stop```
+
+### Optional: clean restart (removing containers)
+
+```docker container prune```
 
 ## Server installation
 
