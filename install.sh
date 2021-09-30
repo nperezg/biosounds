@@ -12,4 +12,4 @@ done;
 
 echo "Database started."'
 docker exec -i "$(docker-compose ps -q database)" mysql -ubiosounds -pbiosounds biosounds < init.sql
-docker exec -i "$(docker-compose ps -q database)" mysql -ubiosounds -pbiosounds biosounds < data.sql
+# docker exec -i "$(docker-compose ps -q database)" mysql -ubiosounds -pbiosounds biosounds < data.sql
