@@ -46,7 +46,7 @@ class AppController extends BaseClass
             $slugs[$key] = htmlspecialchars(strip_tags($slug));
         }
 
-        if ($slugs[1] === 'api') {
+        if ($slugs[0] === 'api') {
             set_exception_handler([new ApiExceptionListener(), 'handleException']);
             return (new ApiController())->route($this->twig, array_slice($slugs, 2));
         }
@@ -55,7 +55,7 @@ class AppController extends BaseClass
         $controller = new $controllerName($this->twig);
 
 
-        $method = $slugs[2];
+        $method = $slugs[1];
         if (!method_exists($controller, $method) || !is_callable([$controller, $method])) {
             throw new InvalidActionException($method);
         }
