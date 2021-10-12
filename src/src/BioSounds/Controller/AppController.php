@@ -36,6 +36,8 @@ class AppController extends BaseClass
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $slugs = array_filter(explode('/', substr($uri, 1)));
 
+        error_log("Oracle database not available!", 0);
+
         if (count($slugs) === 1) {
             return $this->twig->render('index.html.twig', [
                 'title' => $this->title,
@@ -46,12 +48,13 @@ class AppController extends BaseClass
             $slugs[$key] = htmlspecialchars(strip_tags($slug));
         }
 
-        if ($slugs[0] === 'api') {
+        $className = $slugs[0];
+        if ($className === 'api') {
             set_exception_handler([new ApiExceptionListener(), 'handleException']);
             return (new ApiController())->route($this->twig, array_slice($slugs, 2));
         }
 
-        $controllerName =  __NAMESPACE__ . '\\' . ucfirst($slugs[1]) . 'Controller';
+        $controllerName =  __NAMESPACE__ . '\\' . ucfirst($className) . 'Controller';
         $controller = new $controllerName($this->twig);
 
 
@@ -60,7 +63,7 @@ class AppController extends BaseClass
             throw new InvalidActionException($method);
         }
 
-        return call_user_func_array([$controller, $method], array_slice($slugs, 3));
+        return call_user_func_array([$controller, $method], array_slice($slugs, 2));
     }
 
     /**
