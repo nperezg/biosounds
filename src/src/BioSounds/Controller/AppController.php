@@ -51,7 +51,7 @@ class AppController extends BaseClass
         $className = $slugs[0];
         if ($className === 'api') {
             set_exception_handler([new ApiExceptionListener(), 'handleException']);
-            return (new ApiController())->route($this->twig, array_slice($slugs, 2));
+            return (new ApiController())->route($this->twig, array_slice($slugs, 1));
         }
 
         $controllerName =  __NAMESPACE__ . '\\' . ucfirst($className) . 'Controller';
