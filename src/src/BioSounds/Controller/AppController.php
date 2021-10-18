@@ -36,6 +36,8 @@ class AppController extends BaseClass
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $slugs = array_filter(explode('/', substr($uri, 1)));
 
+        error_log("Oracle database not available!", 0);
+
         if (count($slugs) === 1) {
             return $this->twig->render('index.html.twig', [
                 'title' => $this->title,
@@ -55,12 +57,13 @@ class AppController extends BaseClass
         $controllerName =  __NAMESPACE__ . '\\' . ucfirst($className) . 'Controller';
         $controller = new $controllerName($this->twig);
 
-        $methodName = $slugs[1];
-        if (!method_exists($controller, $methodName) || !is_callable([$controller, $methodName])) {
-            throw new InvalidActionException($methodName);
+
+        $method = $slugs[1];
+        if (!method_exists($controller, $method) || !is_callable([$controller, $method])) {
+            throw new InvalidActionException($method);
         }
 
-        return call_user_func_array([$controller, $methodName], array_slice($slugs, 2));
+        return call_user_func_array([$controller, $method], array_slice($slugs, 2));
     }
 
     /**

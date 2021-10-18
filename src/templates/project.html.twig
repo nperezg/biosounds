@@ -1,12 +1,72 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container mt-5">
-        <div class="row text-justify">
-            <div class="col-lg-12">
-                <h3>Project</h3>
-                <p>Please use the template <b>src/templates/project.html.twig</b> to describe your project.</p>
-            </div>
-        </div>
-    </div>
+	<div class="jumbotron text-center bg-light py-4">
+		<img src="{{ imagesUrl }}/biosounds_logo_large.png" alt="BioSounds">
+		<p class="lead mt-2">Open-source online platform for ecoacoustics</p>
+	</div>
+	<div class="container mb-5">
+		<h2>Project {{ project_name }}</h2>
+		<p>{{ project_description }}</p>
+		<p><img src="{{ projectImagesUrl }}/beo.jpg" class="rounded" alt="Beo" style="width:300px;margin-right:15px;float:left">
+		Ecoacoustics project of the <b><a href="https://www.uni-goettingen.de/en/310995.html">Collaborative Research Center 990</a></b> (EFForTS), led by <b><a href="https://www.uni-goettingen.de/en/b09+-+aboveground+biodiversity+patterns+and+processes+across+rainforest+transformation+landscapes/412081.html">B09</a></b> in Jambi, Indonesia. We analysed soundscapes from our core plots in lowland rainforest, jungle rubber, oil palm, and rubber plantations ("Open Collections" menu, data published in various syntheses), Berbak national park ("Open Collections" menu, <b><a href="https://f1000research.com/articles/7-229/v2">F1000Research</a></b>), the oil palm exclusion experiment (<b><a href="http://onlinelibrary.wiley.com/doi/10.1002/ecy.1882/abstract">Ecology</a></b>), the microphone signal-to-noise study ("Open Collections" menu, <b><a href="https://peerj.com/articles/9955">PeerJ</a></b>), and the oil palm management experiment (<b><a href="https://www.frontiersin.org/articles/10.3389/ffgc.2019.00065/full">Frontiers in Forests and Global Change</a></b>). We also reference species recordings of several Anura species (<b><a href="http://www.sciencedirect.com/science/article/pii/S2351989418301033">Global Ecology and Conservation</a></b>).
+		<br><br><br><br><br>
+		</p>
+		{% if collections and isUserLogged %}
+		<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Collections</a>
+                        <div class="dropdown-menu">
+                            {% for collection in collections %}
+                                {# for temporary solution, showing for project_id =1  only#}
+                                {% if collection.getproject == 1 %}
+                                <a href="{{ baseUrl}}/collection/show/{{ collection.id }}" class="dropdown-item">
+                                    {{ collection.name }}
+                                </a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+               {% endif %}
+		<p><h2>Reference collections / call libraries</h2></p>
+		<p><img src="{{ projectImagesUrl }}/Vignette.jpg" class="rounded" alt="Vignette" style="width:300px;margin-right:15px;float:left;border:1px solid #000;">
+		Apart from the annotation of soundscapes, BioSounds also offers reference call collections (a.k.a. "call libraries"). This offer is unique as it allows sound recording archival, public access (visualisation and playback), and reference in scientific publications. At the moment, we host species recordings for Sumatran bats and amphibians, as well as Madagascan primates.
+		<p>The reference collections can be found under "Open Collections".
+		<p>Coming soon: Peruvian and European bats, location management.
+		<br><br><br><br><br><br><br><br>
+		</p>
+		<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Collections</a>
+                        <div class="dropdown-menu">
+                            {% for collection in collections %}
+                                {# for temporary solution, showing for project_id =1  only#}
+                                {% if collection.getproject == 2 %}
+                                <a href="{{ baseUrl}}/collection/show/{{ collection.id }}" class="dropdown-item">
+                                    {{ collection.name }}
+                                </a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+		<p><h2>Project CNFEREF</h2></p>
+		<p><img src="{{ projectImagesUrl }}/Gabelstreifenmaki.jpg" class="rounded" alt="Maki" style="width:300px;margin-right:15px;float:left">
+		We host annotated night soundscapes and lemur reference recordings from Kirindy Private Reserve, Madagascar, obtained within the frame of the Centre National de Formation, d’Etudes et de Recherche en Environnement et Forestier and the <b><a href="https://www.dpz.eu/en/unit/sociobiology-homepage/study-sites/madagascar.html">German Primate Center</a></b>.
+		<br><br><br><br><br><br><br>
+		</p>
+		{% if collections and isUserLogged %}
+		<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Collections</a>
+                        <div class="dropdown-menu">
+                            {% for collection in collections %}
+                                {# for temporary solution, showing for project_id =1  only#}
+                                {% if collection.getproject == 3 %}
+                                <a href="{{ baseUrl}}/collection/show/{{ collection.id }}" class="dropdown-item">
+                                    {{ collection.name }}
+                                </a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+               {% endif %}
+		<p><h2>Flower fields in Göttingen</h2></p>
+		<p><img src="{{ projectImagesUrl }}/PP_SM2Bat.JPG" class="rounded" alt="SM2Bat+" style="width:300px;margin-right:15px;float:left">
+		We study the impact of flower fields on bird diversity in bordering agricultural fields in several locations around Göttingen, Germany. We repeated our sampling protocol yearly since 2018, and conducted this study in the frame of student projects under the lead of the <b><a href="https://www.uni-goettingen.de/en/74726.html">Agroecology</a></b> and <b><a href="https://www.uni-goettingen.de/en/596513.html">Functional Agrobiodiversity</a></b> groups.
+		<br><br><br><br><br><br><br><br><br>
+		</p>
+		<h2>Other projects</h2>
+		<p>We host recordings from <b><a href="https://secbivit.sustainfarm.org/">SECBIVIT</a></b> (Landau).</p>
+	</div>
 {% endblock %}

@@ -78,6 +78,40 @@ document.addEventListener("DOMContentLoaded", function() {
 			}
 		});
 	});
+
+
+	$(document).on('keydown.autocomplete', '.js-site-autocomplete', function() {
+		$(this).autocomplete ({
+			source: function (request, response) {
+				$.post(baseUrl + '/site/getList', {term: request.term})
+					.done(function (data) {
+						response(JSON.parse(data));
+					})
+					.fail(function (response) {
+						showAlert(JSON.parse(response.responseText).message);
+						response(null);
+					});
+			},
+			minLength: 2,
+			change: function (event, ui) {
+				if (!ui.item) {
+					$(this).val('');
+					let type = $(this).data('type');
+					$('.js-site-id[data-type=' + type + ']').val('');
+					//$('#reviewSpeciesId').val('');
+				}
+			},
+			select: function (e, ui) {
+				$(this).val(ui.item.label.split('(')[0]);
+				let type = $(this).data('type');
+				$('.js-site-id[data-type=' + type + ']').val(ui.item.value);
+				// $('#reviewSpeciesId').val(ui.item.value);
+				e.preventDefault();
+			}
+		});
+	});
+
+
 });
 
 function showAlert(message) {

@@ -3,6 +3,8 @@
 namespace BioSounds\Provider;
 
 use BioSounds\Entity\Recording;
+use BioSounds\Entity\Site;
+use BioSounds\Entity\User;
 use BioSounds\Exception\Database\NotFoundException;
 
 class RecordingProvider extends BaseProvider
@@ -15,7 +17,7 @@ class RecordingProvider extends BaseProvider
     {
         $query = 'SELECT recording_id, name, filename, col_id, directory, sensor_id, site_id, ';
         $query .= 'sound_id, file_size, bitrate, channel_num, DATE_FORMAT(file_date, \'%Y-%m-%d\') ';
-        $query .= 'AS file_date, DATE_FORMAT(file_time, \'%H:%i:%s\') AS file_time, sampling_rate ';
+        $query .= 'AS file_date, DATE_FORMAT(file_time, \'%H:%i:%s\') AS file_time, sampling_rate, doi, license_id ';
         $query .= 'FROM recording';
 
         $this->database->prepareQuery($query);
@@ -37,7 +39,10 @@ class RecordingProvider extends BaseProvider
                 ->setFileSize($item['file_size'])
                 ->setBitrate($item['bitrate'])
                 ->setChannelNum($item['channel_num'])
-                ->setSamplingRate($item['sampling_rate']);
+                ->setSamplingRate($item['sampling_rate'])
+                ->setDoi($item['doi'])
+                ->setLicense($item['license_id'])
+                ->setLicenseName($item['license_name']);
         }
         return $data;
     }
@@ -89,13 +94,14 @@ class RecordingProvider extends BaseProvider
     {
         $values = [':colId' => $colId];
 
-        $query = 'SELECT COUNT(*) AS num FROM ' . Recording::TABLE_NAME . ' LEFT JOIN spectrogram ';
-        $query .= 'ON ' . Recording::TABLE_NAME . '.' . Recording::ID . ' = spectrogram.recording_id ';
+        $query = 'SELECT COUNT(*) AS num FROM ' . Recording::TABLE_NAME .' ';//// . ' LEFT JOIN spectrogram ';
+        //$query .= 'ON ' . Recording::TABLE_NAME . '.' . Recording::ID . ' = spectrogram.recording_id ';
 
         if (!empty($filter)) {
-            $query .= 'JOIN sound ON recording.sound_id = sound.sound_id ';
+            $query .= 'LEFT JOIN sound ON recording.sound_id = sound.sound_id ';
         }
-        $query .= 'WHERE recording.col_id = :colId AND type=\'spectrogram-small\'';
+        $query .= 'WHERE recording.col_id = :colId '; //\AND type=\'spectrogram-small\'';
+        //$query .= 'WHERE recording.col_id = :colId AND type=\'spectrogram-small\'';
 
         if (!empty($filter)) {
             foreach ($filter as $key => $value) {
@@ -154,21 +160,32 @@ class RecordingProvider extends BaseProvider
             ':offset' => $offSet,
         ];
 
-        $query = 'SELECT recording_id, name, filename, col_id, directory, sensor_id, site_id, ';
-        $query .= 'recording.sound_id, file_size, bitrate, channel_num, duration, ';
+        $query = 'SELECT recording_id, recording.name, filename, col_id, directory, sensor_id, recording.site_id, user_id, ';
+        $query .= 'recording.sound_id, file_size, bitrate, channel_num, duration, site.name as site_name, license.name as license_name,';
         $query .= 'DATE_FORMAT(file_date, \'%Y-%m-%d\') AS file_date, ';
-        $query .= 'DATE_FORMAT(file_time, \'%H:%i:%s\') AS file_time, sampling_rate FROM recording ';
+        $query .= 'DATE_FORMAT(file_time, \'%H:%i:%s\') AS file_time, sampling_rate, doi FROM recording ';
+        //default view for site and license
+        $query .= 'LEFT JOIN site ON recording.site_id = site.site_id ';
+        $query .= 'LEFT JOIN license ON recording.license_id = license.license_id ';
 
         if (!empty($filter)) {
-            $query .= 'JOIN sound ON recording.sound_id = sound.sound_id ';
+            $query .= 'LEFT JOIN sound ON recording.sound_id = sound.sound_id ';
         }
         $query .= 'WHERE col_id = :colId';
 
         if (!empty($filter)) {
             foreach ($filter as $key => $value) {
-                $query .= ' AND ' . $key . '= :' . $key;
+                //need a clause with table name
+                if($key == Site::PRIMARY_KEY){
+                    $query .= ' AND site.' . $key . '= :' . $key;
+                }else{
+                    $query .= ' AND ' . $key . '= :' . $key;
+                }
                 $values[':' . $key] = $value;
             }
+            //offset start from 0 for filtering
+            $values[':offset'] = 0;
+
         }
 
         $query .= ' ORDER BY name LIMIT :limit OFFSET :offset';
@@ -177,13 +194,23 @@ class RecordingProvider extends BaseProvider
         $result = $this->database->executeSelect($values);
 
         $data = [];
+
         foreach($result as $item) {
+
             $recording = (new Recording())->createFromValues($item);
             if (!empty($recording->getSound())) {
              $recording->setSoundData((new SoundProvider())->get($recording->getSound()));
             }
+
+            if (!empty($recording->getUserId())) {
+                $recording->setUserFullName((new User())->getFullName($recording->getUserId()));
+            }
+
+
             $data[] = $recording;
         }
+
+
         return $data;
     }
 
@@ -292,6 +319,7 @@ class RecordingProvider extends BaseProvider
         if (empty($data)) {
             return false;
         }
+
 
         $fields = '( ';
         $valuesNames = '( ';

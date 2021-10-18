@@ -9,11 +9,12 @@ use BioSounds\Utils\Utils;
 use Exception;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use \Twig\Extension\DebugExtension;
 
 class BaseClass
 {
     const CONFIG_FILENAME = 'config/config.ini';
-    const GUIDE_URL = 'https://docs.google.com/document/d/1mdZPvGXGbbrxbX7Ms2li9B-fxYCKppjJgpT1RID4hJY/edit?pli=1';
+    const GUIDE_URL = 'https://github.com/nperezg/biosounds/blob/master/docs/user_guide.md';
 
     /*
      * @var \Twig_Environment
@@ -38,7 +39,9 @@ class BaseClass
         $loader = new FilesystemLoader(TEMPLATES_DIR);
         $this->twig = new Environment($loader, [
             'cache' => CACHE_DIR,
+            'debug' => true
         ]);
+        $this->twig->addExtension(new DebugExtension());
 
         $this->addGlobals();
     }
@@ -73,6 +76,8 @@ class BaseClass
         !defined('SPECTROGRAM_LEFT') && define('SPECTROGRAM_LEFT', $this->config['SPECTROGRAM_LEFT']);
         !defined('SPECTROGRAM_RIGHT') && define('SPECTROGRAM_RIGHT', $this->config['SPECTROGRAM_RIGHT']);
         !defined('SPECTROGRAM_HEIGHT') && define('SPECTROGRAM_HEIGHT', $this->config['SPECTROGRAM_HEIGHT']);
+
+        !defined('ERROR_EMPTY_ID') && define('ERROR_EMPTY_ID', $this->config['ERROR_EMPTY_ID']);
 
         if (!isset($_SESSION['settings'])) {
             $_SESSION['settings'] = (new Setting())->getList();
