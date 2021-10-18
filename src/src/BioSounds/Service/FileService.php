@@ -98,8 +98,7 @@ class FileService
         }
 
         try {
-            while ($fileName = readdir($handle))
-            {
+            while ($fileName = readdir($handle)) {
                 $fileDate = $date;
                 $fileTime = $time;
 
@@ -113,9 +112,9 @@ class FileService
                 }
 
                 //Check that the extension is valid
-//                if (substr_count(Utils::getSoundExtensions(), strtolower(pathinfo($fileName, PATHINFO_EXTENSION))) < 1) {
-//                    throw new ExtensionInvalidException(strtolower(pathinfo($fileName, PATHINFO_EXTENSION)), $fileName);
-//                }
+                //                if (substr_count(Utils::getSoundExtensions(), strtolower(pathinfo($fileName, PATHINFO_EXTENSION))) < 1) {
+                //                    throw new ExtensionInvalidException(strtolower(pathinfo($fileName, PATHINFO_EXTENSION)), $fileName);
+                //                }
 
                 if ($dateFromFile) {
                     if (!preg_match($this::DATE_TIME_PATTERN, $fileName, $dateTime)) {
@@ -131,7 +130,7 @@ class FileService
                     ->setDate($fileDate)
                     ->setTime($fileTime)
                     ->setCollection($colID)
-                    ->setDirectory(rand(1,100))
+                    ->setDirectory(rand(1, 100))
                     ->setSensor($sensor)
                     ->setSite($site)
                     ->setName($fileName)
@@ -141,14 +140,14 @@ class FileService
 
                 if ($reference) {
                     $file->setSpecies($species)
-                         ->setSoundType($soundType)
-                         ->setSubtype($soundSubtype)
-                         ->setRating($rating);
+                        ->setSoundType($soundType)
+                        ->setSubtype($soundSubtype)
+                        ->setRating($rating);
                 }
 
                 $this->queueService->add($this->fileProvider->insert($file));
             }
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             Utils::deleteDirContents($uploadPath);
             throw $exception;
         } finally {
@@ -234,13 +233,14 @@ class FileService
                 throw new FileNotFoundException(ABSOLUTE_DIR);
             }
 
-            if (!is_dir(ABSOLUTE_DIR . 'sounds/sounds/' . $file->getCollection()) &&
-                !mkdir(ABSOLUTE_DIR . 'sounds/sounds/' . $file->getCollection())
+            if (
+                !is_dir(ABSOLUTE_DIR . 'sounds/sounds/' . $file->getCollection()) &&
+                !mkdir(ABSOLUTE_DIR . 'sounds/sounds/' . $file->getCollection(), 0755, true)
             ) {
                 throw new FolderCreationException(ABSOLUTE_DIR . 'sounds/sounds/' . $file->getCollection());
             }
 
-            if (!is_dir($path) && !mkdir($path)) {
+            if (!is_dir($path) && !mkdir($path, 0755, true)) {
                 throw new FolderCreationException($path);
             }
 
@@ -258,7 +258,6 @@ class FileService
             (new ImageService())->generateImages($sound);
 
             $this->updateFileStatus($file, File::STATUS_SUCCESS, $sound[Recording::ID]);
-
         } catch (FileQueueNotFoundException $exception) {
             error_log($exception);
         } catch (ProcessFailedException $exception) {
@@ -268,7 +267,8 @@ class FileService
                     $file,
                     File::STATUS_ERROR,
                     $soundId,
-                    'Command failed : ' . $exception->getProcess()->getCommandLine());
+                    'Command failed : ' . $exception->getProcess()->getCommandLine()
+                );
             }
         } catch (\Exception $exception) {
             error_log($exception);
@@ -286,7 +286,8 @@ class FileService
      * @throws \Exception
      */
     private function updateFileStatus(
-        File $file, int $status,
+        File $file,
+        int $status,
         int $recordingId = null,
         string $errorMessage = null
     ) {
