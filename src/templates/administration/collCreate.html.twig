@@ -1,0 +1,67 @@
+<div class="collapse mb-5" id="collectionFormSection">
+  <div class="card">
+    <div class="card-body">
+      <button id="closeForm" class="close" type="button" data-toggle="collapse" data-target="#collectionFormSection" aria-expanded="false" aria-controls="collectionFormSection">
+        <span>&times;</span>
+      </button>
+      <form id="collectionForm" novalidate>
+        <div class="form-group">
+          <label for="name" class="col-form-label-sm">Collection name</label>
+          <input id="name" type="text" name="name_text" class="form-control form-control-sm" maxlength="100" required>
+          <div class="invalid-feedback">
+            Please provide a collection name.
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="author" class="col-form-label-sm">Author</label>
+          <input id="author" type="text" name="author_text" class="form-control form-control-sm" maxlength="100" required>
+          <div class="invalid-feedback">
+            Please provide the author.
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="source" class="col-form-label-sm">Source</label>
+          <select id="source" name="source_select-one" class="form-control form-control-sm" required>
+            <option value="Field Recording">Field Recording</option>
+            <option value="Book with CD">Book with CD</option>
+            <option value="Automated Audio Logger">Automated Audio Logger</option>
+            <option value="Audio CD">Audio CD</option>
+            <option value="CD-ROM">CD-ROM</option>
+            <option value="DVD">DVD</option>
+            <option value="Tape">Tape</option>
+            <option value="Internet">Internet</option>
+            <option value="Donation">Donation</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="doi" class="col-form-label-sm">Citation</label>
+          <input id="doi" type="text" name="doi_text" class="form-control form-control-sm" maxlength="100">
+          <div class="invalid-feedback">
+            Please provide the DOI.
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="note" class="col-form-albel-sm">Note</label>
+          <input id="note" type="text" name="note_text" class="form-control form-control-sm" maxlength="100">
+          <div class="invalid-feedback">
+            Please provide the note.
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="view" class="col-form-label-sm">View</label>
+          <select id="view" name="view_select-one" class="form-control form-control-sm" required>
+            <option value="gallery">gallery</option>
+            <option value="list">list</option>
+          </select>
+        </div>
+        <div class="form-group text-right">
+          <button type="submit" class="btn btn-outline-primary">
+            <i class="fas fa-save"></i>
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
