@@ -14,9 +14,9 @@ class UserPermissionController extends BaseController
      * @return false|string
      * @throws \Exception
      */
-	public function show(int $userId)
+    public function show(int $userId)
     {
-        if (!Auth::isUserAdmin()){
+        if (!Auth::isUserAdmin()) {
             throw new \Exception('User has no access to the administration.');
         }
 
@@ -31,15 +31,16 @@ class UserPermissionController extends BaseController
                 'userId' => $userId,
                 'viewId' => $permission->getViewId(),
                 'reviewId' => $permission->getReviewId(),
+                'accessId' => $permission->getAccessId(),
             ]),
         ]);
-	}
+    }
 
     /**
      * @return string
      * @throws \Exception
      */
-	public function save(): string
+    public function save(): string
     {
         if (!Auth::isUserAdmin()) {
             throw new \Exception('User has no access to the administration.');
@@ -58,5 +59,5 @@ class UserPermissionController extends BaseController
         return json_encode([
             'errorCode' => 0,
         ]);
-	}
+    }
 }

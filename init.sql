@@ -34,7 +34,6 @@ CREATE TABLE `collection` (
   `project_id` int(11) NOT NULL DEFAULT 101,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `author` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
-  `source` enum('Field Recording','Book with CD','Automated Audio Logger','Audio CD','CD-ROM','DVD','Tape','Internet','Donation','Other') COLLATE utf8_unicode_ci NOT NULL,
   `doi` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Citation in cientific format or full URL',
   `note` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `view` enum('gallery','list') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'gallery'
@@ -44,8 +43,8 @@ CREATE TABLE `collection` (
 -- Dumping data for table `collection`
 --
 
-INSERT INTO `collection` (`collection_id`, `project_id`, `name`, `author`, `source`, `doi`, `note`, `view`) VALUES
-(1, 101, 'Demo collection', 'BioSounds', 'Field Recording', '', 'open access', 'gallery');
+INSERT INTO `collection` (`collection_id`, `project_id`, `name`, `author`, `doi`, `note`, `view`) VALUES
+(1, 101, 'Demo collection', 'BioSounds', '', 'open access', 'gallery');
 
 -- --------------------------------------------------------
 
@@ -74,7 +73,7 @@ CREATE TABLE `file_upload` (
   `user_id` int(11) NOT NULL,
   `error` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `creation_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -132,7 +131,9 @@ CREATE TABLE `permission` (
 
 INSERT INTO `permission` (`permission_id`, `name`) VALUES
 (1, 'View'),
-(2, 'Review');
+(2, 'Review'),
+(3, 'Access');
+
 
 -- --------------------------------------------------------
 
@@ -674,7 +675,7 @@ ALTER TABLE `user_permission`
 -- AUTO_INCREMENT for table `collection`
 --
 ALTER TABLE `collection`
-  MODIFY `collection_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `collection_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `file_upload`
@@ -686,7 +687,7 @@ ALTER TABLE `file_upload`
 -- AUTO_INCREMENT for table `license`
 --
 ALTER TABLE `license`
-  MODIFY `license_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `license_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `news`
@@ -698,7 +699,7 @@ ALTER TABLE `news`
 -- AUTO_INCREMENT for table `permission`
 --
 ALTER TABLE `permission`
-  MODIFY `permission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `permission_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `play_log`
@@ -716,19 +717,19 @@ ALTER TABLE `recording`
 -- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
-  MODIFY `role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `role_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `sensor`
 --
 ALTER TABLE `sensor`
-  MODIFY `sensor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `sensor_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `site`
 --
 ALTER TABLE `site`
-  MODIFY `site_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `site_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `sound`
@@ -740,7 +741,7 @@ ALTER TABLE `sound`
 -- AUTO_INCREMENT for table `sound_type`
 --
 ALTER TABLE `sound_type`
-  MODIFY `sound_type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `sound_type_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `spectrogram`
@@ -758,13 +759,13 @@ ALTER TABLE `tag`
 -- AUTO_INCREMENT for table `tag_review_status`
 --
 ALTER TABLE `tag_review_status`
-  MODIFY `tag_review_status_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `tag_review_status_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables

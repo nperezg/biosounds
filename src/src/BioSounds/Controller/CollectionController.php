@@ -48,6 +48,8 @@ class CollectionController extends BaseController
 
         $this->checkPermissions();
 
+        $this->isAccessible();
+
         $this->page = $page;
 
         $this->collection = (new CollectionProvider())->get($this->colId);
@@ -113,11 +115,25 @@ class CollectionController extends BaseController
      */
     private function checkPermissions()
     {
-        if (!Auth::isUserLogged() && !$this->openCollection) {
+        if (!Auth::isUserLogged()) {
             throw new NotAuthenticatedException();
         }
 
         if (empty($this->colId)) {
+            throw new \Exception(ERROR_EMPTY_ID);
+        }
+    }
+
+    private function isAccessible()
+    {
+        $visibleCollObjs = Auth::isUserAdmin() ? (new CollectionProvider())->getList() : (new CollectionProvider())->getAccessedList((Auth::getUserID() == null) ? 0 : Auth::getUserID());
+
+        $vCollIDs = array();
+        foreach ($visibleCollObjs as $vCollObj) {
+            $vCollIDs[] = $vCollObj->getId();
+        }
+
+        if (!in_array($this->colId, $vCollIDs)) {
             throw new \Exception(ERROR_EMPTY_ID);
         }
     }

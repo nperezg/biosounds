@@ -18,9 +18,9 @@
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Author</th>
-            <th scope="col">Source</th>
             <th scope="col">DOI</th>
             <th scope="col">Note</th>
+            <th scope="col">View</th>
           </tr>
         </thead>
         <tbody class="form-control-sm js-coll-list">
@@ -30,13 +30,22 @@
                 <input type="hidden" name="collId" value="{{ collection.id }}">
               </td>
               <td>
-                <input type="text" name="name" value="{{ collection.name }}">
+                <input type="text" class="form-control form-control-sm" name="name" value="{{ collection.name }}">
               </td>
-              <td>{{ collection.author }}</td>
-              <td>{{ collection.source }}</td>
-              <td>{{ collection.doi }}</td>
               <td>
-                <input type="text" name="note" value="{{ collection.note }}">
+                <input type="text" class="form-control form-control-sm" name="author" value="{{ collection.author }}">
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm" name="doi" value="{{ collection.doi }}">
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm" name="note" value="{{ collection.note }}">
+              </td>
+              <td>
+                <select id="view" name="view" class="form-control form-control-sm" required>
+                    <option value="gallery" {{ collection.view == 'gallery' ? 'selected' }}>gallery</option>
+                    <option value="list" {{ collection.view == 'list' ? 'selected' }}>list</option>
+                </select>
               </td>
             </tr>
           {% endfor %}
@@ -75,27 +84,6 @@
 
       $(document).on('click', '#saveButton', function () {
         $('#collectionEdit').submit();
-      });
-
-
-      $(document).on('submit', '#collectionEdit', function (e) {
-        e.preventDefault();
-
-        if (this.checkValidity() === false) {
-          e.stopPropagation();
-        } else {
-          $.ajax({type: 'POST', url: '{{ baseUrl }}/api/admin/collections/save', data: $(this).serialize()}).done(function (response) {
-            showAlert(response.message);
-            $('#modal-div').modal('hide');
-          }).fail(function (response) {
-            if (response.responseJSON.errorCode === 1) {
-              $(this).removeClass('was-validated');
-              $('#admin_pwd').addClass('is-invalid');
-            }
-          });
-        }
-
-        this.classList.add('was-validated');
       });
 
       $('#collectionForm').submit(function (e) {
