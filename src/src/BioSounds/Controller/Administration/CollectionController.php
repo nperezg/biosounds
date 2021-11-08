@@ -23,8 +23,8 @@ class CollectionController extends BaseController
         }
 
         return $this->twig->render('administration/collections.html.twig', [
-            //'collections' => (new CollectionProvider())->getListOrderById(),
-            'collections' => (new CollectionProvider())->getList("name"),
+            'collections' => (new CollectionProvider())->getListOrderById(),
+            // 'collections' => (new (CollectionProvider))->getList("name"),
         ]);
     }
 

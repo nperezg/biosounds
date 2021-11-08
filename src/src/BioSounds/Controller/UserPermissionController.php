@@ -58,6 +58,7 @@ class UserPermissionController extends BaseController
         }
         return json_encode([
             'errorCode' => 0,
+            'message' => 'successfully changed user permissions',
         ]);
     }
 }

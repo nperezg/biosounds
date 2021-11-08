@@ -2,106 +2,101 @@
 
 {% block admin_content %}
 
-  {% include 'administration/collCreate.html.twig' %}
-  <div class="card mb-3" id="collectionsList">
-    <div class="card-header border-light bg-white text-right">
-      <button id="collectionFormButton" class="btn btn-outline-primary btn-sm mt-2" type="button" data-toggle="collapse" data-target="#collectionFormSection" aria-expanded="false" aria-controls="collectionFormSection">
-        <i class="fas fa-plus"></i>
-        Add Collection
-      </button>
-    </div>
+    {% include 'administration/collCreate.html.twig' %}
+    <div class="card mb-3" id="collectionsList">
+        <div class="card-header border-light bg-white text-right">
+            <button id="collectionFormButton" class="btn btn-outline-primary btn-sm mt-2" type="button" data-toggle="collapse" data-target="#collectionFormSection" aria-expanded="false" aria-controls="collectionFormSection">
+                <i class="fas fa-plus"></i>
+                Add Collection
+            </button>
+        </div>
 
-    <div class="card card-body">
-      <table class="table table-sm table-hover">
-        <thead class="table-borderless">
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Author</th>
-            <th scope="col">DOI</th>
-            <th scope="col">Note</th>
-            <th scope="col">View</th>
-          </tr>
-        </thead>
-        <tbody class="form-control-sm js-coll-list">
-          {% for collection in collections %}
-            <tr>
-              <td scope='row'>{{ collection.id }}
-                <input type="hidden" name="collId" value="{{ collection.id }}">
-              </td>
-              <td>
-                <input type="text" class="form-control form-control-sm" name="name" value="{{ collection.name }}">
-              </td>
-              <td>
-                <input type="text" class="form-control form-control-sm" name="author" value="{{ collection.author }}">
-              </td>
-              <td>
-                <input type="text" class="form-control form-control-sm" name="doi" value="{{ collection.doi }}">
-              </td>
-              <td>
-                <input type="text" class="form-control form-control-sm" name="note" value="{{ collection.note }}">
-              </td>
-              <td>
-                <select id="view" name="view" class="form-control form-control-sm" required>
-                    <option value="gallery" {{ collection.view == 'gallery' ? 'selected' }}>gallery</option>
-                    <option value="list" {{ collection.view == 'list' ? 'selected' }}>list</option>
-                </select>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+        <div class="card card-body">
+            <table class="table table-sm table-hover">
+                <thead class="table-borderless">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Author</th>
+                        <th scope="col">DOI</th>
+                        <th scope="col">Note</th>
+                        <th scope="col">View</th>
+                    </tr>
+                </thead>
+                <tbody class="form-control-sm js-coll-list">
+                    {% for collection in collections %}
+                        <tr>
+                            <td scope='row'>{{ collection.id }}
+                                <input type="hidden" name="collId" value="{{ collection.id }}">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm" name="name" value="{{ collection.name }}">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm" name="author" value="{{ collection.author }}">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm" name="doi" value="{{ collection.doi }}">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm" name="note" value="{{ collection.note }}">
+                            </td>
+                            <td>
+                                <select id="view" name="view" class="form-control form-control-sm" required>
+                                    <option value="gallery" {{ collection.view == 'gallery' ? 'selected' }}>gallery</option>
+                                    <option value="list" {{ collection.view == 'list' ? 'selected' }}>list</option>
+                                </select>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-    <div class="text-right">
-      <button id="collectionsExport" class="btn btn-outline-primary btn-sm mt-2" type="button" data-target="#collectionsExport" aria-expanded="false" aria-controls="collectionsExport">
-        <i class="fas"></i>
-        Collection Export
-      </button>
-    </div>
+        <div class="text-right">
+            <button id="collectionsExport" class="btn btn-outline-primary btn-sm mt-2" type="button" data-target="#collectionsExport" aria-expanded="false" aria-controls="collectionsExport">
+                <i class="fas"></i>
+                Collection Export
+            </button>
+        </div>
 
-  </div>
+    </div>
 {% endblock %}
 
 {% block header %}
-  {{ parent() }}
-  <link rel="stylesheet" href="{{ baseUrl }}/templates/administration/css/collection.css"/>
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ baseUrl }}/templates/administration/css/collection.css"/>
 
-  <script>
-    $(function () {
-      'use strict';
+    <script>
+        $(function () {
+            'use strict';
 
-      /* Save collections list */
-      $('.js-coll-list').on('change', 'input, select, textarea', function () {
-        saveFormList($(this), 'api/admin/collections/save');
-      });
+            /* Save collections list */
+            $('.js-coll-list').on('change', 'input, select, textarea', function () {
+                saveFormList($(this), 'api/admin/collections/save');
+            });
 
-      $("#collectionFormSection").on('shown.bs.collapse', function () {
-        $("#collectionsList").hide();
-      }).on('hidden.bs.collapse', function () {
-        $("#collectionsList").show();
-      });
 
-      $(document).on('click', '#saveButton', function () {
-        $('#collectionEdit').submit();
-      });
+            $(document).on('click', '#saveButton', function () {
+                $('#collectionEdit').submit();
+            });
 
-      $('#collectionForm').submit(function (e) {
-        e.preventDefault();
+            $('#collectionForm').submit(function (e) {
+                e.preventDefault();
 
-        if (this.checkValidity() === false) {
-          e.stopPropagation();
-        } else {
-          postRequest('{{ baseUrl }}/api/admin/collections/save', $(this).serialize(), false, false, function () {
-            location.reload();
-          });
-        }
-        this.classList.add('was-validated');
-      });
+                if (this.checkValidity() === false) {
+                    e.stopPropagation();
+                } else {
+                    postRequest('{{ baseUrl }}/api/admin/collections/save', $(this).serialize(), false, false, function () {
+                        location.reload();
+                    });
+                }
+                this.classList.add('was-validated');
+            });
 
-      $(document).on('click', '#collectionsExport', function () {
-        window.location.href ='{{ baseUrl }}/api/admin/collections/export';
-      });
-    });
-  </script>
+            $(document).on('click', '#collectionsExport', function () {
+                window.location.href ='{{ baseUrl }}/api/admin/collections/export';
+            });
+        });
+    </script>
 {% endblock %}
