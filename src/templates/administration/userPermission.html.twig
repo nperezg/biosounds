@@ -63,11 +63,21 @@
 
         $('.js-view-checkbox').change(function (e) {
             $('.js-access-checkbox[data-collection-id="' + $(this).data('collection-id') + '"]').prop('checked', this.checked).prop('disabled', this.checked);
+            if (!$(this).checked) {
+                $('.js-review-checkbox[data-collection-id="' + $(this).data('collection-id') + '"]').get(0).checked = false;
+            }
         });
 
         $('.js-review-checkbox').change(function (e) {
             $('.js-view-checkbox[data-collection-id="' + $(this).data('collection-id') + '"]').prop('checked', this.checked).prop('disabled', this.checked);
             $('.js-access-checkbox[data-collection-id="' + $(this).data('collection-id') + '"]').prop('checked', this.checked).prop('disabled', this.checked);
+        });
+
+        $('.js-access-checkbox').change(function (e) {
+            if (!$(this).checked) {
+                $('.js-view-checkbox[data-collection-id="' + $(this).data('collection-id') + '"]').get(0).checked = false;
+                $('.js-review-checkbox[data-collection-id="' + $(this).data('collection-id') + '"]').get(0).checked = false;
+            }
         });
 
         $('#userPermissionForm').submit(function (e) {
