@@ -28,16 +28,15 @@ class CollectionProvider extends BaseProvider
 
         $result = $this->database->executeSelect();
 
-        foreach($result as $item) {
+        foreach ($result as $item) {
             $data[] = (new Collection())
                 ->setId($item['collection_id'])
                 ->setName($item['name'])
                 ->setAuthor($item['author'])
-                ->setSource($item['source'])
-                ->setCitation($item['citation'])
-                ->setUrl($item['url'])
+                ->setDoi($item['doi'])
                 ->setNote($item['note'])
-                ->setProject($item['project_id']);
+                ->setProject($item['project_id'])
+                ->setView($item['view']);
         }
 
         return $data;
@@ -62,10 +61,34 @@ class CollectionProvider extends BaseProvider
             ->setId($result['collection_id'])
             ->setName($result['name'])
             ->setAuthor($result['author'])
-            ->setSource($result['source'])
-            ->setCitation($result['citation'])
-            ->setUrl($result['url'])
+            ->setDoi($result['doi'])
             ->setNote($result['note'])
             ->setView($result['view']);
+    }
+
+
+    /**
+     * @param string $order
+     * @return Collection[]
+     * @throws \Exception
+     */
+    public function getAccessedList(int $userId): array
+    {
+        $data = [];
+        $this->database->prepareQuery('SELECT * FROM collection WHERE collection_id IN ( SELECT up.collection_id FROM user_permission up, permission p WHERE up.permission_id = p.permission_id AND (p.name = "Access" OR p.name = "View" OR p.name = "Review") AND up.user_id = :userId) ORDER BY name');
+
+        $result = $this->database->executeSelect([':userId' => $userId]);
+
+        foreach ($result as $item) {
+            $data[] = (new Collection())
+                ->setId($item['collection_id'])
+                ->setName($item['name'])
+                ->setAuthor($item['author'])
+                ->setDoi($item['doi'])
+                ->setNote($item['note'])
+                ->setProject($item['project_id']);
+        }
+
+        return $data;
     }
 }

@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h2>
+            No access to collection
+        </h2>
+    </div>
+{% endblock %}
+
+
+{% block header %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ baseUrl }}/templates/collection/css/smallPlayer.css"/>
+{% endblock %}
+
+
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        {% include 'collection/js/collection.js' %}
+        {% include 'collection/js/smallPlayer.js' %}
+    </script>
+{% endblock %}

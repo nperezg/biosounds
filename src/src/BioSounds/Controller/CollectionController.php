@@ -46,7 +46,9 @@ class CollectionController extends BaseController
             $this->openCollection = true;
         }
 
-        $this->checkPermissions();
+        $isAccessed = $this->checkPermissions();
+
+        $isAccessed &= $this->isAccessible();
 
         $this->page = $page;
 
@@ -96,29 +98,52 @@ class CollectionController extends BaseController
             $this->filter['speciesName'] = filter_var($_POST['species-name'], FILTER_SANITIZE_STRING);
         }
 
-        return $this->twig->render('collection/collection.html.twig', [
-            'collection' => $this->collection,
-            'pageNum' => $this->pageNum,
-            'currentPage' => $this->page,
-            'recordingNum' => $this->recordingNum,
-            'list' => $this->recordings,
-            'template' => $display == Collection::LIST_VIEW ? self::LIST_TEMPLATE : self::GALLERY_TEMPLATE,
-            'display' => $display,
-            'filter' => $this->filter,
-        ]);
+        if ($isAccessed) {
+            return $this->twig->render('collection/collection.html.twig', [
+                'collection' => $this->collection,
+                'pageNum' => $this->pageNum,
+                'currentPage' => $this->page,
+                'recordingNum' => $this->recordingNum,
+                'list' => $this->recordings,
+                'template' => $display == Collection::LIST_VIEW ? self::LIST_TEMPLATE : self::GALLERY_TEMPLATE,
+                'display' => $display,
+                'filter' => $this->filter,
+            ]);
+        } else {
+            return $this->twig->render('collection/noaccess.html.twig');
+        }
     }
 
     /**
      * @throws \Exception
      */
-    private function checkPermissions()
+    private function checkPermissions(): bool
     {
-        if (!Auth::isUserLogged() && !$this->openCollection) {
-            throw new NotAuthenticatedException();
+        if (!Auth::isUserLogged()) {
+            // throw new NotAuthenticatedException();
+            return false;
         }
 
         if (empty($this->colId)) {
-            throw new \Exception(ERROR_EMPTY_ID);
+            // throw new \Exception(ERROR_EMPTY_ID);
+            return false;
         }
+        return true;
+    }
+
+    private function isAccessible(): bool
+    {
+        $visibleCollObjs = Auth::isUserAdmin() ? (new CollectionProvider())->getList() : (new CollectionProvider())->getAccessedList((Auth::getUserID() == null) ? 0 : Auth::getUserID());
+
+        $vCollIDs = array();
+        foreach ($visibleCollObjs as $vCollObj) {
+            $vCollIDs[] = $vCollObj->getId();
+        }
+
+        if (!in_array($this->colId, $vCollIDs)) {
+            // throw new \Exception(ERROR_EMPTY_ID);
+            return false;
+        }
+        return true;
     }
 }

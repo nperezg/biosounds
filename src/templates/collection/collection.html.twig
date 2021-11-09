@@ -4,18 +4,19 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-7">
-                <h2>{{ collection.name }} <small>{{ recordingNum }} sounds</small></h2>
+                <h2>{{ collection.name }}
+                    <small>{{ recordingNum }}
+                        sounds</small>
+                </h2>
             </div>
             <div class="col-md-5 text-right">
-                <a href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage }}/gallery"
-                   type="button" class="btn btn-outline-primary btn-sm view {{ display == 'gallery' ? 'active'}}"
-                   aria-pressed="true">
-                    <i class="fas fa-th" aria-hidden="true"></i> Gallery View
+                <a href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage }}/gallery" type="button" class="btn btn-outline-primary btn-sm view {{ display == 'gallery' ? 'active'}}" aria-pressed="true">
+                    <i class="fas fa-th" aria-hidden="true"></i>
+                    Gallery View
                 </a>
-                <a href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage }}/list"
-                   type="button" class="btn btn-outline-primary btn-sm view {{ display == 'list' ? 'active'}}"
-                   aria-pressed="true">
-                    <i class="fas fa-th-list" aria-hidden="true"></i> List View
+                <a href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage }}/list" type="button" class="btn btn-outline-primary btn-sm view {{ display == 'list' ? 'active'}}" aria-pressed="true">
+                    <i class="fas fa-th-list" aria-hidden="true"></i>
+                    List View
                 </a>
             </div>
         </div>
@@ -23,7 +24,10 @@
         <div class="row mt-4">
             <div class="col-auto mr-auto">
                 {% if collection.note is not empty %}
-                    <p><strong>Notes: </strong>{{ collection.note }}</p>
+                    <p>
+                        <strong>Notes:
+                        </strong>
+                        {{ collection.note }}</p>
                 {% endif %}
             </div>
             {% if display == 'list' %}
@@ -31,58 +35,29 @@
                     <form id="search-form" class="form-inline text-right" action="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage }}/{{ display }}" method="post">
                         <div class="form-group mr-3">
                             <label class="col-form-label-sm" for="doi">DOI</label>
-                            <input type="text"
-                                   class="form-control form-control-sm filter ml-2"
-                                   id="doi"
-                                   name="doi"
-                                   placeholder="DOI"
-                                   value=""
-                                   data-type="search"
-                            >
+                            <input type="text" class="form-control form-control-sm filter ml-2" id="doi" name="doi" placeholder="DOI" value="" data-type="search">
                         </div>
                         <div class="form-group mr-3">
                             <label class="col-form-label-sm" for="siteName">Site</label>
-                            <input type="hidden"
-                                   class="filter js-site-id"
-                                   name="site"
-                                   value="{{ filter.site_id }}"
-                                   data-type="search"
-                            >
-                            <input type="text"
-                                   class="form-control form-control-sm filter ml-2 js-site-autocomplete"
-                                   id="siteName"
-                                   name="site-name"
-                                   placeholder="Site"
-                                   value="{{ filter.siteName }}"
-                                   data-type="search"
-                            >
+                            <input type="hidden" class="filter js-site-id" name="site" value="{{ filter.site_id }}" data-type="search">
+                            <input type="text" class="form-control form-control-sm filter ml-2 js-site-autocomplete" id="siteName" name="site-name" placeholder="Site" value="{{ filter.siteName }}" data-type="search">
                         </div>
                         <div class="form-group mr-3">
                             <label class="col-form-label-sm" for="speciesName">Species</label>
-                            <input type="hidden"
-                                   class="filter js-species-id"
-                                   name="species"
-                                   value="{{ filter.species_id }}"
-                                   data-type="search"
-                            >
-                            <input type="text"
-                                   class="form-control form-control-sm filter ml-2 js-species-autocomplete"
-                                   id="speciesName"
-                                   name="species-name"
-                                   placeholder="Species"
-                                   value="{{ filter.speciesName }}"
-                                   data-type="search"
-                            >
+                            <input type="hidden" class="filter js-species-id" name="species" value="{{ filter.species_id }}" data-type="search">
+                            <input type="text" class="form-control form-control-sm filter ml-2 js-species-autocomplete" id="speciesName" name="species-name" placeholder="Species" value="{{ filter.speciesName }}" data-type="search">
                         </div>
                         <div class="form-group mr-3">
                             <label class="col-form-label-sm" for="rating">Rating</label>
                             <input type="text" class="form-control form-control-sm filter ml-2" id="rating" name="rating" placeholder="A-E" pattern="[A-E]{1}" style="width:60px;" value="{{ filter.rating }}">
                         </div>
                         <button type="submit" class="btn btn-outline-primary btn-sm mr-2">
-                            <i class="fas fa-search" aria-hidden="true"></i> Search
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                            Search
                         </button>
                         <button id="clear-filter" type="submit" class="btn btn-outline-secondary btn-sm mr-2">
-                            <i class="fas fa-eraser" aria-hidden="true"></i> Clear
+                            <i class="fas fa-eraser" aria-hidden="true"></i>
+                            Clear
                         </button>
                     </form>
                 </div>
@@ -112,7 +87,7 @@
 
 {% block header %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ baseUrl }}/templates/collection/css/smallPlayer.css" />
+    <link rel="stylesheet" href="{{ baseUrl }}/templates/collection/css/smallPlayer.css"/>
 {% endblock %}
 
 

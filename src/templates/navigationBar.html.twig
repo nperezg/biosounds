@@ -13,13 +13,30 @@
                 <li class="navbar-item">
                     <a class="nav-link" href="{{ baseUrl}}/project/show">Projects</a>
                 </li>
+
+                <li class="navbar-item dropdown">
+                    {% if collections and isUserLogged %}
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Collections</a>
+                        <div class="dropdown-menu">
+                            {% for collection in collections %}
+
+                                <a href="{{ baseUrl}}/collection/show/{{ collection.id }}" class="dropdown-item">
+                                    {{ collection.name }}
+                                </a>
+
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </li>
+
             </ul>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav ml-auto">
                     {% if isUserLogged %}
                         <li class="navbar-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle user" data-toggle="dropdown">
-                                <i class="fas fa-user"></i> {{ username }}
+                                <i class="fas fa-user"></i>
+                                {{ username }}
                             </a>
                             <div class="dropdown-menu">
                                 {% if is_admin %}
@@ -30,12 +47,15 @@
                             </div>
                         </li>
                     {% else %}
-                        <li class=navbar-item">
+                        <li class="navbar-item" ">
                             <a class="nav-link" href="#" data-target="#loginForm" data-toggle="collapse">
-                                <i class="fas fa-sign-in-alt"></i> Login
+                                <i class="fas fa-sign-in-alt"></i>
+                                Login
                             </a>
                         </li>
-                        {% block login %} {% include 'login/login.html.twig' %}{% endblock %}
+                        {% block login %}
+                            {% include 'login/login.html.twig' %}
+                        {% endblock %}
                     {% endif %}
                 </ul>
             </div>
