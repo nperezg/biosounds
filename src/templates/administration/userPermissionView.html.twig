@@ -1,0 +1,50 @@
+<div class="modal fade" id="modal-div" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="userPermissionForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">User
+                        <strong>{{ username }}</strong>
+                        permissions</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input id="user_id" type="hidden" value="{{ userId }}">
+                    <table id="user-perm" class="table table-sm table-hover">
+                        <thead class="table-borderless">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Collection</th>
+                                <th scope="col">Access</th>
+                                <th scope="col">View all tags</th>
+                                <th scope="col">Review all tags</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for collection in collections %}
+                                <tr>
+                                    <td scope="row">
+                                        {{ collection.collection_id }}
+                                        <input class="js-data-input" type='hidden' data-collection-id="{{ collection.collection_id }}" data-permission-id="{{ collection.permission_id }}">
+                                    </td>
+                                    <td>{{ collection.name }}</td>
+                                    <td class="text-center">
+                                        <input class="js-access-checkbox" value="{{ accessId }}" type="checkbox" disabled name="access" data-collection-id="{{ collection.collection_id }}" {{ collection.permission_id == accessId ? "checked"}} {{ collection.permission_id == viewId ? "checked"}} {{ collection.permission_id == reviewId ? "checked"}}>
+                                    </td>
+                                    <td class="text-center">
+                                        <input class="js-view-checkbox" value="{{ viewId }}" type="checkbox" disabled name="view" data-collection-id="{{ collection.collection_id }}" {{ collection.permission_id == viewId ? "checked"}} {{ collection.permission_id == reviewId ? "checked"}}>
+                                    </td>
+                                    <td class="text-center">
+                                        <input class="js-review-checkbox" value="{{ reviewId }}" type="checkbox" disabled name="review" data-collection-id="{{ collection.collection_id }}" {{ collection.permission_id == reviewId ? "checked"}}>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

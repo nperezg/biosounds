@@ -37,6 +37,28 @@ class UserPermissionController extends BaseController
     }
 
     /**
+     * @param int $userId
+     * @return false|string
+     * @throws \Exception
+     */
+    public function view(int $userId)
+    {
+        $listCollections = (new UserPermission())->getColPermissionsByUser($userId);
+        $permission = new Permission();
+
+        return json_encode([
+            'errorCode' => 0,
+            'data' => $this->twig->render('administration/userPermissionView.html.twig', [
+                'collections' => $listCollections,
+                'username' => (new User())->getUserName($userId),
+                'userId' => $userId,
+                'viewId' => $permission->getViewId(),
+                'reviewId' => $permission->getReviewId(),
+                'accessId' => $permission->getAccessId(),
+            ]),
+        ]);
+    }
+    /**
      * @return string
      * @throws \Exception
      */
