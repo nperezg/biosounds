@@ -12,7 +12,7 @@ use BioSounds\Utils\Utils;
 class UserController extends BaseController
 {
     const SECTION_TITLE = 'Users';
-	const DEFAULT_TAG_COLOR = '#FFFFFF';
+    const DEFAULT_TAG_COLOR = '#FFFFFF';
 
     /**
      * @return false|string
@@ -20,12 +20,12 @@ class UserController extends BaseController
      */
     public function create()
     {
-		if (!Auth::isUserAdmin()){
-			throw new ForbiddenException();
-		}
-       // $this->getUsersList();
+        if (!Auth::isUserAdmin()) {
+            throw new ForbiddenException();
+        }
+        // $this->getUsersList();
         return $this->twig->render('administration/users.html.twig', [
-            'roles' => 	(new Role())->getRoles(),
+            'roles' => (new Role())->getRoles(),
             'users' => (new User())->getAllUsers(),
             'default_color' => self::DEFAULT_TAG_COLOR,
         ]);
@@ -88,20 +88,73 @@ class UserController extends BaseController
                 'errorCode' => 0,
                 'message' => 'User updated successfully.'
             ]);
-        }
-        else if($userProvider->insertUser($data) > 0) {
+        } else if ($userProvider->insertUser($data) > 0) {
             return json_encode([
                 'errorCode' => 0,
                 'message' => 'User created successfully.',
             ]);
         }
-	}
+    }
+
 
     /**
      * @return false|string
      * @throws \Exception
      */
-	public function editPassword()
+    public function resetSave()
+    {
+        $userProvider = new User();
+
+        if (isset($_POST['my_pwd'])) {
+            $myPwd = filter_var($_POST['my_pwd'], FILTER_SANITIZE_STRING);
+            $bdMyPwd = $userProvider->getPasswordByUserId(Auth::getUserLoggedID());
+            if (!Utils::checkPasswords($myPwd, $bdMyPwd)) {
+                throw new \Exception('The old password is not correct.', 1);
+            }
+            unset($_POST['my_pwd']);
+        }
+
+        $data = [];
+
+        foreach ($_POST as $key => $value) {
+            if (strrpos($key, '_')) {
+                $type = substr($key, strrpos($key, '_') + 1, strlen($key));
+                $key = substr($key, 0, strrpos($key, '_'));
+
+                switch ($type) {
+                    case 'password':
+                        $password = filter_var($value, FILTER_SANITIZE_STRING);
+                        $data[$key] = Utils::encodePasswordHash($password);
+                        break;
+                    default:
+                        $data[$key] = filter_var($value, FILTER_SANITIZE_STRING);
+                        break;
+                }
+            } else {
+                $data[$key] =  filter_var($value, FILTER_SANITIZE_STRING);
+            }
+        }
+
+        if (isset($data['sscID'])) {
+            $userProvider->resetPasswd($data['sscID'], $data['password']);
+            return json_encode([
+                'errorCode' => 0,
+                'message' => 'Password updated successfully.'
+            ]);
+        } else if (isset($data['itemID'])) {
+            $userProvider->updateUser($data);
+            return json_encode([
+                'errorCode' => 0,
+                'message' => 'Profile updated successfully.'
+            ]);
+        }
+    }
+
+    /**
+     * @return false|string
+     * @throws \Exception
+     */
+    public function editPassword()
     {
         if (!Auth::isUserAdmin()) {
             throw new ForbiddenException();
@@ -114,5 +167,32 @@ class UserController extends BaseController
                 'userId' => $userId,
             ]),
         ]);
-	}
+    }
+
+    /**
+     * @return false|string
+     * @throws \Exception
+     */
+    public function selfService(int $id = null)
+    {
+        return $this->twig->render('administration/userAdmin.html.twig', [
+            'user' => (new User())->getMyProfile($id),
+            'role' => (new Role())->getMyRole($id),
+        ]);
+    }
+
+    /**
+     * @return false|string
+     * @throws \Exception
+     */
+    public function passwordReset()
+    {
+        $userId = filter_var($_POST['id'], FILTER_SANITIZE_NUMBER_INT);
+        return json_encode([
+            'errorCode' => 0,
+            'data' => $this->twig->render('administration/resetPassword.html.twig', [
+                'userId' => $userId,
+            ]),
+        ]);
+    }
 }

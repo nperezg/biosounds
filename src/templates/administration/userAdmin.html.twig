@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb bg-white mt-4">
+                <li class="breadcrumb-item" aria-current="page">
+                    <a href="{{ baseUrl }}/admin/selfService">Administration</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">User
+                </li>
+            </ul>
+        </nav>
+
+
+        <div class="row">
+            <div class="col-lg-2">
+                <ul class="nav flex-column nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link">
+                            <i class="fas fa-user pr-1"></i>
+                            User</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-lg-10">
+                <div class="card mb-3" id="user">
+                    <div class="card-body">
+                        <table class="table table-sm table-hover">
+                            <thead class="table-borderless">
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Role</th>
+                                    <th scope="col">Password Reset</th>
+                                    <th scope="col">Permissions</th>
+                                    <th scope="col">Color</th>
+                                </tr>
+                            </thead>
+                            <tbody class="form-control-sm js-user-self-service">
+                                <tr>
+                                    <td>
+                                        {{ user.username }}
+                                        <input type="hidden" name="itemID" value="{{ user.user_id }}">
+                                    </td>
+                                    <td>{{ user.username }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ role.name }}</td>
+                                    <td>
+                                        <a href="{{ baseUrl }}/admin/users/passwordReset" class="js-open-modal" data-id="{{ user.user_id }}" title="Reset Password">
+                                            <i class='fas fa-edit'></i>
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        <a href="{{ baseUrl }}/UserPermission/view/{{ user.user_id }}" class="js-open-modal" title="Collection Privileges" $privhidden>
+                                            <i class='fas fa-tasks'></i>
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        <input type="color" name="color" alt="Tag color" value="{{ user.color is empty ? default_color : user.color }}">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+
+    <script>
+        $(function () {
+            'use strict';
+
+            $('.js-user-self-service').on('change', 'input', function () {
+                saveFormList($(this), 'api/admin/users/resetSave');
+            });
+
+            $(document).on('click', '#resetButton', function () {
+                $('#myPasswdForm').submit();
+            });
+
+            document.querySelectorAll('[type=password]').forEach(function (elem) {
+                elem.addEventListener('keyup', function () {
+                    document.getElementById('my_new_pwd2').setCustomValidity('');
+                    if ($('#my_new_pwd2').val() !== $('#my_new_pwd1').val()) {
+                        document.getElementById('my_new_pwd2').setCustomValidity('Passwords do not match.');
+                    }
+                });
+            });
+
+            $(document).on('submit', '#myPasswdForm', function (e) {
+                e.preventDefault();
+
+                if (this.checkValidity() === false) {
+                    e.stopPropagation();
+                } else {
+                    $.ajax({type: 'POST', url: '{{ baseUrl }}/api/admin/users/resetSave', data: $(this).serialize()}).done(function (response) {
+                        showAlert(response.message);
+                        $('#modal-div').modal('hide');
+                    }).fail(function (response) {
+                        if (response.responseJSON.errorCode === 1) {
+                            $(this).removeClass('was-validated');
+                            $('#my_pwd').addClass('is-invalid');
+                        }
+                    });
+                }
+
+                this.classList.add('was-validated');
+            });
+
+        });
+    </script>
+{% endblock %}
