@@ -43,7 +43,7 @@ class AdminController extends BaseController
      */
     public function selfService()
     {
-        return (new UserController($this->twig))->passwordSelfService(Auth::getUserID());
+        return (new UserController($this->twig))->selfService(Auth::getUserID());
     }
 
     /**

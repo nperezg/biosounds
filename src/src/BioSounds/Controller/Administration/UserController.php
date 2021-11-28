@@ -135,11 +135,17 @@ class UserController extends BaseController
             }
         }
 
-        if (isset($data['itemID'])) {
-            $userProvider->resetPasswd($data['itemID'], $data['password']);
+        if (isset($data['sscID'])) {
+            $userProvider->resetPasswd($data['sscID'], $data['password']);
             return json_encode([
                 'errorCode' => 0,
                 'message' => 'Password updated successfully.'
+            ]);
+        } else if (isset($data['itemID'])) {
+            $userProvider->updateUser($data);
+            return json_encode([
+                'errorCode' => 0,
+                'message' => 'Profile updated successfully.'
             ]);
         }
     }
@@ -167,9 +173,9 @@ class UserController extends BaseController
      * @return false|string
      * @throws \Exception
      */
-    public function passwordSelfService(int $id = null)
+    public function selfService(int $id = null)
     {
-        return $this->twig->render('administration/passwordSelfService.html.twig', [
+        return $this->twig->render('administration/userAdmin.html.twig', [
             'user' => (new User())->getMyProfile($id),
             'role' => (new Role())->getMyRole($id),
         ]);
