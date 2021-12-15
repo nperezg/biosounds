@@ -5,6 +5,55 @@
                 <img src="{{ logoUrl }}" alt="BioSounds">
             </a>
             <ul class="nav navbar-nav">
+                <li class="navbar-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Open Soundscape Collections</a>
+                    <div class="dropdown-menu">
+                        <a href="{{ baseUrl }}/collection/show/1" class="dropdown-item">
+                            Demo
+                        </a>
+                        <a href="{{ baseUrl }}/collection/show/3" class="dropdown-item">
+                            Berbak NP phase 1 and 2
+                        </a>
+                        <a href="{{ baseUrl }}/collection/show/2" class="dropdown-item">
+                            CRC990 Upland core plots dry season 2013
+                        </a>
+                        <a href="{{ baseUrl }}/collection/show/20" class="dropdown-item">
+                            CRC990 Upland core plots 2016 (ultrasound)
+                        </a>
+                        <a href="{{ baseUrl }}/collection/show/31" class="dropdown-item">
+                            Microphone SNR
+                        </a>
+                        <a href="{{ baseUrl }}/collection/show/34" class="dropdown-item">
+                            Bat point counts and automated recordings 2019
+                        </a>
+                    </div>
+                </li>
+                <li class="navbar-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Reference Collections</a>
+                    <div class="dropdown-menu">
+                        <a href="{{ baseUrl }}/collection/show/18" class="dropdown-item">
+                            Sumatran Amphibians
+                        </a>
+                        <a href="{{ baseUrl }}/collection/show/19" class="dropdown-item">
+                            Chiroptera
+                        </a>
+                        <a href="{{ baseUrl }}/collection/show/39" class="dropdown-item">
+                            Primates
+                        </a>
+                    </div>
+                </li>
+                {% if collections and isUserLogged %}
+                    <li class="navbar-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Collections</a>
+                        <div class="dropdown-menu">
+                            {% for collection in collections %}
+                                <a href="{{ baseUrl}}/collection/show/{{ collection.id }}" class="dropdown-item">
+                                    {{ collection.name }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </li>
+                {% endif %}
                 {% if isUserLogged %}
                     <li class="navbar-item">
                         <a class="nav-link" target="_blank" href="{{ guide_url }}">Guide</a>
@@ -13,22 +62,9 @@
                 <li class="navbar-item">
                     <a class="nav-link" href="{{ baseUrl}}/project/show">Projects</a>
                 </li>
-
-                <li class="navbar-item dropdown">
-                    {% if collections and isUserLogged %}
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Collections</a>
-                        <div class="dropdown-menu">
-                            {% for collection in collections %}
-
-                                <a href="{{ baseUrl}}/collection/show/{{ collection.id }}" class="dropdown-item">
-                                    {{ collection.name }}
-                                </a>
-
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                <li class="navbar-item">
+                    <a class="nav-link" href="{{baseUrl}}/project/about">About</a>
                 </li>
-
             </ul>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav ml-auto">

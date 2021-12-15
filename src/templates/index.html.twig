@@ -1,17 +1,35 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<div class="jumbotron text-center bg-light py-4">
-		<img src="{{ imagesUrl }}/biosounds_logo_large.png" alt="BioSounds">
-		<p class="lead mt-2">Open-source online platform for ecoacoustics</p>
-	</div>
-	<div class="container mb-5">
-		<h2>Project {{ project_name }}</h2>
-		<p>{{ project_description }}</p>
-		<p>BioSounds is a tool for ecoacoustics researchers and practitioners. We analyse soundscapes by identifying the sonant animals inside, and we provide sample recordings of animal species for reference in scientific publications.
-		<p>
-		<img src="{{ projectImagesUrl }}/index.png" class="rounded" alt="workflow" style="width:1200px">
-		<p>
-		Some <a href="{{ baseUrl}}/project/show">projects</a> are open to the public, but you can access them all after logging in. Contact us if you need to use BioSounds for your project.
-	</div>
-{% endblock %}
+    <div class="jumbotron text-center bg-light py-4">
+        <img src="{{ imagesUrl }}/biosounds_logo_large.png" alt="BioSounds">
+        <p class="lead mt-2">Open-source online platform for ecoacoustics</p>
+    </div>
+    <div class="container mb-5">
+        <p style="text-align: center;">
+            <span>
+                <img src="{{imagesUrl}}/ecosound-web_infra.png">
+            </span>
+        </p>
+        <p class="c0">
+            <span class="c3">ecoSound-web is an open-source, online platform for collaboratively archiving and sharing audio recordings, manually creating and reviewing annotations in soundscapes, analysing target signals in time and frequency, and storing reference recordings for different sonant taxa.</span>
+        </p>
+        <h1 class="c1" id="h.snyv6571pmgh">
+            <span class="c2">References</span>
+        </h1>
+        <p class="c0">
+            The precursor of ecoSound-web, BioSounds, has a scientific publication in
+            <b>
+                <a href="https://f1000research.com/articles/9-1224/v1">F1000Research</a>
+            </b>, and ecoSound-web is on
+            <b>
+                <a href="https://github.com/ecomontec/ecoSound-web">GitHub</a>.</b>
+            <h1 class="c1" id="h.hrgj46y6swje">
+                <span class="c2">Collaboration</span>
+            </h1>
+        </p>
+        <p class="c0">
+            <span class="c3">We are open for collaboration with web engineers and ecologists. If you need to use ecoSound-web to annotate your soundscapes, or want to join its development, contact us (kdarras#at#gwdg#dot#de).</span>
+        </p>
+    </p>
+</p></div>{% endblock %}
