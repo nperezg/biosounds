@@ -16,4 +16,14 @@ class ProjectController extends BaseController
             'title' => self::TITLE,
         ]);
     }
+
+    public function about()
+    {
+        return $this->twig->render('about.html.twig');
+    }
+
+    public function gsp()
+    {
+        return $this->twig->render('gsp.html.twig');
+    }
 }
