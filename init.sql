@@ -304,8 +304,8 @@ CREATE TABLE `site` (
   `site_id` int(11) NOT NULL,
   `name` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
   `note` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
+  `latitude` double DEFAULT NULL,
   `elevation` double DEFAULT NULL,
   `country` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
