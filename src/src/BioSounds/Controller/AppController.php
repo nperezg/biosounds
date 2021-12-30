@@ -13,7 +13,7 @@ use Throwable;
 
 class AppController extends BaseClass
 {
-    private $title = 'BioSounds';
+    private $title = 'ecoSound';
 
     /**
      * AppController constructor.
@@ -48,22 +48,27 @@ class AppController extends BaseClass
             $slugs[$key] = htmlspecialchars(strip_tags($slug));
         }
 
-        $className = $slugs[0];
+        $subdirOffset = 1;
+        if ($_SERVER['DOCUMENT_ROOT'] == dirname(__DIR__, 3)) {
+            $subdirOffset = 0;
+        }
+
+        $className = $slugs[0 + $subdirOffset];
         if ($className === 'api') {
             set_exception_handler([new ApiExceptionListener(), 'handleException']);
-            return (new ApiController())->route($this->twig, array_slice($slugs, 1));
+            return (new ApiController())->route($this->twig, array_slice($slugs, 1 + $subdirOffset));
         }
 
         $controllerName =  __NAMESPACE__ . '\\' . ucfirst($className) . 'Controller';
         $controller = new $controllerName($this->twig);
 
 
-        $method = $slugs[1];
+        $method = $slugs[1 + $subdirOffset];
         if (!method_exists($controller, $method) || !is_callable([$controller, $method])) {
             throw new InvalidActionException($method);
         }
 
-        return call_user_func_array([$controller, $method], array_slice($slugs, 2));
+        return call_user_func_array([$controller, $method], array_slice($slugs, 2 + $subdirOffset));
     }
 
     /**
