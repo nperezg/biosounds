@@ -8,6 +8,7 @@ use BioSounds\Utils\Auth;
 use BioSounds\Controller\Administration\CollectionController as CollectionController;
 use BioSounds\Controller\Administration\SettingController as SettingController;
 use BioSounds\Controller\Administration\RecordingController as RecordingController;
+use BioSounds\Controller\Administration\SiteController as SiteController;
 
 class AdminController extends BaseController
 {
@@ -91,5 +92,28 @@ class AdminController extends BaseController
     public function recordingManager(string $action, int $id = null)
     {
         return (new RecordingController($this->twig))->$action($id);
+    }
+
+    /**
+     * @param string|null $action
+     * @return false|string
+     * @throws \Exception
+     */
+    public function sites(?string $action = null)
+    {
+        if (!empty($action)) {
+            return (new SiteController($this->twig))->$action();
+        }
+        return (new SiteController($this->twig))->show();
+    }
+
+    /**
+     * @param string $action
+     * @param int|null $id
+     * @return mixed
+     */
+    public function siteManager(string $action, int $id = null)
+    {
+        return (new SiteController($this->twig))->$action($id);
     }
 }

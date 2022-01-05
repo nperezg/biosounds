@@ -1,0 +1,122 @@
+{% extends 'administration/admin.html.twig' %}
+
+{% block admin_content %}
+
+    {% include 'administration/siteCreate.html.twig' %}
+    <div class="card mb-3" id="siteList">
+        <div class="card-header border-light bg-white text-right">
+            <button id="siteFormButton" class="btn btn-outline-primary btn-sm mt-2" type="button" data-toggle="collapse" data-target="#siteFormSection" aria-expanded="false" aria-controls="siteFormSection">
+                <i class="fas fa-plus"></i>
+                Add Site
+            </button>
+        </div>
+
+        <div class="card card-body">
+            <table class="table table-sm table-hover">
+                <thead class="table-borderless">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Longitude</th>
+                        <th scope="col">Latitude</th>
+                        <th scope="col">GADM1</th>
+                        <th scope="col">GADM2</th>
+                        <th scope="col">GADM3</th>
+                        <th scope="col">Centroid</th>
+                    </tr>
+                </thead>
+                <tbody class="form-control-sm js-site-list">
+                    {% for site in siteList %}
+                        <tr>
+                            <td>
+                                <label>{{ site.id }}</label>
+                                <input type="hidden" name="steId" value="{{ site.id }}">
+                            </td>
+                            <td>
+                                <input type="text" name="name" value="{{ site.name }}">
+                            </td>
+                            <td>
+                                <select id="userId" name="user" class="form-control-sm" required>
+                                    {% for user in userList %}
+                                        <option value="{{user.user_id}}" {% if site.userId == user.user_id %} selected {% endif %}>{{user.username}}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" name="longitude" value="{{ site.longitude }}">
+                            </td>
+                            <td>
+                                <input type="text" name="latitude" value="{{ site.latitude }}">
+                            </td>
+                            <td>
+                                <input type="text" name="gadm1" value="{{ site.gadm1 }}">
+                            </td>
+                            <td>
+                                <input type="text" name="gadm2" value="{{ site.gadm2 }}">
+                            </td>
+                            <td>
+                                <input type="text" name="gadm3" value="{{ site.gadm3 }}">
+                            </td>
+                            <td>
+                                <select id="centro" name="centroid" class="form-control-sm" required>
+                                    <option value="true" {{ site.centroId == "true" ? "selected" }}>true</option>
+                                    <option value="false" {{ site.centroId == "false" ? "selected" }}>false</option>
+                                </select>
+                            </td>
+                            <td>
+                                <a class="js-site-delete" href="#" data-id="{{ site.id }}" title="Delete Site">
+                                    <span class="fas fa-trash"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+
+    <script>
+        $(function () {
+            'use strict';
+
+            /* Save site list */
+            $('.js-site-list').on('change', 'input, select, textarea', function () {
+                saveFormList($(this), 'api/admin/sites/save');
+            });
+
+
+            $(document).on('click', '#saveButton', function () {
+                $('#siteEdit').submit();
+            });
+
+            $('.js-site-delete').click(function (e) {
+                if (!confirm('Are you sure you want to delete this site?')) {
+                    return false;
+                }
+
+                let row = $(this).parents("tr");
+
+                deleteRequest('{{ baseUrl }}/api/admin/siteManager/delete/' + $(this).data('id'), [], false, false, row.remove());
+            });
+
+            $('#siteForm').submit(function (e) {
+                e.preventDefault();
+
+                if (this.checkValidity() === false) {
+                    e.stopPropagation();
+                } else {
+                    postRequest('{{ baseUrl }}/api/admin/sites/save', $(this).serialize(), false, false, function () {
+                        location.reload();
+                    });
+                }
+                this.classList.add('was-validated');
+            });
+
+        });
+    </script>
+{% endblock %}

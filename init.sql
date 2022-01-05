@@ -300,22 +300,33 @@ INSERT INTO `setting` (`name`, `value`) VALUES
 -- Table structure for table `site`
 --
 
+-- CREATE TABLE `site` (
+--   `site_id` int(11) NOT NULL,
+--   `name` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+--   `note` text COLLATE utf8_unicode_ci DEFAULT NULL,
+--   `longitude` double DEFAULT NULL,
+--   `latitude` double DEFAULT NULL,
+--   `elevation` double DEFAULT NULL,
+--   `country` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 CREATE TABLE `site` (
   `site_id` int(11) NOT NULL,
-  `name` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
-  `note` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `longitude` double DEFAULT NULL,
-  `latitude` double DEFAULT NULL,
-  `elevation` double DEFAULT NULL,
-  `country` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL
+  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `creation_date_time` datetime NOT NULL,
+  `longitude_WGS84_dd_dddd` double DEFAULT NULL,
+  `latitude_WGS84_dd_dddd` double DEFAULT NULL,
+  `gadm1` varchar(100),
+  `gadm2` varchar(100),
+  `gadm3` varchar(100),
+  `centroid` VARCHAR(5) DEFAULT 'false'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 --
 -- Dumping data for table `site`
 --
 
-INSERT INTO `site` (`site_id`, `name`, `note`, `latitude`, `longitude`, `elevation`, `country`) VALUES
-(0, 'Demo site', NULL, 0, 0, NULL, NULL);
+INSERT INTO `site` (`site_id`, `name`, `user_id`, `creation_date_time`, `longitude_WGS84_dd_dddd`, `latitude_WGS84_dd_dddd`, `GADM1`, `GADM2`, `GADM3`, `centroid`) VALUES
+(1, 'Demo site', 100, now(), 0, 0, NULL, NULL, NULL, 'false');
 
 -- --------------------------------------------------------
 
@@ -599,7 +610,8 @@ ALTER TABLE `setting`
 -- Indexes for table `site`
 --
 ALTER TABLE `site`
-  ADD PRIMARY KEY (`site_id`);
+  ADD PRIMARY KEY (`site_id`),
+  ADD KEY `user_id_idx` (`user_id`) USING BTREE;
 
 --
 -- Indexes for table `sound`
@@ -830,8 +842,12 @@ ALTER TABLE `user_permission`
   ADD CONSTRAINT `user_permission_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `user_permission_ibfk_2` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`permission_id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `user_permission_ibfk_3` FOREIGN KEY (`collection_id`) REFERENCES `collection` (`collection_id`) ON UPDATE CASCADE;
+
+ALTER TABLE `site`
+  ADD CONSTRAINT `site_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
