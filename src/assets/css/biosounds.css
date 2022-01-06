@@ -330,3 +330,7 @@ div .active a {
 #modal-div .modal-dialog {
     min-width: 34em;
 }
+
+.fa-sites:before{
+    content: url('../images/sites_icon.png');
+}
