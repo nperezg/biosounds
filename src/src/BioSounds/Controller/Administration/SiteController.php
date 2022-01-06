@@ -51,7 +51,7 @@ class SiteController extends BaseController
                 $key = substr($key, 0, strrpos($key, '_'));
             }
             $sitePdoValue = $value;
-            if (empty($value)) {
+            if ($sitePdoValue != '0' && empty($sitePdoValue)) {
                 $sitePdoValue = '';
             }
 
@@ -60,10 +60,10 @@ class SiteController extends BaseController
                     $data['user_id'] =  filter_var($sitePdoValue, FILTER_SANITIZE_NUMBER_INT);
                     break;
                 case 'longitude':
-                    $data['longitude_WGS84_dd_dddd'] =  filter_var($sitePdoValue, FILTER_SANITIZE_NUMBER_INT);
+                    $data['longitude_WGS84_dd_dddd'] =  filter_var($sitePdoValue, FILTER_SANITIZE_NUMBER_FLOAT);
                     break;
                 case 'latitude':
-                    $data['latitude_WGS84_dd_dddd'] =  filter_var($sitePdoValue, FILTER_SANITIZE_NUMBER_INT);
+                    $data['latitude_WGS84_dd_dddd'] =  filter_var($sitePdoValue, FILTER_SANITIZE_NUMBER_FLOAT);
                     break;
                 default:
                     $data[$key] = filter_var($sitePdoValue, FILTER_SANITIZE_STRING);
