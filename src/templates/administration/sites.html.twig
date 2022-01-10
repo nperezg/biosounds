@@ -12,42 +12,36 @@
         </div>
 
         <div class="card card-body">
-            <table class="table table-sm table-hover">
+            <table class="table-sm table-hover">
                 <thead class="table-borderless">
-                    <tr>
-                        <th scope="col">#</th>
+                    <tr style="width:100%;">
                         <th scope="col">Name</th>
-                        <th scope="col">User</th>
                         <th scope="col">Longitude</th>
                         <th scope="col">Latitude</th>
-                        <th scope="col">GADM1</th>
-                        <th scope="col">GADM2</th>
-                        <th scope="col">GADM3</th>
+                        <th scope="col">Global Administrative Areas level 1</th>
+                        <th scope="col">Global Administrative Areas level 2</th>
+                        <th scope="col">Global Administrative Areas level 3</th>
                         <th scope="col">Centroid</th>
                     </tr>
                 </thead>
                 <tbody class="form-control-sm js-site-list">
                     {% for site in siteList %}
-                        <tr>
+                        <tr style="width:100%;">
                             <td>
-                                <label>{{ site.id }}</label>
                                 <input type="hidden" name="steId" value="{{ site.id }}">
-                            </td>
-                            <td>
                                 <input type="text" name="name" value="{{ site.name }}">
                             </td>
                             <td>
-                                <select id="userId" name="user" class="form-control-sm" required>
-                                    {% for user in userList %}
-                                        <option value="{{user.user_id}}" {% if site.userId == user.user_id %} selected {% endif %}>{{user.username}}</option>
-                                    {% endfor %}
-                                </select>
+                                <input type="number" name="longitude" min="-180" max="180" value="{{ site.longitude }}">
+                                <div class="invalid-feedback">
+                                    Please provide a longitude value, from -180 to 180.
+                                </div>
                             </td>
                             <td>
-                                <input type="text" name="longitude" value="{{ site.longitude }}">
-                            </td>
-                            <td>
-                                <input type="text" name="latitude" value="{{ site.latitude }}">
+                                <input type="number" id="siteLat" data-id="{{ site.id }}" name="latitude" min="-90" max="90" value="{{ site.latitude }}">
+                                <div class="invalid-feedback">
+                                    Please provide a latitude value, from -90 to 90.
+                                </div>
                             </td>
                             <td>
                                 <input type="text" name="gadm1" value="{{ site.gadm1 }}">
@@ -86,7 +80,22 @@
 
             /* Save site list */
             $('.js-site-list').on('change', 'input, select, textarea', function () {
-                saveFormList($(this), 'api/admin/sites/save');
+                if (this.checkValidity() === false) { // this.style.border = "1px solid red";
+                    let tdLongDiv = $(this).parent().children("div");
+                    tdLongDiv.addClass("d-block");
+                } else {
+                    let tdLongDiv = $(this).parent().children("div");
+                    tdLongDiv.removeClass("d-block");
+                    saveFormList($(this), 'api/admin/sites/save');
+                }
+
+                // if (this.checkValidity() === false) {
+                //     e.stopPropagation();
+                // } else {
+                //     //
+                // }
+                // this.classList.add('was-validated');
+
             });
 
 
@@ -102,6 +111,22 @@
                 let row = $(this).parents("tr");
 
                 deleteRequest('{{ baseUrl }}/api/admin/siteManager/delete/' + $(this).data('id'), [], false, false, row.remove());
+            });
+
+
+            $('#longitude').on('change', function () {
+                if (this.checkValidity() === false) {
+                    $('#invalidLongDiv').addClass("d-block");
+                } else {
+                    $('#invalidLongDiv').removeClass("d-block");
+                }
+            });
+            $('#latitude').on('change', function () {
+                if (this.checkValidity() === false) {
+                    $('#invalidLatDiv').addClass("d-block");
+                } else {
+                    $('#invalidLatDiv').removeClass("d-block");
+                }
             });
 
             $('#siteForm').submit(function (e) {

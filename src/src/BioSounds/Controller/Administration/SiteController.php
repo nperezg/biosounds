@@ -27,7 +27,6 @@ class SiteController extends BaseController
 
         return $this->twig->render('administration/sites.html.twig', [
             'siteList' => (new SiteProvider())->getListOrderById(),
-            'userList' => (new User())->getAllUsers(),
         ]);
     }
 
@@ -56,9 +55,6 @@ class SiteController extends BaseController
             }
 
             switch ($key) {
-                case 'user':
-                    $data['user_id'] =  filter_var($sitePdoValue, FILTER_SANITIZE_NUMBER_INT);
-                    break;
                 case 'longitude':
                     $data['longitude_WGS84_dd_dddd'] =  filter_var($sitePdoValue, FILTER_SANITIZE_NUMBER_FLOAT);
                     break;
@@ -78,6 +74,7 @@ class SiteController extends BaseController
             ]);
         } else {
             $data['creation_date_time'] = date('Y-m-d H:i:s', time());
+            $data['user_id'] =  $_SESSION['user_id'];
 
             if ($siteEnt->insert($data) > 0) {
                 return json_encode([

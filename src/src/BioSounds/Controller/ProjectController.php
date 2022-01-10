@@ -4,7 +4,7 @@ namespace BioSounds\Controller;
 
 class ProjectController extends BaseController
 {
-    const TITLE = 'BioSounds - Project';
+    const TITLE = 'ecoSound - Project';
 
     /**
      * @return string
@@ -19,11 +19,11 @@ class ProjectController extends BaseController
 
     public function about()
     {
-        return $this->twig->render('about.html.twig');
+        return $this->twig->render('about.html.twig', ['title' => 'ecoSound - About']);
     }
 
     public function gsp()
     {
-        return $this->twig->render('gsp.html.twig');
+        return $this->twig->render('gsp.html.twig', ['title' => 'ecoSound - Global Soundscapes Project']);
     }
 }

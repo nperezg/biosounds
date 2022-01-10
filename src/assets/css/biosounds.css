@@ -88,7 +88,15 @@ form label {
 }
 
 .table input[type=text] {
-	width:200px;
+	width:240px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
 }
 
 body .modal-tag {
@@ -333,4 +341,8 @@ div .active a {
 
 .fa-sites:before{
     content: url('../images/sites_icon.png');
+}
+
+.red-border{
+    border: 1px solid red;
 }
