@@ -7,7 +7,7 @@ use Twig\Environment;
 class BaseController
 {
     const SECTION_TITLE = '';
-    const PAGE_TITLE = '%s - BioSounds';
+    const PAGE_TITLE = '%s - ecoSound';
 
     protected $twig;
 

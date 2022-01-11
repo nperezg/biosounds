@@ -22,6 +22,7 @@
 			<table class="table table-sm table-hover">
 				<thead class="table-borderless">
 					<tr>
+						<th scope="col">#</th>
 						<th scope="col">Name</th>
 						<th scope="col">Username</th>
 						<th scope="col">Email</th>
@@ -35,9 +36,9 @@
 				<tbody class="form-control-sm js-user-list">
 					{% for user in users %}
 						<tr>
+							<td scope='row'>{{ user.user_id }}</td>
 							<td>
 								<input type="text" name="username" value="{{ user.username }}">
-								<input type="hidden" name="itemID" value="{{ user.user_id }}">
 							</td>
 							<td>{{ user.username }}</td>
 							<td>

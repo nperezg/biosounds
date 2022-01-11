@@ -16,21 +16,21 @@ class SiteController
 
         $term = isset($_POST['term']) ? $_POST['term'] : null;
 
-		if (!empty($term)) {
+        if (!empty($term)) {
 
-			$site = new Site();
-			$result = $site->getList($term);
+            $site = new Site();
+            $result = $site->getList($term);
 
-			if (!empty($result)) {
-			    $data = [];
-				foreach($result as $row){
-					$data[] = [
-					    'label' => $row[Site::NAME] .' ( '. $row[Site::COUNTRY] .' ) ',
+            if (!empty($result)) {
+                $data = [];
+                foreach ($result as $row) {
+                    $data[] = [
+                        'label' => $row[Site::NAME],
                         'value' => $row[Site::PRIMARY_KEY]
                     ];
-				}
-			}
-		}
+                }
+            }
+        }
         return json_encode($data);
-	}
+    }
 }

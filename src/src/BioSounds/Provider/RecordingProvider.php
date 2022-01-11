@@ -160,12 +160,12 @@ class RecordingProvider extends BaseProvider
             ':offset' => $offSet,
         ];
 
-        $query = 'SELECT recording_id, recording.name, filename, col_id, directory, sensor_id, recording.site_id, user_id, ';
+        $query = 'SELECT recording_id, recording.name, filename, col_id, directory, sensor_id, recording.site_id, recording.user_id, ';
         $query .= 'recording.sound_id, file_size, bitrate, channel_num, duration, site.name as site_name, license.name as license_name,';
         $query .= 'DATE_FORMAT(file_date, \'%Y-%m-%d\') AS file_date, ';
         $query .= 'DATE_FORMAT(file_time, \'%H:%i:%s\') AS file_time, sampling_rate, doi FROM recording ';
         //default view for site and license
-        $query .= 'LEFT JOIN site ON recording.site_id = site.site_id ';
+        $query .= 'LEFT JOIN site ON ( recording.site_id, recording.user_id ) = ( site.site_id, site.user_id ) ';
         $query .= 'LEFT JOIN license ON recording.license_id = license.license_id ';
 
         if (!empty($filter)) {

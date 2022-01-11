@@ -1,0 +1,61 @@
+<div class="collapse mb-5" id="siteFormSection">
+    <div class="card">
+        <div class="card-body">
+            <button id="closeForm" class="close" type="button" data-toggle="collapse" data-target="#siteFormSection" aria-expanded="false" aria-controls="siteFormSection">
+                <span>&times;</span>
+            </button>
+            <form id="siteForm" novalidate>
+                <div class="form-group">
+                    <label for="name" class="col-form-label-sm">Name</label>
+                    <input id="name" type="text" name="name_text" class="form-control form-control-sm" maxlength="100" required>
+                    <div class="invalid-feedback">
+                        Please provide a site name.
+                    </div>
+                </div>
+                <div>
+                    <label style="width:50%" class="col-form-label-sm" for="longitude">Longitude [-180,180]</label>
+                    <label style="width:49.5%" class="col-form-label-sm" for="latitude">Latitude [-90,90]</label>
+                </div>
+                <div style="width:100%">
+                    <span style="width:50%">
+                        <input id="longitude" type="number" min="-180" max="180" name="longitude_number" style="width:50%" maxlength="100" required>
+                    </span>
+                    <span style="width:50%">
+                        <input id="latitude" type="number" min="-90" max="90" name="latitude_number" style="width:49.5%" maxlength="100" required>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <span id="invalidLongDiv" class="invalid-feedback" style="width: 50%; float:left;">
+                        Please provide valid longitude value.
+                    </span>
+                    <span id="invalidLatDiv" class="invalid-feedback" style="width:49%; float:right;">
+                        Please provide valid latitude value.
+                    </span>
+                </div>
+                <div style="width:100%">
+                    <label for="gadm1" class="col-form-label-sm" style="width:33%">Global Administrative Areas level 1</label>
+                    <label for="gadm2" class="col-form-label-sm" style="width:33%">Global Administrative Areas level 2</label>
+                    <label for="gadm3" class="col-form-label-sm" style="width:33%">Global Administrative Areas level 3</label>
+                </div>
+                <div class="form-group">
+                    <input id="gadm1" type="text" name="gadm1_text" style="width:33%" maxlength="100">
+                    <input id="gadm2" type="text" name="gadm2_text" style="width:33%" maxlength="100">
+                    <input id="gadm3" type="text" name="gadm3_text" style="width:33%" maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label for="centro" class="col-form-label-sm">Centroid</label>
+                    <select id="centro" name="centroid_select-one" class="form-control form-control-sm" required>
+                        <option value="true">true</option>
+                        <option value="false">false</option>
+                    </select>
+                </div>
+                <div class="form-group text-right">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="fas fa-save"></i>
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -10,10 +10,10 @@ class NotFoundException extends \Exception
 
     /**
      * NotFoundException constructor.
-     * @param int $id
+     * @param int $id1, $id2
      */
-    public function __construct(int $id)
+    public function __construct(int $id1, $id2 = NULL)
     {
-        parent::__construct(sprintf($this::MESSAGE, $id));
+        parent::__construct(sprintf($this::MESSAGE, $id1, $id2));
     }
 }
