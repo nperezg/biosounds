@@ -18,9 +18,9 @@
                         <th scope="col">Name</th>
                         <th scope="col">Longitude</th>
                         <th scope="col">Latitude</th>
-                        <th scope="col">Global Administrative Areas level 1</th>
-                        <th scope="col">Global Administrative Areas level 2</th>
-                        <th scope="col">Global Administrative Areas level 3</th>
+                        <th scope="col">GADM 1</th>
+                        <th scope="col">GADM 2</th>
+                        <th scope="col">GADM 3</th>
                         <th scope="col">Centroid</th>
                     </tr>
                 </thead>
@@ -88,13 +88,6 @@
                     tdLongDiv.removeClass("d-block");
                     saveFormList($(this), 'api/admin/sites/save');
                 }
-
-                // if (this.checkValidity() === false) {
-                //     e.stopPropagation();
-                // } else {
-                //     //
-                // }
-                // this.classList.add('was-validated');
 
             });
 
