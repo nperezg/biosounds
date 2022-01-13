@@ -26,7 +26,7 @@ class SiteController extends BaseController
         // echo Utils::getSetting('license');
 
         return $this->twig->render('administration/sites.html.twig', [
-            'siteList' => (new SiteProvider())->getListOrderById(),
+            'siteList' => (new SiteProvider())->getListOrderById(Auth::getUserID()),
         ]);
     }
 

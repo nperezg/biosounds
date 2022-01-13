@@ -15,7 +15,7 @@
             <table class="table-sm table-hover">
                 <thead class="table-borderless">
                     <tr style="width:100%;">
-                    	 <th scope="col">#</th>
+                        <th scope="col">#</th>
                         <th scope="col">Name</th>
                         <th scope="col">Longitude</th>
                         <th scope="col">Latitude</th>
@@ -29,10 +29,9 @@
                     {% for site in siteList %}
                         <tr style="width:100%;">
                             <td scope='row'>{{ site.id }}
-                                <input type="hidden" name="siteId" value="{{ site.id }}">
+                                <input type="hidden" name="steId" value="{{ site.id }}">
                             </td>
                             <td>
-                                <input type="hidden" name="steId" value="{{ site.id }}">
                                 <input type="text" name="name" value="{{ site.name }}">
                             </td>
                             <td>
