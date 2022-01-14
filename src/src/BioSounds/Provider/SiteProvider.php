@@ -11,9 +11,9 @@ class SiteProvider extends BaseProvider
      * @return Site[]
      * @throws \Exception
      */
-    public function getListOrderById(): array
+    public function getListOrderById(int $userId): array
     {
-        return $this->getList('site_id');
+        return $this->getList($userId, 'site_id');
     }
 
     /**
@@ -21,11 +21,11 @@ class SiteProvider extends BaseProvider
      * @return Site[]
      * @throws \Exception
      */
-    public function getList(string $order = 'name'): array
+    public function getList(int $userId, string $order = 'name'): array
     {
         $data = [];
         $this->database->prepareQuery(
-            "SELECT * FROM site ORDER BY $order"
+            "SELECT * FROM site where user_id = $userId ORDER BY $order"
         );
 
         $result = $this->database->executeSelect();
