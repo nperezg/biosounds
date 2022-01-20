@@ -99,6 +99,15 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 
+.sortedHeader {
+    cursor: pointer;
+}
+
+.scrollable {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
 body .modal-tag {
     width: 1000px;
     left: -200px;

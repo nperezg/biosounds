@@ -23,26 +23,28 @@ class RecordingService
 
     /**
      * @param int $colId
+     * @param int $steId
      * @param int $limit
      * @param int $offSet
      * @param array $filter
      * @return RecordingListPresenter[]
      * @throws \Exception
      */
-    public function getListWithImages(int $colId, int $limit, int $offSet, array $filter): array
+    public function getListWithImages(int $colId, int $steId, int $limit, int $offSet, array $filter): array
     {
         $result = [];
-        $list = (new RecordingProvider())->getListByCollection($colId, $limit, $offSet, $filter);
+        $list = (new RecordingProvider())->getListByCollection($colId, $steId, $limit, $offSet, $filter);
 
         $spectrogramService = new SpectrogramService();
 
-        foreach($list as $item) {
+        foreach ($list as $item) {
             $recordingListPresenter = new RecordingListPresenter();
             $recordingListPresenter->setRecording($item);
 
             $recordingListPresenter->setPlayerImage('assets/images/notready-small.png');
-            if (!empty($playerImage = $spectrogramService->getPlayerImage($item->getId()))
-                && is_file(  sprintf(
+            if (
+                !empty($playerImage = $spectrogramService->getPlayerImage($item->getId()))
+                && is_file(sprintf(
                     self::IMAGE_PATH,
                     $item->getCollection(),
                     $item->getDirectory(),
@@ -60,8 +62,9 @@ class RecordingService
             }
 
             $recordingListPresenter->setSmallImage('assets/images/notready-small.png');
-            if (!empty($smallImage = $spectrogramService->getSmallImage($item->getId()))
-                && is_file(  sprintf(
+            if (
+                !empty($smallImage = $spectrogramService->getSmallImage($item->getId()))
+                && is_file(sprintf(
                     self::IMAGE_PATH,
                     $item->getCollection(),
                     $item->getDirectory(),
@@ -117,7 +120,7 @@ class RecordingService
         int $maxFrequency,
         int $channel,
         int $minFrequency
-    ){
+    ) {
         if (!file_exists($imagePath)) {
             try {
                 $this->imageService->generatePlayerImage(
@@ -127,7 +130,7 @@ class RecordingService
                     $channel,
                     $minFrequency
                 );
-            } catch(\Exception $exception) {
+            } catch (\Exception $exception) {
                 error_log($exception->getMessage());
                 throw new \Exception('There was a problem generating the recording spectrogram image.');
             }
@@ -145,7 +148,7 @@ class RecordingService
         int $samplingRate,
         int $channel,
         string $fileName
-    ){
+    ) {
         $recordingPresenter->setViewPortFilePath($this->imageService->generateViewPort(
             $samplingRate,
             $recordingPresenter->getMinFrequency(),
@@ -155,7 +158,7 @@ class RecordingService
             $fileName,
             $channel,
             $recordingPresenter->getDuration(),
-            'tmp/'.$_SESSION['random_id'] . '/'
+            'tmp/' . $_SESSION['random_id'] . '/'
         ));
     }
 }

@@ -11,11 +11,11 @@
             </button>
         </div>
 
-        <div class="card card-body">
-            <table class="table-sm table-hover">
+        <div class="card card-body scrollable">
+            <table id="collTable" class="tablesorter table-sm table-hover">
                 <thead class="table-borderless">
                     <tr>
-                        <th scope="col">#</th>
+                        <th scope="col" class="sortedHeader">#</th>
                         <th scope="col">Name</th>
                         <th scope="col">Author</th>
                         <th scope="col">DOI</th>
@@ -68,6 +68,10 @@
     <link rel="stylesheet" href="{{ baseUrl }}/templates/administration/css/collection.css"/>
 
     <script>
+        $(function () {
+            $("#collTable").tablesorter();
+        });
+
         $(function () {
             'use strict';
 

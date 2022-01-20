@@ -11,11 +11,11 @@
             </button>
         </div>
 
-        <div class="card card-body">
-            <table class="table-sm table-hover">
+        <div class="card card-body scrollable">
+            <table id="siteTable" class="tablesorter table table-sm table-hover">
                 <thead class="table-borderless">
-                    <tr style="width:100%;">
-                        <th scope="col">#</th>
+                    <tr>
+                        <th scope="col" class="sortedHeader">#</th>
                         <th scope="col">Name</th>
                         <th scope="col">Longitude</th>
                         <th scope="col">Latitude</th>
@@ -35,13 +35,13 @@
                                 <input type="text" name="name" value="{{ site.name }}">
                             </td>
                             <td>
-                                <input type="number" name="longitude" min="-180" max="180" value="{{ site.longitude }}">
+                                <input type="number" name="longitude" min="-180" max="180" step="0.0000000000001" pattern="##.##############" value="{{ site.longitude }}">
                                 <div class="invalid-feedback">
                                     Please provide a longitude value, from -180 to 180.
                                 </div>
                             </td>
                             <td>
-                                <input type="number" id="siteLat" data-id="{{ site.id }}" name="latitude" min="-90" max="90" value="{{ site.latitude }}">
+                                <input type="number" name="latitude" min="-90" max="90" step="0.0000000000001" pattern="##.##############" value="{{ site.latitude }}">
                                 <div class="invalid-feedback">
                                     Please provide a latitude value, from -90 to 90.
                                 </div>
@@ -79,6 +79,10 @@
 
     <script>
         $(function () {
+            $("#siteTable").tablesorter();
+        });
+
+        $(function () {
             'use strict';
 
             /* Save site list */
@@ -109,22 +113,32 @@
                 deleteRequest('{{ baseUrl }}/api/admin/siteManager/delete/' + $(this).data('id'), [], false, false, row.remove());
             });
 
-
             $('#longitude').on('change', function () {
                 if (this.checkValidity() === false) {
-                    $('#invalidLongDiv').addClass("d-block");
+                    if ($('#invalidLatDiv').css('display') && $('#inv4LatDiv').css('display')) {
+                        $('#inv4LatDiv').css({"width": "", "display": ""});
+                    }
+                    $('#invalidLongDiv').css({"width": "50%", "display": "inline-block", "position": "relative"});
                 } else {
-                    $('#invalidLongDiv').removeClass("d-block");
+                    if ($('#invalidLatDiv').css('display') && (!$('#inv4LatDiv').css('display') || $('#inv4LatDiv').css('display') === 'none')) {
+                        $('#inv4LatDiv').css({"width": "50%", "display": "inline-block"});
+                    }
+                    if ((!$('#invalidLatDiv').css('display') || $('#invalidLatDiv').css('display') === 'none') || !$('#inv4LatDiv').css('display')) {
+                        $('#inv4LatDiv').css({"width": "", "display": ""});
+                    }
+
+                    $('#invalidLongDiv').css({"display": "", "position": ""});
                 }
             });
             $('#latitude').on('change', function () {
                 if (this.checkValidity() === false) {
-                    $('#invalidLatDiv').addClass("d-block");
+                    $('#inv4LatDiv').css({"width": "50%", "display": "inline-block"});
+                    $('#invalidLatDiv').css({"width": "49%", "display": "inline-block", "position": "relative", "right": "2"});
                 } else {
-                    $('#invalidLatDiv').removeClass("d-block");
+                    $('#invalidLatDiv').css({"display": "", "position": ""});
+                    $('#inv4LatDiv').css({"width": "", "display": ""});
                 }
             });
-
             $('#siteForm').submit(function (e) {
                 e.preventDefault();
 

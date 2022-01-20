@@ -10,11 +10,13 @@
                 <div class="col-md-6">
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <label class="col-form-label-sm" for="date">Date </label>
+                            <label class="col-form-label-sm" for="date">Date
+                            </label>
                             <input id="date" class="form-control form-control-sm  js-file-field" name="date" type="date" required>
                         </div>
                         <div class="form-group col-md-4">
-                            <label class="col-form-label-sm" for="time">Time </label>
+                            <label class="col-form-label-sm" for="time">Time
+                            </label>
                             <input id="time" class="form-control form-control-sm js-file-field" name="time" type="time" min="00:00:00" max="23:59:59" step="1" required>
                         </div>
                         <div class="form-group col-md-2">
@@ -26,7 +28,8 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <label for="sensor" class="col-form-label-sm">Sensor </label>
+                            <label for="sensor" class="col-form-label-sm">Sensor
+                            </label>
                             <select id="sensor" name="sensor" class="form-control form-control-sm">
                                 {% for sensor in sensors %}
                                     <option value="{{ sensor.sensor_id }}">{{ sensor.name }}</option>
@@ -34,10 +37,11 @@
                             </select>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="site" class="col-form-label-sm">Site </label>
+                            <label for="site" class="col-form-label-sm">Site
+                            </label>
                             <select id="site" name="site" class="form-control form-control-sm">
                                 {% for site in sites %}
-                                    <option value="{{ site.site_id }}">{{ site.name }}</option>
+                                    <option value="{{ site.id }}">{{ site.name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -45,10 +49,11 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label for="doi" class="col-form-label-sm">DOI (optional)</label>
-                            <input id="doi" type="text" name="doi" class="form-control form-control-sm" />
+                            <input id="doi" type="text" name="doi" class="form-control form-control-sm"/>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="license" class="col-form-label-sm">License </label>
+                            <label for="license" class="col-form-label-sm">License
+                            </label>
                             <select id="license" name="license" class="form-control form-control-sm">
                                 {% for licensed in license %}
                                     <option value="{{ licensed.license_id }}">{{ licensed.name }}</option>
@@ -60,24 +65,19 @@
                     <div class="form-group">
                         <div class="form-control-sm">
                             <input id="reference" name="reference" type="checkbox">
-                            <label for="reference"> Reference Sound</label>
+                            <label for="reference">
+                                Reference Sound</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="speciesName" class="col-form-label-sm">Species</label>
                         <input class="js-species-id" name="species" type="hidden" data-type="upload">
-                        <input id="speciesName"
-                               class="form-control form-control-sm js-reference-field js-field-required js-species-autocomplete"
-                               type="text"
-                               size="50"
-                               placeholder="Insert the species name for searching"
-                               data-type="upload"
-                               disabled
-                        >
+                        <input id="speciesName" class="form-control form-control-sm js-reference-field js-field-required js-species-autocomplete" type="text" size="50" placeholder="Insert the species name for searching" data-type="upload" disabled>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <label for="type" class="col-form-label-sm">Type </label>
+                            <label for="type" class="col-form-label-sm">Type
+                            </label>
                             <select id="type" name="sound-type" class="form-control form-control-sm js-reference-field js-field-required" disabled>
                                 {% for soundType in soundTypes %}
                                     <option value="{{ soundType.soundTypeId }}">{{ soundType.name }}</option>
@@ -85,11 +85,13 @@
                             </select>
                         </div>
                         <div class="form-group col-md-3">
-                            <label for="subtype" class="col-form-label-sm">Subtype </label>
+                            <label for="subtype" class="col-form-label-sm">Subtype
+                            </label>
                             <input id="subtype" name="subtype" class="form-control form-control-sm js-reference-field" type="text" pattern="[A-Z]{1}" placeholder="A-Z" disabled>
                         </div>
                         <div class="form-group col-md-3">
-                            <label for="rating" class="col-form-label-sm">Rating </label>
+                            <label for="rating" class="col-form-label-sm">Rating
+                            </label>
                             <input id="rating" name="rating" class="form-control form-control-sm js-reference-field" type="text" pattern="[A-E]{1}" placeholder="A-E" disabled>
                         </div>
                     </div>
@@ -99,10 +101,12 @@
         <div class="card-footer bg-transparent">
             <div class="form-group text-right mt-2">
                 <button id="closeButton" type="button" class="btn btn-outline-secondary" data-toggle="collapse" data-target="#uploadForm">
-                    <i class="fas fa-times"></i> Close
+                    <i class="fas fa-times"></i>
+                    Close
                 </button>
                 <button id="save_button" type="submit" class="btn btn-outline-primary ml-2" disabled>
-                    <i class="fas fa-save"></i> Save
+                    <i class="fas fa-save"></i>
+                    Save
                 </button>
             </div>
         </div>
