@@ -5,30 +5,31 @@ namespace BioSounds\Entity;
 
 class Recording
 {
-	const TABLE_NAME = 'recording';
-	const ID = 'recording_id';
-	const COL_ID = 'col_id';
+    const TABLE_NAME = 'recording';
+    const ID = 'recording_id';
+    const COL_ID = 'col_id';
     const SITE_ID = 'site_id';
     const SENSOR_ID = 'sensor_id';
     const SOUND_ID = 'sound_id';
-	const DIRECTORY = 'directory';
-	const FILE_SIZE = "file_size";
-	const NAME = "name";
-	const FILENAME = "filename";
-	const FILE_DATE = "file_date";
-	const FILE_TIME = "file_time";
-	const DURATION = "duration";
-	const CHANNEL_NUM = "channel_num";
-	const SAMPLING_RATE = "sampling_rate";
-	const BITRATE = 'bitrate';
-	const MD5_HASH = 'md5_hash';
-	const DOI = "doi";
-	//const LICENSE ="license";
-    const LICENSE_ID ="license_id";
-    const LICENSE_NAME ="license_name";
-    const SITE_NAME ="site_name";
+    const DIRECTORY = 'directory';
+    const FILE_SIZE = "file_size";
+    const NAME = "name";
+    const FILENAME = "filename";
+    const FILE_DATE = "file_date";
+    const FILE_TIME = "file_time";
+    const DURATION = "duration";
+    const CHANNEL_NUM = "channel_num";
+    const SAMPLING_RATE = "sampling_rate";
+    const BITRATE = 'bitrate';
+    const MD5_HASH = 'md5_hash';
+    const DOI = "doi";
+    //const LICENSE ="license";
+    const LICENSE_ID = "license_id";
+    const LICENSE_NAME = "license_name";
+    const SITE_NAME = "site_name";
     const USER_ID = 'user_id';
-
+    const LABEL_ID = "label_id";
+    const LABEL_NAME = 'label_name';
     /**
      * @var string
      */
@@ -142,6 +143,16 @@ class Recording
      * @var string
      */
     private $user_full_name;
+
+    /**
+     *
+     * @var int
+     */
+    private $labelId;
+    /**
+     * @var string
+     */
+    private $labelName;
 
     /**
      * @return int
@@ -544,6 +555,44 @@ class Recording
         return $this;
     }
 
+
+
+    /**
+     * @return null|int
+     */
+    public function getLabelId(): ?int
+    {
+        return $this->labelId;
+    }
+
+    /**
+     * @param null|int $labelId
+     * @return Recording
+     */
+    public function setLabelId(?int $labelId): Recording
+    {
+        $this->labelId = $labelId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabelName(): ?string
+    {
+        return $this->labelName;
+    }
+
+    /**
+     * @param null|string $label_name
+     * @return Recording
+     */
+    public function setLabelName(?string $labelName): Recording
+    {
+        $this->labelName = $labelName;
+        return $this;
+    }
+
     /**
      * @param array $values
      * @return $this
@@ -568,14 +617,12 @@ class Recording
         $this->setDuration($values['duration']);
         $this->setDoi($values['doi']);
         $this->setSiteName($values['site_name']);
-        $this->setLicense($values['license']);
+        // $this->setLicense($values['license']);
         $this->setLicenseName($values['license_name']);
         $this->setUserId($values['user_id']);
+        $this->setLabelId($values['label_id']);
+        $this->setLabelName($values['label_name']);
 
         return $this;
     }
-
-
-
-
 }

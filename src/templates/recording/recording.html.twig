@@ -18,12 +18,19 @@
             <div class="col-2 mt-1 text-right">
                 <div class="dropdown">
                     <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-cog"></i> Utilities
+                        <i class="fas fa-cog"></i>
+                        Utilities
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="{{ player.filePath }}" download><i class='fas fa-file-audio mr-1'></i> Download Recording</a>
-                        <a class="dropdown-item" href="{{ player.imageFilePath }}" download><i class='fas fa-file-image mr-1'></i> Download Spectrogram</a>
-                        <a class="dropdown-item js-open-modal" href="{{ baseUrl }}/recording/details/{{ player.recording.recording_id }}"><i class='fas fa-info-circle mr-1'></i> File Info</a>
+                        <a class="dropdown-item" href="{{ player.filePath }}" download>
+                            <i class='fas fa-file-audio mr-1'></i>
+                            Download Recording</a>
+                        <a class="dropdown-item" href="{{ player.imageFilePath }}" download>
+                            <i class='fas fa-file-image mr-1'></i>
+                            Download Spectrogram</a>
+                        <a class="dropdown-item js-open-modal" href="{{ baseUrl }}/recording/details/{{ player.recording.recording_id }}">
+                            <i class='fas fa-info-circle mr-1'></i>
+                            File Info</a>
                     </div>
                 </div>
             </div>
@@ -66,11 +73,15 @@
                 <hr>
                 {% if player.recording.channel_num > 1 %}
                     <label class="{{ player.channel == 1 ? 'active' : '' }}">
-                        <a href="#" class="channel-left" onclick="return false;"> L </a>
+                        <a href="#" class="channel-left" onclick="return false;">
+                            L
+                        </a>
                     </label>
                     <i class='fas fa-headphones'></i>
                     <label class="{{ player.channel == 2 ? 'active' : '' }}">
-                        <a href="#" class="channel-right" onclick="return false;"> R </a>
+                        <a href="#" class="channel-right" onclick="return false;">
+                            R
+                        </a>
                     </label>
                 {% else %}
                     <label>Mono File</label>
@@ -79,7 +90,8 @@
                 <a href="#" class="viewport" title="Overall view"><img src="{{ baseUrl }}/{{ player.viewPortFilePath }}"></a>
                 <hr>
                 <input id="playback-rate" class="custom-range js-playback-rate-control" type="range" min="0.05" max="1" step="0.01" value="1">
-                <label for="playback-rate">Speed: <span class="playback-rate-value">1.0</span>x</label>
+                <label for="playback-rate">Speed:
+                    <span class="playback-rate-value">1.0</span>x</label>
             </div>
             <div class="col-12-auto mr-auto">
                 {% include 'recording/player/player.html.twig' %}
@@ -125,19 +137,32 @@
         var channelNum = {{ player.recording.channel_num }};
         var soundFilePath = '{{ player.filePath }}';
 
-        $(function() {
-            document.addEventListener('submit', function(e) {
+        $(function () {
+            document.addEventListener('submit', function (e) {
                 if (e.target && e.target.id === 'callDistanceForm') {
                     $('#modal-div').modal('hide');
                 }
             });
 
-            document.addEventListener('click', function(e) {
+            document.addEventListener('click', function (e) {
                 if (e.target && e.target.id === 'distance') {
                     let input = document.getElementById('callDistance');
                     input.value = null;
                     input.readOnly = this.checked;
                 }
+            });
+        });
+
+        $(function () {
+            'use strict';
+
+            $('#reclabel').on('change', function () {
+                $('#reclabelform').submit();
+            });
+
+            $('#reclabelform').submit(function (e) {
+                e.preventDefault();
+                postRequest('{{ baseUrl }}/recording/update', $(this).serialize(), false, false, function () {});
             });
         });
     </script>

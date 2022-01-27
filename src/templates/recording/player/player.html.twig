@@ -1,17 +1,9 @@
 <div class="row">
     <div class="col-6-auto">
-{#        <div class="row timescale">#}
-{#            {% for second in player.timeScaleSeconds %}#}
-{#                <div class='col-1'>#}
-{#                    <small><img src="{{ baseUrl }}/assets/images/vert_line.png" alt="cursor"> {{ second }} s</small>#}
-{#                </div>#}
-{#            {% endfor %}#}
-{#        </div>#}
-
         <div id="myCanvas" class="canvas">
             {% include 'recording/player/tagBoxes.html.twig' with {'tags': player.tags, 'show_tags': player.isShowTags} %}
             <div id="playerCursor" class="player-line"></div>
-            <img src="{{ player.imageFilePath }}" id="cropbox" />
+            <img src="{{ player.imageFilePath }}" id="cropbox"/>
         </div>
 
         <div class="row no-gutters mt-1">
@@ -20,10 +12,14 @@
                     <button id="play" class="btn btn-link" data-playing="false" role="switch" aria-checked="false" disabled>
                         <i class="fas fa-play"></i>
                     </button>
-                    <button id="stop" class="btn btn-link"><i class="fas fa-stop"></i></button>
+                    <button id="stop" class="btn btn-link">
+                        <i class="fas fa-stop"></i>
+                    </button>
                     <h8>
-                        <span id="time_sec_div">{{ player.minTime > 0 ? player.minTime|round: 0 }}</span> /
-                        <span id="duration">{{ (player.maxTime - player.minTime|round) }} s</span>
+                        <span id="time_sec_div">{{ player.minTime > 0 ? player.minTime|round: 0 }}</span>
+                        /
+                        <span id="duration">{{ (player.maxTime - player.minTime|round) }}
+                            s</span>
                     </h8>
                 </div>
             </div>
@@ -70,5 +66,23 @@
             </div>
         </div>
     </div>
-{#    {% include 'recording/player/frequencyScale.html.twig' %}#}
+    <div>
+        <div class="col-auto ">
+            <label class="col-form-label">
+                <strong>My Label:</strong>
+            </label>
+        </div>
+        <div>
+            <form id="reclabelform" novalidate>
+                <input type="hidden" name="recording_id" value="{{player.recording.recording_id}}"/>
+                <input type="hidden" name="user_id" value="{{user_id}}"/>
+                <select id="reclabel" name="label_id" class="form-control form-control-sm ml-3" required>>
+                    {% for lbl in labels %}
+                        <option value="{{lbl.id}}" {{ lbl.id == myLabel.id ? 'selected' }}>{{lbl.name}}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+    </div>
+    {#    {% include 'recording/player/frequencyScale.html.twig' %}#}
 </div>

@@ -72,6 +72,11 @@
                         </h6>
                     {% endif %}
                 </div>
+                <div class="col-2">
+                    <label class="col-form-label">
+                        {{item.recording.labelName}}
+                    </label>
+                </div>
                 <div class="col-6">
                     <div id="player-cursor" class="small-player-cursor" data-cursor-id="{{ item.recording.id }}"></div>
                     <a href="{{ baseUrl }}/recording/show/{{ item.recording.id }}/{{ page }}" title="BioSounds player">

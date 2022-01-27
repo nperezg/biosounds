@@ -529,6 +529,33 @@ CREATE TABLE `user_permission` (
   `permission_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- 
+-- Table structure for table `label`
+-- 
+CREATE TABLE `label` (
+  `label_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `customized` boolean NULL default false,
+  `creation_date` datetime NOT NULL,
+  PRIMARY KEY (`label_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO label (label_id, name, creation_date)
+VALUES (1, 'not analysed', NOW()), (2, 'tagged', NOW()), (3, 'reviewed', NOW());
+
+-- 
+-- Table structure for table `label_association`
+-- 
+CREATE TABLE `label_association` (
+  `recording_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `label_id` int(11) NOT NULL,
+  KEY `recording_id_idx` (`recording_id`) USING BTREE,
+  KEY `user_id_idx` (`user_id`) USING BTREE, 
+  KEY `label_id_idx` (`label_id`) USING BTREE,
+  UNIQUE `label_association_uniq`(`recording_id`, `user_id`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 --
 -- Indexes for dumped tables
 --
@@ -843,8 +870,20 @@ ALTER TABLE `user_permission`
   ADD CONSTRAINT `user_permission_ibfk_2` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`permission_id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `user_permission_ibfk_3` FOREIGN KEY (`collection_id`) REFERENCES `collection` (`collection_id`) ON UPDATE CASCADE;
 
+--
+-- Constraints for table `site`
+--
 ALTER TABLE `site`
   ADD CONSTRAINT `site_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `label_association`
+--
+ALTER TABLE `label_association`
+  ADD CONSTRAINT `label_id_assoc_fk` FOREIGN KEY (`label_id`) REFERENCES `label` (`label_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `recording_id_assoc_fk` FOREIGN KEY (`recording_id`) REFERENCES `recording` (`recording_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `user_id_assoc_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

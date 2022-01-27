@@ -39,6 +39,14 @@ class RecordingService
 
         foreach ($list as $item) {
             $recordingListPresenter = new RecordingListPresenter();
+
+            // be compatible with legacy recording data without label
+            if (is_null($item->getLabelId())) {
+                $item->setLabelId(1);
+                if (is_null($item->getLabelName())) {
+                    $item->setLabelName("not analysed");
+                }
+            }
             $recordingListPresenter->setRecording($item);
 
             $recordingListPresenter->setPlayerImage('assets/images/notready-small.png');
@@ -103,6 +111,7 @@ class RecordingService
 
             $result[] = $recordingListPresenter;
         }
+
         return $result;
     }
 
