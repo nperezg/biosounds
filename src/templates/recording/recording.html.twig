@@ -162,7 +162,20 @@
 
             $('#reclabelform').submit(function (e) {
                 e.preventDefault();
+
                 postRequest('{{ baseUrl }}/recording/update', $(this).serialize(), false, false, function () {});
+            });
+
+
+            $(document).on('click', '#newLabelButton', function () {
+                $('#newLabelForm').submit();
+            });
+
+
+            $(document).on('submit', '#newLabelForm', function (e) {
+                postRequest('{{ baseUrl }}/recording/saveLabel', $(this).serialize(), false, false, function () {
+                    location.reload();
+                });
             });
         });
     </script>

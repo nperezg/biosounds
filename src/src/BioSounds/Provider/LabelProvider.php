@@ -63,6 +63,17 @@ class LabelProvider extends BaseProvider
             ->setCustomized($result['customized']);
     }
 
+    public function newLabel(string $lblName)
+    {
+        if (empty($lblName)) {
+            return false;
+        }
+
+        $this->database->prepareQuery('INSERT INTO label(name, customized, creation_date) 
+        VALUES (:name, true, now())');
+        return $this->database->executeInsert([':name' => $lblName]);
+    }
+
     /**
      * @param int $id
      * @throws \Exception

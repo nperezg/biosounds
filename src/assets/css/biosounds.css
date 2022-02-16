@@ -18,6 +18,11 @@ nav.menu .navbar-nav .nav-link {
   z-index:2147483647;
 }
 
+.vert-super {
+    vertical-align: super;
+    font-size: 12px;
+}
+
 /* Loading Modal */
 
 .loading {

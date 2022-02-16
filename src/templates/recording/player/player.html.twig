@@ -76,11 +76,14 @@
             <form id="reclabelform" novalidate>
                 <input type="hidden" name="recording_id" value="{{player.recording.recording_id}}"/>
                 <input type="hidden" name="user_id" value="{{user_id}}"/>
-                <select id="reclabel" name="label_id" class="form-control form-control-sm ml-3" required>>
+                &nbsp;&nbsp;&nbsp;<select id="reclabel" name="label_id" required>
                     {% for lbl in labels %}
                         <option value="{{lbl.id}}" {{ lbl.id == myLabel.id ? 'selected' }}>{{lbl.name}}</option>
                     {% endfor %}
                 </select>
+                <a href="{{ baseUrl }}/recording/addLabel" class="js-open-modal" title="add custom label">
+                    <i class="fas fa-plus pr-1"></i>
+                </a>
             </form>
         </div>
     </div>

@@ -475,4 +475,38 @@ class RecordingController extends BaseController
             ]);
         }
     }
+
+
+    public function addlabel()
+    {
+        return json_encode([
+            'errorCode' => 0,
+            'data' => $this->twig->render('recording/player/newLabel.html.twig'),
+        ]);
+    }
+
+    public function saveLabel()
+    {
+        if (!Auth::isUserLogged()) {
+            throw new NotAuthenticatedException();
+        }
+
+        $data = [];
+        foreach ($_POST as $key => $value) {
+            $data[$key] = filter_var($value, FILTER_SANITIZE_STRING);
+        }
+
+        $lblName = $data["cust_label"];
+        $bcda = 'bbbb::';
+        foreach ($data as $k1 => $v1) {
+            $bcda .= $k1 . '=' . $v1 . ';';
+        }
+
+        (new LabelProvider())->newLabel($lblName);
+
+        return json_encode([
+            'errorCode' => 0,
+            'message' => 'Recording Label created successfully.'
+        ]);
+    }
 }

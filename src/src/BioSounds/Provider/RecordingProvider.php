@@ -154,10 +154,11 @@ class RecordingProvider extends BaseProvider
      * @return Recording[]
      * @throws \Exception
      */
-    public function getListByCollection(int $colId, int $steId, int $limit, int $offSet, array $filter = null): array
+    public function getListByCollection(int $colId, int $userId, int $steId, int $limit, int $offSet, array $filter = null): array
     {
         $values = [
             ':colId' => $colId,
+            ':usrId' => $userId,
             ':steId' => $steId,
             ':limit' => $limit,
             ':offset' => $offSet,
@@ -172,7 +173,8 @@ class RecordingProvider extends BaseProvider
         $query .= 'LEFT JOIN site ON ( recording.site_id, recording.user_id ) = ( site.site_id, site.user_id ) ';
         $query .= 'LEFT JOIN license ON recording.license_id = license.license_id ';
         $query .= 'LEFT JOIN 
-                ( SELECT label.label_id, label.name, label_association.recording_id FROM label LEFT JOIN label_association ON label.label_id = label_association.label_id ) 
+                ( SELECT label.label_id, label.name, label_association.recording_id FROM label LEFT JOIN label_association 
+                ON label.label_id = label_association.label_id WHERE label_association.user_id = :usrId) 
             AS lba ON recording.recording_id = lba.recording_id ';
 
         if (!empty($filter)) {
