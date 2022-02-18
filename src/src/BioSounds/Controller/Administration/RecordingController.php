@@ -61,6 +61,7 @@ class RecordingController extends BaseController
         $recordingProvider = new RecordingProvider();
         $recordings = $recordingProvider->getListByCollection(
             $colId,
+            (Auth::getUserID() == null) ? 0 : Auth::getUserID(),
             $steId,
             $this::ITEMS_PAGE,
             $this::ITEMS_PAGE * ($page - 1)
