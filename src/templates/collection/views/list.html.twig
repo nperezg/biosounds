@@ -73,9 +73,12 @@
                     {% endif %}
                 </div>
                 <div class="col-2">
-                    <label class="col-form-label">
-                        {{item.recording.labelName}}
-                    </label>
+                    <h6>&nbsp;</h6>
+                    <h6>
+                        My Label:<small>
+                            {{item.recording.labelName}}
+                        </small>
+                    </h6>
                 </div>
                 <div class="col-6">
                     <div id="player-cursor" class="small-player-cursor" data-cursor-id="{{ item.recording.id }}"></div>

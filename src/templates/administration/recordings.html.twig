@@ -52,7 +52,7 @@
                     <th scope="col" class="sortedHeader">#</th>
                     <th scope="col" class="sortedHeader">Original Filename</th>
                     <th scope="col">Name</th>
-                    <th scope="col" class="sortedHeader">Site ID</th>
+                    <th scope="col" class="sortedHeader">Site</th>
                     <th scope="col">Date</th>
                     <th scope="col">Time</th>
                     <th scope="col"></th>
@@ -64,7 +64,7 @@
                         <th scope='row'><input type="hidden" name="itemID" value="{{ recording.id }}">{{ recording.id }}</th>
                         <td>{{ recording.filename }}</td>
                         <td><input type='text' title="Name" name="name" value="{{ recording.name }}"></td>
-                        <td>{{ recording.site }}</td>
+                        <td>{{ recording.siteName }}</td>
                         <td><input type='date' title="Date" name="file_date" value="{{ recording.fileDate }}"></td>
                         <td><input type='time' title="Time" name="file_time" min="00:00:00" max="23:59:59" step="1" value="{{ recording.fileTime }}"></td>
                         <td>
