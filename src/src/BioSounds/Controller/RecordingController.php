@@ -106,7 +106,7 @@ class RecordingController extends BaseController
             'frequency_data' => $this->recordingPresenter->getFrequencyScaleData(),
             'collection_page' => $this->collectionPage,
             'title' => sprintf(self::PAGE_TITLE, $recordingData[Recording::NAME]),
-            'labels' => (new LabelProvider())->getBasicList(),
+            'labels' => (new LabelProvider())->getBasicList(Auth::getUserLoggedID()),
             'myLabel' => (new LabelAssociationProvider())->getUserLabel($id, Auth::getUserLoggedID()),
         ]);
     }
@@ -502,7 +502,7 @@ class RecordingController extends BaseController
             $bcda .= $k1 . '=' . $v1 . ';';
         }
 
-        (new LabelProvider())->newLabel($lblName);
+        (new LabelProvider())->newLabel(Auth::getUserLoggedID(), $lblName);
 
         return json_encode([
             'errorCode' => 0,

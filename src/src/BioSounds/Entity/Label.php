@@ -9,9 +9,12 @@ class Label extends BaseProvider
     const TABLE_NAME = "label";
     const PRIMARY_KEY = "label_id";
     const NAME = "name";
-    const CUSTOMIZED = 'customized';
+    const CREATOR_ID = "creator_id";
+    const TYPE = "type";
     const CREATION_DATE = "creation_date";
 
+    const DEFAULT_TYPE_PUBLIC = 'public';
+    const DEFAULT_TYPE_PRIVATE = 'private';
     /**
      * @var int
      */
@@ -28,9 +31,14 @@ class Label extends BaseProvider
     private $creationDate;
 
     /**
-     * @var bool
+     * @var int
      */
-    private $customized;
+    private $creatorId;
+
+    /**
+     * @var string
+     */
+    private $type;
 
     /**
      * @return int
@@ -87,20 +95,38 @@ class Label extends BaseProvider
     }
 
     /**
-     * @return bool
+     * @return int
      */
-    public function getCustomized(): bool
+    public function getCreatorId(): int
     {
-        return $this->customized;
+        return $this->creatorId;
     }
 
     /**
-     * @param string $customized
+     * @param string $creatorId
      * @return label
      */
-    public function setCustomized(string $customized): Label
+    public function setCreatorId(string $creatorId): Label
     {
-        $this->customized = $customized;
+        $this->creatorId = $creatorId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     * @return label
+     */
+    public function setType(string $type): Label
+    {
+        $this->type = $type;
         return $this;
     }
 

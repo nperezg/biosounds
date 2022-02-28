@@ -8,15 +8,6 @@ use BioSounds\Exception\Database\NotFoundException;
 class LabelAssociationProvider extends BaseProvider
 {
     /**
-     * @return Label[]
-     * @throws \Exception
-     */
-    public function getBasicList(): array
-    {
-        return $this->getList('label_id');
-    }
-
-    /**
      * @param int $recId
      * @param int $loggedUserId
      * @return Label or NULL
@@ -26,7 +17,7 @@ class LabelAssociationProvider extends BaseProvider
     {
         $data = [];
         $query =
-            "SELECT l.label_id, l.name, l.creation_date, l.customized 
+            "SELECT l.label_id, l.name, l.creation_date, l.creator_id, l.type 
             FROM label l, label_association la
             WHERE la.label_id = l.label_id 
             AND la.user_id = :user_id
@@ -40,7 +31,8 @@ class LabelAssociationProvider extends BaseProvider
                 ->setId($item['label_id'])
                 ->setName($item['name'])
                 ->setCreationDate($item['creation_date'])
-                ->setCustomized($item['customized']);
+                ->setCreatorId($item['creator_id'])
+                ->setType($item['type']);
         }
 
         // TODO: 
@@ -48,55 +40,8 @@ class LabelAssociationProvider extends BaseProvider
             return $data[0];
         } else {
             // WORKAROUND: 1, 'not analysed'
-            return (new Label())->setId(1)->setName('not analysed')->setCustomized(false);
+            return (new Label())->setId(1)->setName('not analysed')->setCreatorId(-1)->setType('public');
         }
-    }
-
-    /**
-     * @param string $order
-     * @return Label[]
-     * @throws \Exception
-     */
-    private function getList(string $order = 'name'): array
-    {
-        $data = [];
-        $this->database->prepareQuery(
-            "SELECT * FROM label ORDER BY $order"
-        );
-
-        $result = $this->database->executeSelect();
-
-        foreach ($result as $item) {
-            $data[] = (new Label())
-                ->setId($item['label_id'])
-                ->setName($item['name'])
-                ->setCreationDate($item['creation_date'])
-                ->setCustomized($item['customized']);
-        }
-
-        return $data;
-    }
-
-    /**
-     * @param int $siteId, $userId
-     * @return Site|null
-     * @throws \Exception
-     */
-    public function get(int $lblId): ?Label
-    {
-        $this->database->prepareQuery('SELECT * FROM site WHERE label_id = :labelId');
-
-        if (empty($result = $this->database->executeSelect([':labelId' => $lblId]))) {
-            throw new NotFoundException($lblId);
-        }
-
-        $result = $result[0];
-
-        return (new Label())
-            ->setId($result['label_id'])
-            ->setName($result['name'])
-            ->setCreationDate($result['creation_date'])
-            ->setCustomized($result['customized']);
     }
 
     public function setEntry(array $repData)

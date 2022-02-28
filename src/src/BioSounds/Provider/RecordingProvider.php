@@ -162,13 +162,21 @@ class RecordingProvider extends BaseProvider
             ':steId' => $steId,
             ':limit' => $limit,
             ':offset' => $offSet,
+            ':userId' => $userId,
         ];
 
         $query = 'SELECT recording.recording_id, recording.name, filename, col_id, directory, sensor_id, recording.site_id, recording.user_id, ';
         $query .= 'recording.sound_id, file_size, bitrate, channel_num, duration, site.name as site_name, license.name as license_name, ';
         $query .= 'lba.label_id, lba.name as label_name,';
         $query .= 'DATE_FORMAT(file_date, \'%Y-%m-%d\') AS file_date, ';
-        $query .= 'DATE_FORMAT(file_time, \'%H:%i:%s\') AS file_time, sampling_rate, doi FROM recording ';
+        $query .= 'DATE_FORMAT(file_time, \'%H:%i:%s\') AS file_time, sampling_rate, recording.doi FROM recording ';
+        $query .= 'LEFT JOIN 
+                ( SELECT up.collection_id 
+                  FROM user_permission up, permission p 
+                  WHERE up.permission_id = p.permission_id 
+                  AND (p.name = "Access" OR p.name = "View" OR p.name = "Review") 
+                  AND up.user_id = :userId ) as coll on recording.col_id = coll.collection_id ';
+
         //default view for site and license
         $query .= 'LEFT JOIN site ON ( recording.site_id, recording.user_id ) = ( site.site_id, site.user_id ) ';
         $query .= 'LEFT JOIN license ON recording.license_id = license.license_id ';
@@ -181,6 +189,7 @@ class RecordingProvider extends BaseProvider
             $query .= 'LEFT JOIN sound ON recording.sound_id = sound.sound_id ';
         }
 
+        // $query .= 'WHERE col_id = :colId AND recording.site_id = :steId';
         if ($steId == BaseController::SITE_SYMBOL_FOR_COLLECTIONS_QUERY_ALL) {
             $query .= 'WHERE col_id = :colId AND recording.site_id != :steId';
         } else {

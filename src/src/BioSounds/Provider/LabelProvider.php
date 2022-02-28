@@ -11,9 +11,9 @@ class LabelProvider extends BaseProvider
      * @return Label[]
      * @throws \Exception
      */
-    public function getBasicList(): array
+    public function getBasicList(string $userId): array
     {
-        return $this->getList('label_id');
+        return $this->getList($userId, 'label_id');
     }
 
     /**
@@ -21,21 +21,22 @@ class LabelProvider extends BaseProvider
      * @return Label[]
      * @throws \Exception
      */
-    private function getList(string $order = 'name'): array
+    private function getList(string $userId, string $order = 'name'): array
     {
         $data = [];
         $this->database->prepareQuery(
-            "SELECT * FROM label ORDER BY $order"
+            "SELECT * FROM label WHERE creator_id = $userId or type = :type ORDER BY $order"
         );
 
-        $result = $this->database->executeSelect();
+        $result = $this->database->executeSelect([':type' => Label::DEFAULT_TYPE_PUBLIC]);
 
         foreach ($result as $item) {
             $data[] = (new Label())
                 ->setId($item['label_id'])
                 ->setName($item['name'])
                 ->setCreationDate($item['creation_date'])
-                ->setCustomized($item['customized']);
+                ->setCreatorId($item['creator_id'])
+                ->setType($item['type']);
         }
 
         return $data;
@@ -60,18 +61,19 @@ class LabelProvider extends BaseProvider
             ->setId($result['label_id'])
             ->setName($result['name'])
             ->setCreationDate($result['creation_date'])
-            ->setCustomized($result['customized']);
+            ->setCreatorId($result['creatorId'])
+            ->setType($result['type']);
     }
 
-    public function newLabel(string $lblName)
+    public function newLabel(string $userId, string $lblName)
     {
         if (empty($lblName)) {
             return false;
         }
 
-        $this->database->prepareQuery('INSERT INTO label(name, customized, creation_date) 
-        VALUES (:name, true, now())');
-        return $this->database->executeInsert([':name' => $lblName]);
+        $this->database->prepareQuery('INSERT INTO label(name, creator_id, type, creation_date) 
+        VALUES (:name, :creatorId, :type, now())');
+        return $this->database->executeInsert([':name' => $lblName, ':creatorId' => $userId, ':type' => Label::DEFAULT_TYPE_PRIVATE]);
     }
 
     /**

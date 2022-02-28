@@ -20,21 +20,23 @@
                                 {% endfor %}
                             </select>
                         </td>
-                        <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                        <td>
-                            <label for="steId">Site</label>
-                        </td>
-                        <td>
-                            <select id="steId" name="steId" class="form-control form-control-sm ml-3">
-                                <option value="-2" {{steId == -2 ? 'selected' }}>All</option>
-
-                                {% for st in sites %}
-                                    <option value="{{ st.id }}" {{st.id == steId ? 'selected' }}>
-                                        {{ st.name }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </td>
+                        {% if sites is not empty %}
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            <td>
+                                <label for="steId">Site</label>
+                            </td>
+                            <td>
+                                <select id="steId" name="steId" class="form-control form-control-sm ml-3">
+                                    <option value="-12">&nbsp;</option>
+                                    <option value="-2" {{steId == -2 ? 'selected' }}>All</option>
+                                    {% for st in sites %}
+                                        <option value="{{ st.id }}" {{st.id == steId ? 'selected' }}>
+                                            {{ st.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        {% endif %}
                     </tr>
                 </table>
             </form>
@@ -64,7 +66,19 @@
                         <th scope='row'><input type="hidden" name="itemID" value="{{ recording.id }}">{{ recording.id }}</th>
                         <td>{{ recording.filename }}</td>
                         <td><input type='text' title="Name" name="name" value="{{ recording.name }}"></td>
-                        <td>{{ recording.siteName }}</td>
+                        {% if sites is empty %}
+                            <td>{{ recording.siteName }}</td>
+                        {% else %}
+                            <td>
+                                <select name="site_id" class="form-control-sm ">
+                                    {% for st in sites %}
+                                        <option value="{{ st.id }}" {{st.id == steId ? 'selected' }}>
+                                            {{ st.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        {% endif %}
                         <td><input type='date' title="Date" name="file_date" value="{{ recording.fileDate }}"></td>
                         <td><input type='time' title="Time" name="file_time" min="00:00:00" max="23:59:59" step="1" value="{{ recording.fileTime }}"></td>
                         <td>
@@ -139,6 +153,7 @@
             /* Save recordings list */
             $(".save-recording").on('change', 'input, select, textarea', function () {
                 saveFormList($(this), 'api/admin/recordingManager/save');
+                location.reload();
             });
         });
     </script>

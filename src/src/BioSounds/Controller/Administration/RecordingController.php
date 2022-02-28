@@ -55,10 +55,11 @@ class RecordingController extends BaseController
         }
 
         if (empty($steId)) {
-            $steId = parent::SITE_SYMBOL_FOR_COLLECTIONS_QUERY_ALL;
+            $steId = -1;
         }
 
         $recordingProvider = new RecordingProvider();
+
         $recordings = $recordingProvider->getListByCollection(
             $colId,
             (Auth::getUserID() == null) ? 0 : Auth::getUserID(),
@@ -107,6 +108,9 @@ class RecordingController extends BaseController
                         break;
                     case "text":
                         $data[$key] =  filter_var($value, FILTER_SANITIZE_STRING);
+                        break;
+                    case 'select-one':
+                        $data[$key] =  filter_var($value, FILTER_SANITIZE_NUMBER_INT);
                         break;
                     case "hidden":
                         $data[$key] =  filter_var($value, FILTER_SANITIZE_NUMBER_INT);

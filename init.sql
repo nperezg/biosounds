@@ -535,13 +535,14 @@ CREATE TABLE `user_permission` (
 CREATE TABLE `label` (
   `label_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `customized` boolean NULL default false,
+  `creator_id` int(11) NOT NULL default -1,
+  `type` enum('private', 'public') NOT NULL DEFAULT 'private',
   `creation_date` datetime NOT NULL,
   PRIMARY KEY (`label_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO label (label_id, name, creation_date)
-VALUES (1, 'not analysed', NOW()), (2, 'tagged', NOW()), (3, 'reviewed', NOW());
+INSERT INTO label (label_id, name, type, creation_date)
+VALUES (1, 'not analysed', 'public', NOW()), (2, 'tagged', 'public', NOW()), (3, 'reviewed', 'public', NOW());
 
 -- 
 -- Table structure for table `label_association`
