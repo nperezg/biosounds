@@ -20,23 +20,6 @@
                                 {% endfor %}
                             </select>
                         </td>
-                        {% if sites is not empty %}
-                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <td>
-                                <label for="steId">Site</label>
-                            </td>
-                            <td>
-                                <select id="steId" name="steId" class="form-control form-control-sm ml-3">
-                                    <option value="-12">&nbsp;</option>
-                                    <option value="-2" {{steId == -2 ? 'selected' }}>All</option>
-                                    {% for st in sites %}
-                                        <option value="{{ st.id }}" {{st.id == steId ? 'selected' }}>
-                                            {{ st.name }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </td>
-                        {% endif %}
                     </tr>
                 </table>
             </form>
@@ -72,7 +55,7 @@
                             <td>
                                 <select name="site_id" class="form-control-sm ">
                                     {% for st in sites %}
-                                        <option value="{{ st.id }}" {{st.id == steId ? 'selected' }}>
+                                        <option value="{{ st.id }}" {{st.id == recording.site ? 'selected' }}>
                                             {{ st.name }}
                                         </option>
                                     {% endfor %}
@@ -144,9 +127,6 @@
             });
 
             $('#colId').change(function () {
-                $("#collectionForm").submit();
-            });
-            $('#steId').change(function () {
                 $("#collectionForm").submit();
             });
 

@@ -154,12 +154,11 @@ class RecordingProvider extends BaseProvider
      * @return Recording[]
      * @throws \Exception
      */
-    public function getListByCollection(int $colId, int $userId, int $steId, int $limit, int $offSet, array $filter = null): array
+    public function getListByCollection(int $colId, int $userId, int $limit, int $offSet, array $filter = null): array
     {
         $values = [
             ':colId' => $colId,
             ':usrId' => $userId,
-            ':steId' => $steId,
             ':limit' => $limit,
             ':offset' => $offSet,
             ':userId' => $userId,
@@ -189,12 +188,7 @@ class RecordingProvider extends BaseProvider
             $query .= 'LEFT JOIN sound ON recording.sound_id = sound.sound_id ';
         }
 
-        // $query .= 'WHERE col_id = :colId AND recording.site_id = :steId';
-        if ($steId == BaseController::SITE_SYMBOL_FOR_COLLECTIONS_QUERY_ALL) {
-            $query .= 'WHERE col_id = :colId AND recording.site_id != :steId';
-        } else {
-            $query .= 'WHERE col_id = :colId AND recording.site_id = :steId';
-        }
+        $query .= 'WHERE col_id = :colId ';
 
         if (!empty($filter)) {
             foreach ($filter as $key => $value) {

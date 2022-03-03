@@ -46,24 +46,11 @@ class RecordingController extends BaseController
             $colId = $collections[0]->getId();
         }
 
-        // steId processing
-        if (isset($_POST['steId'])) {
-            $steId = filter_var($_POST['steId'], FILTER_SANITIZE_STRING);
-        }
-        if (!empty($stId)) {
-            $steId = $stId;
-        }
-
-        if (empty($steId)) {
-            $steId = -1;
-        }
-
         $recordingProvider = new RecordingProvider();
 
         $recordings = $recordingProvider->getListByCollection(
             $colId,
             (Auth::getUserID() == null) ? 0 : Auth::getUserID(),
-            $steId,
             $this::ITEMS_PAGE,
             $this::ITEMS_PAGE * ($page - 1)
         );
@@ -73,7 +60,6 @@ class RecordingController extends BaseController
 
         return $this->twig->render('administration/recordings.html.twig', [
             'colId' => $colId,
-            'steId' => $steId,
             'recordings' => $recordings,
             'sites' => (new SiteProvider())->getBasicList(),
             'sensors' => (new Sensor())->getBasicList(),
