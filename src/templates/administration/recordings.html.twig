@@ -30,14 +30,14 @@
                 Upload Files</button>
         </div>
     </div>
-    <div class="card-body scrollable">
+    <div class="card-body ">
         <table id="recTable" class="tablesorter table table-sm save-recording">
             <thead class="table-borderless">
                 <tr>
                     <th scope="col" class="sortedHeader">#</th>
                     <th scope="col" class="sortedHeader">Original Filename</th>
                     <th scope="col">Name</th>
-                    <th scope="col" class="sortedHeader">Site</th>
+                    <th scope="col">Site</th>
                     <th scope="col">Date</th>
                     <th scope="col">Time</th>
                     <th scope="col"></th>
@@ -46,14 +46,23 @@
             <tbody class="form-control-sm">
                 {% for recording in recordings %}
                     <tr>
-                        <th scope='row'><input type="hidden" name="itemID" value="{{ recording.id }}">{{ recording.id }}</th>
+                        <td scope='row'>
+                            {{ recording.id }}
+                            <input type="hidden" name="itemID" value="{{ recording.id }}"/>
+                            <input type="hidden" name="user_id" value="{{ user_id }}"/>
+                        </td>
                         <td>{{ recording.filename }}</td>
                         <td><input type='text' title="Name" name="name" value="{{ recording.name }}"></td>
                         {% if sites is empty %}
                             <td>{{ recording.siteName }}</td>
                         {% else %}
                             <td>
-                                <select name="site_id" class="form-control-sm ">
+                                <select name="site_id" class="form-control-sm">
+                                    {% if siteFieldFlags[recording.id] == 0 %}
+                                        <option value="{{ recording.site }}" selected>
+                                            {{ recording.siteName }}
+                                        </option>
+                                    {% endif %}
                                     {% for st in sites %}
                                         <option value="{{ st.id }}" {{st.id == recording.site ? 'selected' }}>
                                             {{ st.name }}
@@ -105,8 +114,24 @@
     {{ parent() }}
 
     <script>
-        $(function () {
-            $("#recTable").tablesorter();
+        $(document).ready(function () {
+            $("#recTable").tablesorter({
+                sortRestart: true,
+                sortStable: true,
+                sortReset: false,
+                saveSort: true,
+                sortList: [
+                    [
+                        0, 0
+                    ],
+                    [
+                        1, 0
+                    ],
+                    [
+                        3, 0
+                    ]
+                ]
+            });
         });
 
         document.addEventListener("DOMContentLoaded", function (event) {

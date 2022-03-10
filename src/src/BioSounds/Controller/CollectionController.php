@@ -84,7 +84,6 @@ class CollectionController extends BaseController
         $this->recordings = (new RecordingService())->getListWithImages(
             $this->colId,
             (Auth::getUserID() == null) ? 0 : Auth::getUserID(),
-            parent::SITE_SYMBOL_FOR_COLLECTIONS_QUERY_ALL,
             self::ITEMS_PAGE,
             self::ITEMS_PAGE * ($this->page - 1),
             $this->filter

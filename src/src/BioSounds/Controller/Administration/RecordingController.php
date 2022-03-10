@@ -55,18 +55,31 @@ class RecordingController extends BaseController
             $this::ITEMS_PAGE * ($page - 1)
         );
 
+        $userSites = (new SiteProvider())->getBasicList();
+
+        $siteFieldFlags = [];
+        foreach ($recordings as $rec) {
+            $siteFieldFlags[$rec->getId()] = 0;
+            foreach ($userSites as $st) {
+                if ($st->getId() == $rec->getSite()) {
+                    $siteFieldFlags[$rec->getId()] = 1;
+                }
+            }
+        }
+
         $recordingNum = $recordingProvider->countAllByCollection($colId);
         $pages = $recordingNum > 0 ? ceil($recordingNum / self::ITEMS_PAGE) : 1;
 
         return $this->twig->render('administration/recordings.html.twig', [
             'colId' => $colId,
             'recordings' => $recordings,
-            'sites' => (new SiteProvider())->getBasicList(),
+            'sites' => $userSites,
+            'siteFieldFlags' => $siteFieldFlags,
             'sensors' => (new Sensor())->getBasicList(),
             'soundTypes' => (new SoundTypeProvider())->getList(),
             'license' => (new License())->getBasicList(),
             'currentPage' => ($page > $pages) ?: $page,
-            'pages' => $pages,
+            'pages' => $pages
         ]);
     }
 

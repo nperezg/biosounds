@@ -75,7 +75,20 @@
 
     <script>
         $(function () {
-            $("#userTable").tablesorter();
+            $("#userTable").tablesorter({
+                sortList: [
+                    [
+                        0, 0
+                    ],
+                    [
+                        2, 0
+                    ]
+                ],
+                sortRestart: true,
+                sortStable: true,
+                saveSort: false,
+                sortReset: false
+            });
         });
 
         $(function () {

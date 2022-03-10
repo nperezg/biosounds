@@ -69,7 +69,11 @@
 
     <script>
         $(function () {
-            $("#collTable").tablesorter();
+            $("#collTable").tablesorter({
+                sortList: [
+                    [0, 0]
+                ]
+            });
         });
 
         $(function () {
