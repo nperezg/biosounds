@@ -34,12 +34,14 @@
         <table id="recTable" class="tablesorter table table-sm save-recording">
             <thead class="table-borderless">
                 <tr>
-                    <th scope="col" class="sortedHeader">#</th>
-                    <th scope="col" class="sortedHeader">Original Filename</th>
-                    <th scope="col">Name</th>
-                    <th scope="col" class="recSiteFd">Site</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Time</th>
+                    <th scope="col" class="sortedHeader">
+                        #&nbsp;<i class="fa fa-sort"></i>
+                    </th>
+                    <th scope="col" class="recFd">Original Filename</th>
+                    <th scope="col" class="recFd">Name</th>
+                    <th scope="col" class="recFd">Site</th>
+                    <th scope="col" class="recFd">Date</th>
+                    <th scope="col" class="recFd">Time</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -115,45 +117,16 @@
 
     <script>
         $(document).ready(function () {
-            let ecPref = 'hc';
             $("#recTable").tablesorter({
-                sortRestart: true,
                 sortList: [
-                    [0], [1]
+                    [0]
                 ],
                 headers: {
-                    '.recSiteFd': {
+                    '.recFd': {
                         sorter: false
                     }
                 }
-            }).on('sortStart', function (sorter) {
-                currentSort = sorter.target.config.sortList;
-
-                if (currentSort.length == 2 && currentSort[0].length > 1) {
-                    sessionStorage.setItem(ecPref + "0", currentSort[0][1]);
-                    sessionStorage.setItem(ecPref + "1", currentSort[1][1]);
-                    sessionStorage.setItem(ecPref + ".init", true);
-                }
-            }).on('sortBegin', function (sorter) {
-                currentSort = sorter.target.config.sortList;
-
-                if (currentSort.length == 1) {
-                    if (sessionStorage.getItem(ecPref + ".init")) {
-                        if (currentSort[0][1] == sessionStorage.getItem(ecPref + currentSort[0][0])) {
-                            let vcl0 = sessionStorage.getItem(ecPref + "0");
-                            let vcl1 = sessionStorage.getItem(ecPref + "1");
-                            $('#recTable').trigger('resetToLoadState');
-                            sessionStorage.setItem(ecPref + "0", vcl0);
-                            sessionStorage.setItem(ecPref + "1", vcl1);
-
-                            sessionStorage.setItem(ecPref + ".init", false);
-                        } else {
-                            sessionStorage.setItem(ecPref + currentSort[0][0], currentSort[0][1]);
-                        };
-                    }
-                }
             });
-
         });
 
         document.addEventListener("DOMContentLoaded", function (event) {

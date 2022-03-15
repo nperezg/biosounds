@@ -15,12 +15,13 @@
             <table id="userTable" class="tablesorter table table-sm table-hover">
                 <thead class="table-borderless">
                     <tr>
-                        <th scope="col" class="sortedHeader">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col" class="sortedHeader">Username</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Active</th>
+                        <th scope="col" class="sortedHeader">#&nbsp;<i class="fa fa-sort"></i>
+                        </th>
+                        <th scope="col" class="usrFd">Name</th>
+                        <th scope="col" class="usrFd">Username</th>
+                        <th scope="col" class="usrFd">Email</th>
+                        <th scope="col" class="usrFd">Role</th>
+                        <th scope="col" class="usrFd">Active</th>
                         <th scope="col"></th>
                         <th scope="col"></th>
                         <th scope="col"></th>
@@ -75,34 +76,13 @@
 
     <script>
         $(function () {
-            let rePref = 're';
             $("#userTable").tablesorter({
-                sortRestart: true,
-                sortList: [[0], [2]]
-            }).on('sortStart', function (sorter) {
-                currentSort = sorter.target.config.sortList;
-
-                if (currentSort.length == 2 && currentSort[0].length > 1) {
-                    sessionStorage.setItem(rePref + "0", currentSort[0][1]);
-                    sessionStorage.setItem(rePref + "2", currentSort[1][1]);
-                    sessionStorage.setItem(rePref + ".init", true);
-                }
-            }).on('sortBegin', function (sorter) {
-                currentSort = sorter.target.config.sortList;
-
-                if (currentSort.length == 1) {
-                    if (sessionStorage.getItem(rePref + ".init")) {
-                        if (currentSort[0][1] == sessionStorage.getItem(rePref + currentSort[0][0])) {
-                            let vcl0 = sessionStorage.getItem(rePref + "0");
-                            let vcl1 = sessionStorage.getItem(rePref + "1");
-                            $('#userTable').trigger('resetToLoadState');
-                            sessionStorage.setItem(rePref + "0", vcl0);
-                            sessionStorage.setItem(rePref + "2", vcl1);
-
-                            sessionStorage.setItem(rePref + ".init", false);
-                        } else {
-                            sessionStorage.setItem(rePref + currentSort[0][0], currentSort[0][1]);
-                        };
+                sortList: [
+                    [0]
+                ],
+                headers: {
+                    '.usrFd': {
+                        sorter: false
                     }
                 }
             });

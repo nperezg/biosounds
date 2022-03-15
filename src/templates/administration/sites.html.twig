@@ -15,14 +15,15 @@
             <table id="siteTable" class="tablesorter table table-sm table-hover">
                 <thead class="table-borderless">
                     <tr>
-                        <th scope="col" class="sortedHeader">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Longitude</th>
-                        <th scope="col">Latitude</th>
-                        <th scope="col">GADM 1</th>
-                        <th scope="col">GADM 2</th>
-                        <th scope="col">GADM 3</th>
-                        <th scope="col">Centroid</th>
+                        <th scope="col" class="sortedHeader">#&nbsp;<i class="fa fa-sort"></i>
+                        </th>
+                        <th scope="col" class="stFd">Name</th>
+                        <th scope="col" class="stFd">Longitude</th>
+                        <th scope="col" class="stFd">Latitude</th>
+                        <th scope="col" class="stFd">GADM 1</th>
+                        <th scope="col" class="stFd">GADM 2</th>
+                        <th scope="col" class="stFd">GADM 3</th>
+                        <th scope="col" class="stFd">Centroid</th>
                     </tr>
                 </thead>
                 <tbody class="form-control-sm js-site-list">
@@ -81,8 +82,13 @@
         $(function () {
             $("#siteTable").tablesorter({
                 sortList: [
-                    [0, 0]
-                ]
+                    [0]
+                ],
+                headers: {
+                    '.stFd': {
+                        sorter: false
+                    }
+                }
             });
         });
 
