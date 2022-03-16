@@ -6,11 +6,11 @@ use BioSounds\Controller\BaseController;
 use BioSounds\Entity\License;
 use BioSounds\Entity\Recording;
 use BioSounds\Entity\Sensor;
-use BioSounds\Entity\Site;
 use BioSounds\Exception\ForbiddenException;
 use BioSounds\Provider\CollectionProvider;
 use BioSounds\Provider\RecordingProvider;
 use BioSounds\Provider\SpectrogramProvider;
+use BioSounds\Provider\SiteProvider;
 use BioSounds\Provider\SoundProvider;
 use BioSounds\Provider\SoundTypeProvider;
 use BioSounds\Utils\Auth;
@@ -21,23 +21,24 @@ class RecordingController extends BaseController
     const SECTION_TITLE = 'Recordings';
 
     /**
-     * @param int|null $id
+     * @param int|null $cId
+     * @param int|null $stId
      * @param int $page
      * @return mixed
      * @throws \Exception
      */
-    public function show(int $id = null, int $page = 1)
+    public function show(int $cId = null, int $stId = null, int $page = 1)
     {
-        if (!Auth::isUserAdmin()){
+        if (!Auth::isUserAdmin()) {
             throw new ForbiddenException();
         }
 
+        // colId proceesing
         if (isset($_POST['colId'])) {
             $colId = filter_var($_POST['colId'], FILTER_SANITIZE_STRING);
         }
-
-        if (!empty($id)) {
-            $colId = $id;
+        if (!empty($cId)) {
+            $colId = $cId;
         }
 
         $collections = (new CollectionProvider())->getList();
@@ -46,11 +47,25 @@ class RecordingController extends BaseController
         }
 
         $recordingProvider = new RecordingProvider();
+
         $recordings = $recordingProvider->getListByCollection(
             $colId,
+            (Auth::getUserID() == null) ? 0 : Auth::getUserID(),
             $this::ITEMS_PAGE,
             $this::ITEMS_PAGE * ($page - 1)
         );
+
+        $userSites = (new SiteProvider())->getBasicList();
+
+        $siteFieldFlags = [];
+        foreach ($recordings as $rec) {
+            $siteFieldFlags[$rec->getId()] = 0;
+            foreach ($userSites as $st) {
+                if ($st->getId() == $rec->getSite()) {
+                    $siteFieldFlags[$rec->getId()] = 1;
+                }
+            }
+        }
 
         $recordingNum = $recordingProvider->countAllByCollection($colId);
         $pages = $recordingNum > 0 ? ceil($recordingNum / self::ITEMS_PAGE) : 1;
@@ -58,12 +73,13 @@ class RecordingController extends BaseController
         return $this->twig->render('administration/recordings.html.twig', [
             'colId' => $colId,
             'recordings' => $recordings,
-            'sites' => (new Site())->getBasicList(),
+            'sites' => $userSites,
+            'siteFieldFlags' => $siteFieldFlags,
             'sensors' => (new Sensor())->getBasicList(),
             'soundTypes' => (new SoundTypeProvider())->getList(),
             'license' => (new License())->getBasicList(),
             'currentPage' => ($page > $pages) ?: $page,
-            'pages' => $pages,
+            'pages' => $pages
         ]);
     }
 
@@ -78,11 +94,11 @@ class RecordingController extends BaseController
         }
 
         $data = [];
-        foreach($_POST as $key => $value){
-            if(strpos($key, "_")){
+        foreach ($_POST as $key => $value) {
+            if (strpos($key, "_")) {
                 $type = substr($key, strripos($key, "_") + 1, strlen($key));
                 $key = substr($key, 0, strripos($key, "_"));
-                switch($type){
+                switch ($type) {
                     case "date":
                         $data[$key] =  filter_var($value, FILTER_SANITIZE_STRING);
                         break;
@@ -91,6 +107,9 @@ class RecordingController extends BaseController
                         break;
                     case "text":
                         $data[$key] =  filter_var($value, FILTER_SANITIZE_STRING);
+                        break;
+                    case 'select-one':
+                        $data[$key] =  filter_var($value, FILTER_SANITIZE_NUMBER_INT);
                         break;
                     case "hidden":
                         $data[$key] =  filter_var($value, FILTER_SANITIZE_NUMBER_INT);
@@ -108,16 +127,16 @@ class RecordingController extends BaseController
                 'message' => 'Recording updated successfully.',
             ]);
         }
-	}
+    }
 
     /**
      * @param int $id
      * @return false|string
      * @throws \Exception
      */
-	public function delete(int $id)
-	{
-        if (!Auth::isUserAdmin()){
+    public function delete(int $id)
+    {
+        if (!Auth::isUserAdmin()) {
             throw new ForbiddenException();
         }
 
@@ -158,5 +177,5 @@ class RecordingController extends BaseController
             'errorCode' => 0,
             'message' => 'Recording deleted successfully.',
         ]);
-	}
+    }
 }

@@ -5,8 +5,19 @@ namespace BioSounds\Provider;
 use BioSounds\Entity\Site;
 use BioSounds\Exception\Database\NotFoundException;
 
+use BioSounds\Utils\Auth;
+
 class SiteProvider extends BaseProvider
 {
+    /**
+     * @return Site[]
+     * @throws \Exception
+     */
+    public function getBasicList(): array
+    {
+        return $this->getList(Auth::getUserID(), 'site_id');
+    }
+
     /**
      * @return Site[]
      * @throws \Exception

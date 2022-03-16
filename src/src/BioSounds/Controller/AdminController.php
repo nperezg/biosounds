@@ -80,7 +80,8 @@ class AdminController extends BaseController
     {
         return (new RecordingController($this->twig))->show(
             empty($args[0]) ? null : $args[0],
-            empty($args[1]) ? 1 : $args[1]
+            empty($args[1]) ? null : $args[1],
+            empty($args[2]) ? 1 : $args[2]
         );
     }
 

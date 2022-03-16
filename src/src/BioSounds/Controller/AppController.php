@@ -13,7 +13,7 @@ use Throwable;
 
 class AppController extends BaseClass
 {
-    private $title = 'ecoSound';
+    private $title = 'ecoSound-web';
 
     /**
      * AppController constructor.

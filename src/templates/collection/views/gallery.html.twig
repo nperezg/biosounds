@@ -6,7 +6,10 @@
                 <a href="{{ baseUrl }}/recording/show/{{ item.recording.id }}/{{ page }}" title="BioSounds player">
                     <img src="{{ baseUrl }}/{{ item.smallImage }}">
                 </a>
-                <span>{{ item.recording.name }}</span>
+                <span>
+                    <span style="display:inline;">{{ item.recording.name }}</span>
+                    <span style="display:inline; color: dodgerBlue;">&nbsp;&nbsp;{{ item.recording.labelName }}</span>
+                </span>
                 <span>{{ item.recording.file_date }}</span>
             </div>
         {% endfor %}

@@ -18,6 +18,11 @@ nav.menu .navbar-nav .nav-link {
   z-index:2147483647;
 }
 
+.vert-super {
+    vertical-align: super;
+    font-size: 12px;
+}
+
 /* Loading Modal */
 
 .loading {
@@ -84,7 +89,7 @@ form label {
 }
 
 .table input[type=email] {
-	width:270px;
+	width:240px;
 }
 
 .table input[type=text] {
@@ -97,6 +102,15 @@ input::-webkit-inner-spin-button {
 }
 input[type="number"] {
     -moz-appearance: textfield;
+}
+
+.sortedHeader {
+    cursor: pointer;
+}
+
+.scrollable {
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
 body .modal-tag {

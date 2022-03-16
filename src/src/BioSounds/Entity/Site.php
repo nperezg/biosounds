@@ -20,7 +20,7 @@ class Site extends AbstractProvider
     /**
      * @var int
      */
-    private $Id;
+    private $id;
 
     /**
      * @var string
@@ -72,7 +72,7 @@ class Site extends AbstractProvider
      */
     public function getId(): int
     {
-        return $this->Id;
+        return $this->id;
     }
 
     /**
@@ -142,7 +142,7 @@ class Site extends AbstractProvider
     /**
      * @return float
      */
-    public function getLongitude(): float
+    public function getLongitude(): ?float
     {
         return $this->longitude;
     }
@@ -151,7 +151,7 @@ class Site extends AbstractProvider
      * @param float $longitude
      * @return site
      */
-    public function setLongitude(float $longitude): Site
+    public function setLongitude(?float $longitude): Site
     {
         $this->longitude = $longitude;
         return $this;
@@ -160,7 +160,7 @@ class Site extends AbstractProvider
     /**
      * @return float
      */
-    public function getLatitude(): float
+    public function getLatitude(): ?float
     {
         return $this->latitude;
     }
@@ -169,7 +169,7 @@ class Site extends AbstractProvider
      * @param float $latitude
      * @return site
      */
-    public function setLatitude(float $latitude): Site
+    public function setLatitude(?float $latitude): Site
     {
         $this->latitude = $latitude;
         return $this;

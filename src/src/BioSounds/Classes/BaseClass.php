@@ -60,6 +60,7 @@ class BaseClass
         !defined('APP_URL') && define('APP_URL', $this->config['APP_URL']);
         !defined('IMAGES_URL') && define('IMAGES_URL', APP_URL . $this->config['IMAGES_URL']);
         !defined('PROJECT_IMAGES_URL') && define('PROJECT_IMAGES_URL', IMAGES_URL . $this->config['PROJECT_IMAGES_URL']);
+        !defined('LICENSE_IMAGES_URL') && define('LICENSE_IMAGES_URL', IMAGES_URL . $this->config['LICENSE_IMAGES_URL']);
         !defined('ABSOLUTE_DIR') && define('ABSOLUTE_DIR', $this->config['ABSOLUTE_DIR']);
         !defined('TEMPLATES_DIR') && define('TEMPLATES_DIR', $this->config['TEMPLATES_DIR']);
         !defined('CACHE_DIR') && define('CACHE_DIR', $this->config['CACHE_DIR']);
@@ -92,6 +93,7 @@ class BaseClass
         $this->twig->addGlobal('logoUrl', LOGO);
         $this->twig->addGlobal('imagesUrl', IMAGES_URL);
         $this->twig->addGlobal('projectImagesUrl', PROJECT_IMAGES_URL);
+        $this->twig->addGlobal('licenseImagesUrl', LICENSE_IMAGES_URL);
         $this->twig->addGlobal('baseUrl', APP_URL);
         $this->twig->addGlobal('project_name', Utils::getSetting(Setting::PROJECT_NAME));
         $this->twig->addGlobal('project_description', Utils::getSetting(Setting::PROJECT_DESCRIPTION));

@@ -11,16 +11,17 @@
             </button>
         </div>
 
-        <div class="card card-body">
-            <table class="table-sm table-hover">
+        <div class="card card-body scrollable">
+            <table id="collTable" class="tablesorter table-sm table-hover">
                 <thead class="table-borderless">
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Author</th>
-                        <th scope="col">DOI</th>
-                        <th scope="col">Note</th>
-                        <th scope="col">View</th>
+                        <th scope="col" class="sortedHeader">#&nbsp;<i class="fa fa-sort"></i>
+                        </th>
+                        <th scope="col" class="colFd">Name</th>
+                        <th scope="col" class="colFd">Author</th>
+                        <th scope="col" class="colFd">DOI</th>
+                        <th scope="col" class="colFd">Note</th>
+                        <th scope="col" class="colFd">View</th>
                     </tr>
                 </thead>
                 <tbody class="form-control-sm js-coll-list">
@@ -68,6 +69,19 @@
     <link rel="stylesheet" href="{{ baseUrl }}/templates/administration/css/collection.css"/>
 
     <script>
+        $(function () {
+            $("#collTable").tablesorter({
+                sortList: [
+                    [0]
+                ],
+                headers: {
+                    '.colFd': {
+                        sorter: false
+                    }
+                }
+            });
+        });
+
         $(function () {
             'use strict';
 

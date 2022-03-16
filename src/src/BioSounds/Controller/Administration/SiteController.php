@@ -26,7 +26,7 @@ class SiteController extends BaseController
         // echo Utils::getSetting('license');
 
         return $this->twig->render('administration/sites.html.twig', [
-            'siteList' => (new SiteProvider())->getListOrderById(Auth::getUserID()),
+            'siteList' => (new SiteProvider())->getBasicList(),
         ]);
     }
 
@@ -56,10 +56,10 @@ class SiteController extends BaseController
 
             switch ($key) {
                 case 'longitude':
-                    $data['longitude_WGS84_dd_dddd'] =  filter_var($sitePdoValue, FILTER_SANITIZE_NUMBER_FLOAT);
+                    $data['longitude_WGS84_dd_dddd'] =  filter_var($sitePdoValue, FILTER_SANITIZE_STRING);
                     break;
                 case 'latitude':
-                    $data['latitude_WGS84_dd_dddd'] =  filter_var($sitePdoValue, FILTER_SANITIZE_NUMBER_FLOAT);
+                    $data['latitude_WGS84_dd_dddd'] =  filter_var($sitePdoValue, FILTER_SANITIZE_STRING);
                     break;
                 default:
                     $data[$key] = filter_var($sitePdoValue, FILTER_SANITIZE_STRING);
