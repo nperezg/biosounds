@@ -16,15 +16,25 @@ class CollectionController extends BaseController
      * @return string
      * @throws \Exception
      */
-    public function show()
+    public function show(int $page = 1)
     {
         if (!Auth::isUserAdmin()) {
             throw new ForbiddenException();
         }
 
+        $collProvider = new CollectionProvider();
+
+        $collNum = $collProvider->countCollections();
+        $pages = $collNum > 0 ? ceil($collNum / self::ITEMS_PAGE) : 1;
+
         return $this->twig->render('administration/collections.html.twig', [
-            'collections' => (new CollectionProvider())->getListOrderById(),
+            'collections' => $collProvider->getCollectionPages(
+                $this::ITEMS_PAGE,
+                $this::ITEMS_PAGE * ($page - 1)
+            ),
             // 'collections' => (new (CollectionProvider))->getList("name"),
+            'currentPage' => ($page > $pages) ?: $page,
+            'pages' => $pages
         ]);
     }
 

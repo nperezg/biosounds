@@ -17,7 +17,6 @@ use BioSounds\Utils\Auth;
 
 class RecordingController extends BaseController
 {
-    const ITEMS_PAGE = 15;
     const SECTION_TITLE = 'Recordings';
 
     /**

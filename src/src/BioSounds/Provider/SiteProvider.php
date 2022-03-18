@@ -19,15 +19,6 @@ class SiteProvider extends BaseProvider
     }
 
     /**
-     * @return Site[]
-     * @throws \Exception
-     */
-    public function getListOrderById(int $userId): array
-    {
-        return $this->getList($userId, 'site_id');
-    }
-
-    /**
      * @param string $order
      * @return Site[]
      * @throws \Exception
@@ -56,6 +47,51 @@ class SiteProvider extends BaseProvider
         }
 
         return $data;
+    }
+
+    public function getSitePages(int $limit, int $offSet): array
+    {
+        $data = [];
+        $this->database->prepareQuery(
+            "SELECT * FROM site where user_id = :userId ORDER BY site_id LIMIT :limit OFFSET :offset"
+        );
+
+        $result = $this->database->executeSelect([
+            ':userId' => Auth::getUserID(),
+            ':limit' => $limit,
+            ':offset' => $offSet,
+        ]);
+
+        foreach ($result as $item) {
+            $data[] = (new Site())
+                ->setId($item['site_id'])
+                ->setName($item['name'])
+                ->setUserId($item['user_id'])
+                ->setCreationDateTime($item['creation_date_time'])
+                ->setLongitude($item['longitude_WGS84_dd_dddd'])
+                ->setLatitude($item['latitude_WGS84_dd_dddd'])
+                ->setGadm1($item['gadm1'])
+                ->setGadm2($item['gadm2'])
+                ->setGadm3($item['gadm3'])
+                ->setCentroId($item['centroid']);
+        }
+
+        return $data;
+    }
+
+    public function countSites(): int
+    {
+        $this->database->prepareQuery(
+            "SELECT count(site_id) AS num FROM site where user_id = :userId"
+        );
+
+        $result = $this->database->executeSelect([':userId' => Auth::getUserID()]);
+
+        if (empty($result)) {
+            return 0;
+        }
+
+        return $result[0]['num'];
     }
 
     /**

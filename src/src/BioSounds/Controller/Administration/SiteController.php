@@ -18,15 +18,25 @@ class SiteController extends BaseController
      * @return false|string
      * @throws \Exception
      */
-    public function show()
+    public function show(int $page = 1)
     {
         if (!Auth::isUserAdmin()) {
             throw new ForbiddenException();
         }
         // echo Utils::getSetting('license');
 
+        $siteProvider = new SiteProvider();
+
+        $siteNum = $siteProvider->countSites();
+        $pages = $siteNum > 0 ? ceil($siteNum / self::ITEMS_PAGE) : 1;
+
         return $this->twig->render('administration/sites.html.twig', [
-            'siteList' => (new SiteProvider())->getBasicList(),
+            'siteList' => $siteProvider->getSitePages(
+                $this::ITEMS_PAGE,
+                $this::ITEMS_PAGE * ($page - 1)
+            ),
+            'currentPage' => ($page > $pages) ?: $page,
+            'pages' => $pages
         ]);
     }
 

@@ -50,12 +50,17 @@ class AdminController extends BaseController
     /**
      * @throws \Exception
      */
-    public function collections(?string $action = null)
+    public function collections(int $page = 1)
     {
-        if (!empty($action)) {
-            return (new CollectionController($this->twig))->$action();
-        }
-        return (new CollectionController($this->twig))->show();
+        return (new CollectionController($this->twig))->show($page);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function collectionMgr(?string $action = null)
+    {
+        return (new CollectionController($this->twig))->$action();
     }
 
     /**
@@ -63,12 +68,19 @@ class AdminController extends BaseController
      * @return false|string
      * @throws \Exception
      */
-    public function users(?string $action = null)
+    public function users(int $pageId = 1)
     {
-        if (!empty($action)) {
-            return (new UserController($this->twig))->$action();
-        }
-        return (new UserController($this->twig))->create();
+        return (new UserController($this->twig))->show($pageId);
+    }
+
+    /**
+     * @param string $action
+     * @param int|null $id
+     * @return mixed
+     */
+    public function userMgr(string $action, int $id = null)
+    {
+        return (new UserController($this->twig))->$action($id);
     }
 
     /**
@@ -100,12 +112,9 @@ class AdminController extends BaseController
      * @return false|string
      * @throws \Exception
      */
-    public function sites(?string $action = null)
+    public function sites(int $pageId = 1)
     {
-        if (!empty($action)) {
-            return (new SiteController($this->twig))->$action();
-        }
-        return (new SiteController($this->twig))->show();
+        return (new SiteController($this->twig))->show($pageId);
     }
 
     /**

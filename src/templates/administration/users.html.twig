@@ -49,7 +49,7 @@
                                 <input name="active" type="checkbox" {{ user.active ? 'checked' }}>
                             </td>
                             <td>
-                                <a href="{{ baseUrl }}/admin/users/editPassword" class="js-open-modal" data-id="{{ user.user_id }}" title="Edit Password">
+                                <a href="{{ baseUrl }}/admin/userMgr/editPassword" class="js-open-modal" data-id="{{ user.user_id }}" title="Edit Password">
                                     <i class='fas fa-edit'></i>
                                 </a>
                             </td>
@@ -67,6 +67,21 @@
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <nav aria-label="pagination">
+                    <ul class="pagination justify-content-center mt-3">
+                        {% for page in range(1, pages) %}
+                            <li class="page-item {{ currentPage == page ? 'active' }}">
+                                <a class="page-link" href="{{ baseUrl }}/admin/users/{{ page }}">
+                                    {{ page }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -93,7 +108,7 @@
 
             /* Save users list */
             $('.js-user-list').on('change', 'input, select, textarea', function () {
-                saveFormList($(this), 'api/admin/users/save');
+                saveFormList($(this), 'api/admin/userMgr/save');
             });
 
             $("#userFormSection").on('shown.bs.collapse', function () {
@@ -121,7 +136,7 @@
                 if (this.checkValidity() === false) {
                     e.stopPropagation();
                 } else {
-                    $.ajax({type: 'POST', url: '{{ baseUrl }}/api/admin/users/save', data: $(this).serialize()}).done(function (response) {
+                    $.ajax({type: 'POST', url: '{{ baseUrl }}/api/admin/userMgr/save', data: $(this).serialize()}).done(function (response) {
                         showAlert(response.message);
                         $('#modal-div').modal('hide');
                     }).fail(function (response) {
@@ -141,7 +156,7 @@
                 if (this.checkValidity() === false) {
                     e.stopPropagation();
                 } else {
-                    postRequest('{{ baseUrl }}/api/admin/users/save', $(this).serialize(), false, false, function () {
+                    postRequest('{{ baseUrl }}/api/admin/userMgr/save', $(this).serialize(), false, false, function () {
                         location.reload();
                     });
                 }

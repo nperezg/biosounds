@@ -11,7 +11,7 @@
             </button>
         </div>
 
-        <div class="card card-body scrollable">
+        <div class="card-body scrollable">
             <table id="siteTable" class="tablesorter table table-sm table-hover">
                 <thead class="table-borderless">
                     <tr>
@@ -72,6 +72,21 @@
                 </tbody>
             </table>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <nav aria-label="pagination">
+                    <ul class="pagination justify-content-center mt-3">
+                        {% for page in range(1, pages) %}
+                            <li class="page-item {{ currentPage == page ? 'active' }}">
+                                <a class="page-link" href="{{ baseUrl }}/admin/sites/{{ page }}">
+                                    {{ page }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
@@ -103,7 +118,7 @@
                 } else {
                     let tdLongDiv = $(this).parent().children("div");
                     tdLongDiv.removeClass("d-block");
-                    saveFormList($(this), 'api/admin/sites/save');
+                    saveFormList($(this), 'api/admin/siteManager/save');
                 }
 
             });
@@ -155,7 +170,7 @@
                 if (this.checkValidity() === false) {
                     e.stopPropagation();
                 } else {
-                    postRequest('{{ baseUrl }}/api/admin/sites/save', $(this).serialize(), false, false, function () {
+                    postRequest('{{ baseUrl }}/api/admin/siteManager/save', $(this).serialize(), false, false, function () {
                         location.reload();
                     });
                 }

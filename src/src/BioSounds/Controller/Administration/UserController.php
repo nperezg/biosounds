@@ -18,16 +18,27 @@ class UserController extends BaseController
      * @return false|string
      * @throws \Exception
      */
-    public function create()
+    public function show(int $page = 1)
     {
         if (!Auth::isUserAdmin()) {
             throw new ForbiddenException();
         }
         // $this->getUsersList();
+
+        $userProducer = new User();
+
+        $userNum = $userProducer->countUsers();
+        $pages = $userNum > 0 ? ceil($userNum / self::ITEMS_PAGE) : 1;
+
         return $this->twig->render('administration/users.html.twig', [
             'roles' => (new Role())->getRoles(),
-            'users' => (new User())->getAllUsers(),
+            'users' => $userProducer->getUserPages(
+                $this::ITEMS_PAGE,
+                $this::ITEMS_PAGE * ($page - 1)
+            ),
             'default_color' => self::DEFAULT_TAG_COLOR,
+            'currentPage' => ($page > $pages) ?: $page,
+            'pages' => $pages
         ]);
     }
 

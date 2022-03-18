@@ -11,9 +11,29 @@ class CollectionProvider extends BaseProvider
      * @return Collection[]
      * @throws \Exception
      */
-    public function getListOrderById(): array
+    public function getCollectionPages(int $limit, int $offSet): array
     {
-        return $this->getList('collection_id');
+        $this->database->prepareQuery(
+            "SELECT * FROM collection ORDER BY collection_id LIMIT :limit OFFSET :offset"
+        );
+
+        $result = $this->database->executeSelect([
+            ':limit' => $limit,
+            ':offset' => $offSet,
+        ]);
+
+        $data = [];
+        foreach ($result as $item) {
+            $data[] = (new Collection())
+                ->setId($item['collection_id'])
+                ->setName($item['name'])
+                ->setAuthor($item['author'])
+                ->setDoi($item['doi'])
+                ->setNote($item['note'])
+                ->setProject($item['project_id'])
+                ->setView($item['view']);
+        }
+        return $data;
     }
 
     /**
@@ -40,6 +60,18 @@ class CollectionProvider extends BaseProvider
         }
 
         return $data;
+    }
+
+    public function countCollections(): int
+    {
+        $this->database->prepareQuery(
+            "SELECT count(collection_id) AS num FROM collection"
+        );
+
+        if (empty($result = $this->database->executeSelect())) {
+            return 0;
+        }
+        return $result[0]['num'];
     }
 
     /**

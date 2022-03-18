@@ -53,7 +53,21 @@
                 </tbody>
             </table>
         </div>
-
+        <div class="row">
+            <div class="col-md-12">
+                <nav aria-label="pagination">
+                    <ul class="pagination justify-content-center mt-3">
+                        {% for page in range(1, pages) %}
+                            <li class="page-item {{ currentPage == page ? 'active' }}">
+                                <a class="page-link" href="{{ baseUrl }}/admin/collections/{{ page }}">
+                                    {{ page }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
         <div class="text-right">
             <button id="collectionsExport" class="btn btn-outline-primary btn-sm mt-2" type="button" data-target="#collectionsExport" aria-expanded="false" aria-controls="collectionsExport">
                 <i class="fas"></i>
@@ -87,7 +101,7 @@
 
             /* Save collections list */
             $('.js-coll-list').on('change', 'input, select, textarea', function () {
-                saveFormList($(this), 'api/admin/collections/save');
+                saveFormList($(this), 'api/admin/collectionMgr/save');
             });
 
 
@@ -101,7 +115,7 @@
                 if (this.checkValidity() === false) {
                     e.stopPropagation();
                 } else {
-                    postRequest('{{ baseUrl }}/api/admin/collections/save', $(this).serialize(), false, false, function () {
+                    postRequest('{{ baseUrl }}/api/admin/collectionMgr/save', $(this).serialize(), false, false, function () {
                         location.reload();
                     });
                 }
@@ -109,7 +123,7 @@
             });
 
             $(document).on('click', '#collectionsExport', function () {
-                window.location.href ='{{ baseUrl }}/api/admin/collections/export';
+                window.location.href ='{{ baseUrl }}/api/admin/collectionMgr/export';
             });
         });
     </script>
