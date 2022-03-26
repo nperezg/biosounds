@@ -69,13 +69,103 @@
         <nav aria-label="pagination">
             {% if pageNum > 0 %}
                 <ul class="pagination justify-content-center">
-                    {% for page in 1..pageNum %}
-                        <li class="page-item {{ page == currentPage ? 'active' }}">
-                            <a class="page-link {{ display == 'list' ? 'page-selector' }}" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ page }}/{{ display }}">
-                                {{ page }}
+                    {% if pageNum > 10 %}
+                        <li class="page-item">
+                            <a href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage == 1 ? 1 : currentPage - 1 }}/{{ display }}">
+                                <i class="fa fa-angle-left" style="font-size:36px; position:relative; top:4px;"></i>
+                            </a>
+                            &nbsp;&nbsp;</li>
+                        <li class="page-item {{ currentPage == 1 ? 'active' }}">
+                            <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/1/{{ display }}">1</a>
+                        </li>
+                        {% if currentPage <= 3 %}
+                            <li class="page-item  {{ currentPage == 2 ? 'active' }}">
+                                <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/2/{{ display }}">2</a>
+                            </li>
+                            <li class="page-item {{ currentPage == 3 ? 'active' }}">
+                                <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/3/{{ display }}">3</a>
+                            </li>
+                            <li class="disabled">
+                                <span style="font-size:28px;position:relative;">&nbsp;.</span>
+                                <span style="font-size:28px;position:relative;">.</span>
+                                <span style="font-size:28px;position:relative;">.&nbsp;</span>
+                            </li>
+                        {% endif %}
+
+                        {% if currentPage >= 4 and currentPage <= (pageNum - 3) %}
+                            <li class="disabled">
+                                <span style="font-size:28px;position:relative;">&nbsp;.</span>
+                                <span style="font-size:28px;position:relative;">.</span>
+                                <span style="font-size:28px;position:relative;">.&nbsp;</span>
+                            </li>
+                            {% if currentPage == 4 %}
+                                <li class="page-item  active">
+                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/4/{{ display }}">4</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage + 1 }}/{{ display }}">{{ currentPage + 1}}</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage + 2 }}/{{ display }}">{{ currentPage + 2}}</a>
+                                </li>
+                            {% elseif currentPage == pageNum - 3 %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage - 2}}/{{ display }}">{{ currentPage - 2 }}</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage - 1 }}/{{ display }}">{{ currentPage - 1 }}</a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage}}/{{ display }}">{{ currentPage }}</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage -1 }}/{{ display }}">{{ currentPage - 1 }}</a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage }}/{{ display }}">{{ currentPage }}</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage + 1 }}/{{ display }}">{{ currentPage + 1 }}</a>
+                                </li>
+                            {% endif %}
+                            <li class="disabled">
+                                <span style="font-size:28px;position:relative;">&nbsp;.</span>
+                                <span style="font-size:28px;position:relative;">.</span>
+                                <span style="font-size:28px;position:relative;">.&nbsp;</span>
+                            </li>
+                        {% endif %}
+
+                        {% if currentPage >= pageNum - 2 %}
+                            <li class="disabled">
+                                <span style="font-size:28px;position:relative;">&nbsp;.</span>
+                                <span style="font-size:28px;position:relative;">.</span>
+                                <span style="font-size:28px;position:relative;">.&nbsp;</span>
+                            </li>
+                            <li class="page-item  {{ currentPage == pageNum - 2 ? 'active' }}">
+                                <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ pageNum - 2}}/{{ display }}">{{ pageNum - 2 }}</a>
+                            </li>
+                            <li class="page-item {{ currentPage == pageNum - 1 ? 'active' }}">
+                                <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ pageNum - 1 }}/{{ display }}">{{ pageNum -1 }}</a>
+                            </li>
+                        {% endif %}
+                        <li class="page-item {{ currentPage == pageNum ? 'active' }}">
+                            <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ pageNum }}/{{ display }}">{{ pageNum }}</a>
+                        </li>
+                        <li class="page-item">&nbsp;&nbsp;
+                            <a href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage == pageNum ? pageNum : currentPage + 1 }}/{{ display }}">
+                                <i class="fa fa-angle-right" style="font-size:36px; position:relative; top:4px;"></i>
                             </a>
                         </li>
-                    {% endfor %}
+                    {% else %}
+                        {% for page in 1..pageNum %}
+                            <li class="page-item {{ page == currentPage ? 'active' }}">
+                                <a class="page-link {{ display == 'list' ? 'page-selector' }}" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ page }}/{{ display }}">
+                                    {{ page }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
                 </ul>
             {% else %}
                 <h4>No results</h4>
