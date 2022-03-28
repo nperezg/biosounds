@@ -12,16 +12,15 @@
         </div>
 
         <div class="card card-body scrollable">
-            <table id="collTable" class="tablesorter table-sm table-hover">
+            <table id="collTable" class="table-sm table-hover">
                 <thead class="table-borderless">
                     <tr>
-                        <th scope="col" class="sortedHeader">#&nbsp;<i class="fa fa-sort"></i>
-                        </th>
-                        <th scope="col" class="colFd">Name</th>
-                        <th scope="col" class="colFd">Author</th>
-                        <th scope="col" class="colFd">DOI</th>
-                        <th scope="col" class="colFd">Note</th>
-                        <th scope="col" class="colFd">View</th>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Author</th>
+                        <th scope="col">DOI</th>
+                        <th scope="col">Note</th>
+                        <th scope="col">View</th>
                     </tr>
                 </thead>
                 <tbody class="form-control-sm js-coll-list">
@@ -53,7 +52,111 @@
                 </tbody>
             </table>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <nav aria-label="pagination">
+                    <ul class="pagination justify-content-center mt-3">
+                        {% if pages > 10 %}
+                            <li class="page-item">
+                                <a href="{{ baseUrl }}/admin/collections/{{ currentPage == 1 ? 1 : currentPage - 1 }}">
+                                    <i class="fa fa-angle-left" style="font-size:36px; position:relative; top:4px;"></i>
+                                </a>
+                                &nbsp;&nbsp;</li>
+                            <li class="page-item {{ currentPage == 1 ? 'active' }}">
+                                <a class="page-link" href="{{ baseUrl }}/admin/collections/1">1</a>
+                            </li>
+                            {% if currentPage <= 3 %}
+                                <li class="page-item  {{ currentPage == 2 ? 'active' }}">
+                                    <a class="page-link" href="{{ baseUrl }}/admin/collections/2">2</a>
+                                </li>
+                                <li class="page-item {{ currentPage == 3 ? 'active' }}">
+                                    <a class="page-link" href="{{ baseUrl }}/admin/collections/3">3</a>
+                                </li>
+                                <li class="disabled">
+                                    <span style="font-size:28px;position:relative;">&nbsp;.</span>
+                                    <span style="font-size:28px;position:relative;">.</span>
+                                    <span style="font-size:28px;position:relative;">.&nbsp;</span>
+                                </li>
+                            {% endif %}
 
+                            {% if currentPage >= 4 and currentPage <= (pages - 3) %}
+                                <li class="disabled">
+                                    <span style="font-size:28px;position:relative;">&nbsp;.</span>
+                                    <span style="font-size:28px;position:relative;">.</span>
+                                    <span style="font-size:28px;position:relative;">.&nbsp;</span>
+                                </li>
+                                {% if currentPage == 4 %}
+                                    <li class="page-item  active">
+                                        <a class="page-link" href="{{ baseUrl }}/admin/collections/4">4</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ baseUrl }}/admin/collections/{{ currentPage + 1 }}">{{ currentPage + 1}}</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ baseUrl }}/admin/collections/{{ currentPage + 2 }}">{{ currentPage + 2}}</a>
+                                    </li>
+                                {% elseif currentPage == pages - 3 %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ baseUrl }}/admin/collections/{{ currentPage - 2}}">{{ currentPage - 2 }}</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ baseUrl }}/admin/collections/{{ currentPage - 1 }}">{{ currentPage - 1 }}</a>
+                                    </li>
+                                    <li class="page-item active">
+                                        <a class="page-link" href="{{ baseUrl }}/admin/collections/{{ currentPage}}">{{ currentPage }}</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ baseUrl }}/admin/collections/{{ currentPage -1 }}">{{ currentPage - 1 }}</a>
+                                    </li>
+                                    <li class="page-item active">
+                                        <a class="page-link" href="{{ baseUrl }}/admin/collections/{{ currentPage }}">{{ currentPage }}</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ baseUrl }}/admin/collections/{{ currentPage + 1 }}">{{ currentPage + 1 }}</a>
+                                    </li>
+                                {% endif %}
+                                <li class="disabled">
+                                    <span style="font-size:28px;position:relative;">&nbsp;.</span>
+                                    <span style="font-size:28px;position:relative;">.</span>
+                                    <span style="font-size:28px;position:relative;">.&nbsp;</span>
+                                </li>
+                            {% endif %}
+
+                            {% if currentPage >= pages - 2 %}
+                                <li class="disabled">
+                                    <span style="font-size:28px;position:relative;">&nbsp;.</span>
+                                    <span style="font-size:28px;position:relative;">.</span>
+                                    <span style="font-size:28px;position:relative;">.&nbsp;</span>
+                                </li>
+                                <li class="page-item  {{ currentPage == pages - 2 ? 'active' }}">
+                                    <a class="page-link" href="{{ baseUrl }}/admin/collections/{{ pages - 2}}">{{ pages - 2 }}</a>
+                                </li>
+                                <li class="page-item {{ currentPage == pages - 1 ? 'active' }}">
+                                    <a class="page-link" href="{{ baseUrl }}/admin/collections/{{ pages - 1 }}">{{ pages -1 }}</a>
+                                </li>
+                            {% endif %}
+                            <li class="page-item {{ currentPage == pages ? 'active' }}">
+                                <a class="page-link" href="{{ baseUrl }}/admin/collections/{{ pages }}">{{ pages }}</a>
+                            </li>
+                            <li class="page-item">&nbsp;&nbsp;
+                                <a href="{{ baseUrl }}/admin/collections/{{ currentPage == pages ? pages : currentPage + 1 }}">
+                                    <i class="fa fa-angle-right" style="font-size:36px; position:relative; top:4px;"></i>
+                                </a>
+                            </li>
+                        {% else %}
+                            {% for page in range(1, pages) %}
+                                <li class="page-item {{ currentPage == page ? 'active' }}">
+                                    <a class="page-link" href="{{ baseUrl }}/admin/collections/{{ page }}">
+                                        {{ page }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {%  endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
         <div class="text-right">
             <button id="collectionsExport" class="btn btn-outline-primary btn-sm mt-2" type="button" data-target="#collectionsExport" aria-expanded="false" aria-controls="collectionsExport">
                 <i class="fas"></i>
@@ -63,31 +166,17 @@
 
     </div>
 {% endblock %}
-
 {% block header %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ baseUrl }}/templates/administration/css/collection.css"/>
 
     <script>
         $(function () {
-            $("#collTable").tablesorter({
-                sortList: [
-                    [0]
-                ],
-                headers: {
-                    '.colFd': {
-                        sorter: false
-                    }
-                }
-            });
-        });
-
-        $(function () {
             'use strict';
 
             /* Save collections list */
             $('.js-coll-list').on('change', 'input, select, textarea', function () {
-                saveFormList($(this), 'api/admin/collections/save');
+                saveFormList($(this), 'api/admin/collectionMgr/save');
             });
 
 
@@ -101,7 +190,7 @@
                 if (this.checkValidity() === false) {
                     e.stopPropagation();
                 } else {
-                    postRequest('{{ baseUrl }}/api/admin/collections/save', $(this).serialize(), false, false, function () {
+                    postRequest('{{ baseUrl }}/api/admin/collectionMgr/save', $(this).serialize(), false, false, function () {
                         location.reload();
                     });
                 }
@@ -109,7 +198,7 @@
             });
 
             $(document).on('click', '#collectionsExport', function () {
-                window.location.href ='{{ baseUrl }}/api/admin/collections/export';
+                window.location.href ='{{ baseUrl }}/api/admin/collectionMgr/export';
             });
         });
     </script>

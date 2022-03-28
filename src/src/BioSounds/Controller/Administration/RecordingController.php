@@ -17,17 +17,15 @@ use BioSounds\Utils\Auth;
 
 class RecordingController extends BaseController
 {
-    const ITEMS_PAGE = 15;
     const SECTION_TITLE = 'Recordings';
 
     /**
      * @param int|null $cId
-     * @param int|null $stId
      * @param int $page
      * @return mixed
      * @throws \Exception
      */
-    public function show(int $cId = null, int $stId = null, int $page = 1)
+    public function show(int $cId = null, int $page = 1)
     {
         if (!Auth::isUserAdmin()) {
             throw new ForbiddenException();

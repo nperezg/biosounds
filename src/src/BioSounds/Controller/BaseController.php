@@ -9,6 +9,8 @@ class BaseController
     const SECTION_TITLE = '';
     const PAGE_TITLE = '%s - ecoSound-web';
 
+    const ITEMS_PAGE = 12;
+
     protected $twig;
 
     /**

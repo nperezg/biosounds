@@ -168,6 +168,19 @@ class User extends BaseProvider
         return $this->database->executeSelect();
     }
 
+    public function getUserPages(int $limit, int $offSet): array
+    {
+        $this->database->prepareQuery(
+            "SELECT * FROM user ORDER BY user_id LIMIT :limit OFFSET :offset"
+        );
+
+        return $this->database->executeSelect([
+            ':limit' => $limit,
+            ':offset' => $offSet,
+        ]);
+    }
+
+
     /**
      * @return array
      * @throws \Exception
@@ -188,6 +201,21 @@ class User extends BaseProvider
     {
         $this->database->prepareQuery('SELECT COUNT(*) AS result FROM user WHERE role_id = :adminRoleId AND user_id <> :userId');
         if (empty($result = $this->database->executeSelect([":userId" => $userId, ":adminRoleId" => Role::ADMIN_ID]))) {
+            return 0;
+        }
+
+        return $result[0]["result"];
+    }
+
+    /**
+     * @param int $userId
+     * @return int
+     * @throws \Exception
+     */
+    public function countUsers(): int
+    {
+        $this->database->prepareQuery('SELECT COUNT(user_id) AS result FROM user');
+        if (empty($result = $this->database->executeSelect())) {
             return 0;
         }
 

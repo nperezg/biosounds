@@ -204,7 +204,7 @@ class RecordingProvider extends BaseProvider
             $values[':offset'] = 0;
         }
 
-        $query .= ' ORDER BY name LIMIT :limit OFFSET :offset';
+        $query .= ' ORDER BY recording_id LIMIT :limit OFFSET :offset';
 
         $this->database->prepareQuery($query);
         $result = $this->database->executeSelect($values);
