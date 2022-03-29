@@ -69,7 +69,8 @@ class FileService
         $message = $this::SUCCESS_MESSAGE;
 
         $colID = filter_var($request['colId'], FILTER_SANITIZE_NUMBER_INT);
-        $site = filter_var($request['site'], FILTER_SANITIZE_NUMBER_INT);
+        $site = isset($request['site']) ? filter_var($request['site'], FILTER_SANITIZE_NUMBER_INT) : null;
+
         $sensor = filter_var($request['sensor'], FILTER_SANITIZE_NUMBER_INT);
         $dateFromFile = isset($request['dateFromFile'])
             ? filter_var($request['dateFromFile'], FILTER_VALIDATE_BOOLEAN) : false;

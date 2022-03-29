@@ -62,7 +62,7 @@ CREATE TABLE `file_upload` (
   `date` date DEFAULT NULL,
   `time` time DEFAULT NULL,
   `recording_id` int(11) DEFAULT NULL,
-  `site_id` int(11) NOT NULL,
+  `site_id` int(11) DEFAULT NULL,
   `collection_id` int(11) NOT NULL,
   `directory` int(11) NOT NULL,
   `sensor_id` int(11) NOT NULL,
