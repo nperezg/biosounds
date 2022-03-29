@@ -179,7 +179,7 @@ class File
     /**
      * @return int
      */
-    public function getSite(): int
+    public function getSite(): ?int
     {
         return $this->site;
     }
@@ -188,7 +188,7 @@ class File
      * @param int $site
      * @return File
      */
-    public function setSite(int $site): File
+    public function setSite(?int $site): File
     {
         $this->site = $site;
         return $this;
