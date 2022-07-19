@@ -29,7 +29,10 @@
                 <tbody class="form-control-sm js-user-list">
                     {% for user in users %}
                         <tr>
-                            <td scope='row'>{{ user.user_id }}</td>
+                            <td scope='row'>
+                                {{ user.user_id }}
+                                <input type="hidden" name="itemID" value="{{ user.user_id }}">
+                            </td>
                             <td>
                                 <input type="text" name="username" value="{{ user.username }}">
                             </td>
