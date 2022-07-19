@@ -60,7 +60,7 @@ class CollectionController extends BaseController
             }
             $data[$key] = filter_var($value, FILTER_SANITIZE_STRING);
         }
-
+        $data['user_id']=$_SESSION['user_id'];
         if (isset($data['collId'])) {
             $collProvider->updateColl($data);
             return json_encode([

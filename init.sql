@@ -33,7 +33,7 @@ CREATE TABLE `collection` (
   `collection_id` int(11) NOT NULL,
   `project_id` int(11) NOT NULL DEFAULT 101,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `author` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
+  `user_id` int(11) NOT NULL,
   `doi` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Citation in cientific format or full URL',
   `note` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `view` enum('gallery','list') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'gallery'
@@ -43,8 +43,8 @@ CREATE TABLE `collection` (
 -- Dumping data for table `collection`
 --
 
-INSERT INTO `collection` (`collection_id`, `project_id`, `name`, `author`, `doi`, `note`, `view`) VALUES
-(1, 101, 'Demo collection', 'BioSounds', '', 'open access', 'gallery');
+INSERT INTO `collection` (`collection_id`, `project_id`, `name`, `user_id`, `doi`, `note`, `view`) VALUES
+(1, 101, 'Demo collection', 100, '', 'open access', 'gallery');
 
 -- --------------------------------------------------------
 

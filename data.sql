@@ -16,8 +16,8 @@
 -- Dumping data for table `collection`
 --
 
-INSERT INTO `collection` (`collection_id`, `name`, `author`) VALUES
-(1, 'Demo Collection', 'BioSounds');
+INSERT INTO `collection` (`collection_id`, `name`, `user_id`) VALUES
+(1, 'Demo Collection', 100);
 
 --
 -- Dumping data for table `role`

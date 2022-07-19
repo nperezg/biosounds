@@ -28,9 +28,9 @@ class Collection extends BaseProvider
     private $name;
 
     /**
-     * @var string
+     * @var int
      */
-    private $author;
+    private $user_id;
 
     /**
      * @var string
@@ -93,16 +93,17 @@ class Collection extends BaseProvider
      */
     public function getAuthor(): string
     {
-        return $this->author;
+        $author = (new User())->getUserName($this->user_id);
+        return $author;
     }
 
     /**
-     * @param string $author
+     * @param int $user_id
      * @return Collection
      */
-    public function setAuthor(string $author): Collection
+    public function setUserId(string $user_id): Collection
     {
-        $this->author = $author;
+        $this->user_id = $user_id;
         return $this;
     }
 
