@@ -39,7 +39,7 @@ class UserPermission extends BaseProvider
 		$this->database->prepareQuery(
 		    'SELECT collection.collection_id, collection.name, user_permission.permission_id ' .
             'FROM collection LEFT JOIN user_permission ON user_permission.collection_id = ' .
-            Collection::TABLE_NAME. '.' . Collection::PRIMARY_KEY . ' AND user_id = :userId ORDER BY ' .
+            Collection::TABLE_NAME. '.' . Collection::PRIMARY_KEY . ' AND user_permission.user_id = :userId ORDER BY ' .
             Collection::TABLE_NAME. '.' . Collection::PRIMARY_KEY
         );
 		return $this->database->executeSelect([':userId' => $userId]);
