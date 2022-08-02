@@ -267,16 +267,14 @@ class RecordingController extends BaseController
                     $zoomedFilePlayer = Utils::convertToOgg($zoomedFilePath);
                 }
             }
-
-            $this->recordingService->generateSpectrogramImage(
-                $spectrogramImagePath,
-                Utils::generateWavFile($zoomedFilePath),
-                $maxFrequency,
-                $this->recordingPresenter->getChannel(),
-                $minFrequency
-            );
         }
-
+        $this->recordingService->generateSpectrogramImage(
+            $spectrogramImagePath,
+            Utils::generateWavFile($zoomedFilePath),
+            $maxFrequency,
+            $this->recordingPresenter->getChannel(),
+            $minFrequency
+        );
         $this->recordingPresenter->setMinTime(round($minTime, 1));
         $this->recordingPresenter->setMaxTime(round($maxTime, 1));
         $this->recordingPresenter->setMinFrequency($minFrequency);

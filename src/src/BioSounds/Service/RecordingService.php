@@ -225,19 +225,17 @@ class RecordingService
         int    $minFrequency
     )
     {
-        if (!file_exists($imagePath)) {
-            try {
-                $this->imageService->generatePlayerImage(
-                    $imagePath,
-                    $wavFilePath,
-                    $maxFrequency,
-                    $channel,
-                    $minFrequency
-                );
-            } catch (\Exception $exception) {
-                error_log($exception->getMessage());
-                throw new \Exception('There was a problem generating the recording spectrogram image.');
-            }
+        try {
+            $this->imageService->generatePlayerImage(
+                $imagePath,
+                $wavFilePath,
+                $maxFrequency,
+                $channel,
+                $minFrequency
+            );
+        } catch (\Exception $exception) {
+            error_log($exception->getMessage());
+            throw new \Exception('There was a problem generating the recording spectrogram image.');
         }
     }
 

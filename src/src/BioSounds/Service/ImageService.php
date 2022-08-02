@@ -27,10 +27,10 @@ class ImageService
      * ImageService constructor.
      * @param int $fftSize
      */
-    public function __construct(int $fftSize = 1024)
+    public function __construct()
     {
         $this->spectrogramService = new SpectrogramService();
-        $this->fftSize = $fftSize;
+        $this->fftSize = Utils::getSetting('fft');
     }
 
     /**
