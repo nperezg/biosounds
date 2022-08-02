@@ -228,7 +228,59 @@ class Site extends AbstractProvider
         $this->gadm3 = $gadm3;
         return $this;
     }
+    /**
+     * @return int
+     */
+    public function getRealm(): ?int
+    {
+        return $this->realm;
+    }
 
+    /**
+     * @param int $realm
+     * @return site
+     */
+    public function setRealm($realm = NULL): Site
+    {
+        $this->realm = $realm;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBiome(): ?int
+    {
+        return $this->biome;
+    }
+
+    /**
+     * @param int $biome
+     * @return site
+     */
+    public function setBiome($biome = NULL): Site
+    {
+        $this->biome = $biome;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFunctionalGroup(): ?int
+    {
+        return $this->functionalGroup;
+    }
+
+    /**
+     * @param int $functionalGroup
+     * @return site
+     */
+    public function setFunctionalGroup($functionalGroup = NULL): Site
+    {
+        $this->functionalGroup = $functionalGroup;
+        return $this;
+    }
     /**
      * @return bool
      */

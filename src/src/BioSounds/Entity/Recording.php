@@ -592,14 +592,97 @@ class Recording
         $this->labelName = $labelName;
         return $this;
     }
+    /**
+     * @return string
+     */
+    public function getRealmName(): ?string
+    {
+        return $this->realmName;
+    }
 
+    /**
+     * @param null|string $realmName
+     * @return Recording
+     */
+    public function setRealmName(?string $realmName): Recording
+    {
+        $this->realmName = $realmName;
+        return $this;
+    }
+    /**
+     * @return string
+     */
+    public function getBiomeName(): ?string
+    {
+        return $this->biomeName;
+    }
+
+    /**
+     * @param null|string $biomeName
+     * @return Recording
+     */
+    public function setBiomeName(?string $biomeName): Recording
+    {
+        $this->biomeName = $biomeName;
+        return $this;
+    }
+    /**
+     * @return string
+     */
+    public function getFunctionalGroupName(): ?string
+    {
+        return $this->functionalGroupName;
+    }
+
+    /**
+     * @param null|string $functionalGroupName
+     * @return Recording
+     */
+    public function setFunctionalGroupName(?string $functionalGroupName): Recording
+    {
+        $this->functionalGroupName = $functionalGroupName;
+        return $this;
+    }
+    /**
+     * @return float
+     */
+    public function getLongitude(): ?float
+    {
+        return $this->longitude;
+    }
+
+    /**
+     * @param null|float $longitude
+     * @return Recording
+     */
+    public function setLongitude(?float $longitude): Recording
+    {
+        $this->longitude = $longitude;
+        return $this;
+    }
+    /**
+     * @return float
+     */
+    public function getLatitude(): ?float
+    {
+        return $this->latitude;
+    }
+
+    /**
+     * @param null|float $latitude
+     * @return Recording
+     */
+    public function setLatitude(?float $latitude): Recording
+    {
+        $this->latitude = $latitude;
+        return $this;
+    }
     /**
      * @param array $values
      * @return $this
      */
     public function createFromValues(array $values)
     {
-
         $this->setId($values['recording_id']);
         $this->setName($values['name']);
         $this->setCollection($values['col_id']);
@@ -622,7 +705,11 @@ class Recording
         $this->setUserId($values['user_id']);
         $this->setLabelId($values['label_id']);
         $this->setLabelName($values['label_name']);
-
+        $this->setRealmName($values['realm']);
+        $this->setBiomeName($values['biome']);
+        $this->setFunctionalGroupName($values['functionalGroup']);
+        $this->setLongitude($values['longitude']);
+        $this->setLatitude($values['latitude']);
         return $this;
     }
 }

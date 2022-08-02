@@ -5,26 +5,9 @@
                 <img src="{{ logoUrl }}" alt="ecoSound-web">
             </a>
             <ul class="nav navbar-nav">
-                <li class="navbar-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Open Soundscape Collections</a>
-                    <div class="dropdown-menu">
-                        <a href="{{ baseUrl }}/collection/show/1" class="dropdown-item">
-                            Demo
-                        </a>
-                    </div>
+                <li class="navbar-item">
+                    <a class="nav-link" href="{{ baseUrl}}/collection/index">Collections</a>
                 </li>
-                {% if collections and isUserLogged %}
-                    <li class="navbar-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Collections</a>
-                        <div class="dropdown-menu">
-                            {% for collection in collections %}
-                                <a href="{{ baseUrl}}/collection/show/{{ collection.id }}" class="dropdown-item">
-                                    {{ collection.name }}
-                                </a>
-                            {% endfor %}
-                        </div>
-                    </li>
-                {% endif %}
                 {% if isUserLogged %}
                     <li class="navbar-item">
                         <a class="nav-link" target="_blank" href="{{ guide_url }}">Guide</a>

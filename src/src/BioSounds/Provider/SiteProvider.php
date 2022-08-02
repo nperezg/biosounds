@@ -48,7 +48,35 @@ class SiteProvider extends BaseProvider
 
         return $data;
     }
+    /**
+     * @return Site[]
+     * @throws \Exception
+     */
+    public function getExplore(): array
+    {
+        $data = [];
+        $this->database->prepareQuery(
+            "SELECT * FROM explore ORDER BY explore_id"
+        );
 
+        $result = $this->database->executeSelect();
+
+        foreach ($result as $item) {
+            $data[] = (new Explore())
+                ->setId($item['site_id'])
+                ->setName($item['name'])
+                ->setUserId($item['user_id'])
+                ->setCreationDateTime($item['creation_date_time'])
+                ->setLongitude($item['longitude_WGS84_dd_dddd'])
+                ->setLatitude($item['latitude_WGS84_dd_dddd'])
+                ->setGadm1($item['gadm1'])
+                ->setGadm2($item['gadm2'])
+                ->setGadm3($item['gadm3'])
+                ->setCentroId($item['centroid']);
+        }
+
+        return $data;
+    }
     public function getSitePages(int $limit, int $offSet): array
     {
         $data = [];
@@ -73,6 +101,9 @@ class SiteProvider extends BaseProvider
                 ->setGadm1($item['gadm1'])
                 ->setGadm2($item['gadm2'])
                 ->setGadm3($item['gadm3'])
+                ->setRealm($item['realm_id'])
+                ->setBiome($item['biome_id'])
+                ->setFunctionalGroup($item['functional_group_id'])
                 ->setCentroId($item['centroid']);
         }
 

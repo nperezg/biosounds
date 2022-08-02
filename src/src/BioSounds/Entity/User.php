@@ -144,7 +144,6 @@ class User extends BaseProvider
         if (empty($result = $this->database->executeSelect([":userId" => $userId, ":roleName" => Role::ADMIN_ROLE]))) {
             throw new \Exception("User $userId doesn't exist.");
         }
-
         return ($result[0]["result"] == 0 ? true : false);
     }
 

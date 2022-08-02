@@ -1,13 +1,15 @@
 <div class="collapse mb-5" id="siteFormSection">
     <div class="card">
         <div class="card-body">
-            <button id="closeForm" class="close" type="button" data-toggle="collapse" data-target="#siteFormSection" aria-expanded="false" aria-controls="siteFormSection">
+            <button id="closeForm" class="close" type="button" data-toggle="collapse" data-target="#siteFormSection"
+                    aria-expanded="false" aria-controls="siteFormSection">
                 <span>&times;</span>
             </button>
             <form id="siteForm" novalidate>
                 <div class="form-group">
                     <label for="name" class="col-form-label-sm">Name</label>
-                    <input id="name" type="text" name="name_text" class="form-control form-control-sm" maxlength="100" required>
+                    <input id="name" type="text" name="name_text" class="form-control form-control-sm" maxlength="100"
+                           required>
                     <div class="invalid-feedback">
                         Please provide a site name.
                     </div>
@@ -18,10 +20,14 @@
                 </div>
                 <div>
                     <span>
-                        <input id="longitude" type="number" min="-180" max="180" step="0.0000000000001" pattern="##.##############" name="longitude_number" style="width:50%" maxlength="100" required>
+                        <input id="longitude" type="number" min="-180" max="180" step="0.0000000000001"
+                               pattern="##.##############" name="longitude_number" style="width:50%" maxlength="100"
+                               required>
                     </span>
                     <span>
-                        <input id="latitude" type="number" min="-90" max="90" step="0.0000000000001" pattern="##.##############" name="latitude_number" style="width:49.5%" maxlength="100" required>
+                        <input id="latitude" type="number" min="-90" max="90" step="0.0000000000001"
+                               pattern="##.##############" name="latitude_number" style="width:49.5%" maxlength="100"
+                               required>
                     </span>
                 </div>
                 <div>
@@ -34,14 +40,38 @@
                     </span>
                 </div>
                 <div>
-                    <label for="gadm1" class="col-form-label-sm" style="width:33%">Global Administrative Areas level 1</label>
-                    <label for="gadm2" class="col-form-label-sm" style="width:33%">Global Administrative Areas level 2</label>
-                    <label for="gadm3" class="col-form-label-sm" style="width:33%">Global Administrative Areas level 3</label>
+                    <label for="gadm1" class="col-form-label-sm" style="width:33%">Global Administrative Areas level
+                        1</label>
+                    <label for="gadm2" class="col-form-label-sm" style="width:33%">Global Administrative Areas level
+                        2</label>
+                    <label for="gadm3" class="col-form-label-sm" style="width:33%">Global Administrative Areas level
+                        3</label>
                 </div>
                 <div class="form-group">
                     <input id="gadm1" type="text" name="gadm1_text" style="width:33%" maxlength="100">
                     <input id="gadm2" type="text" name="gadm2_text" style="width:33%" maxlength="100">
                     <input id="gadm3" type="text" name="gadm3_text" style="width:33%" maxlength="100">
+                </div>
+                <div>
+                    <label for="realm" class="col-form-label-sm" style="width:33%">Realm</label>
+                    <label for="biome" class="col-form-label-sm" style="width:33%">Biome</label>
+                    <label for="functionalGroup" class="col-form-label-sm" style="width:33%">Functional Group</label>
+                </div>
+                <div class="form-group">
+                    <select id="realm" name="realm_id_text" style="width:33%" class="form-control-sm">
+                        <option></option>
+                        {% for explore in explores %}
+                            {% if explore.level==1 %}
+                                <option value="{{ explore.explore_id }}">{{ explore.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    <select id="biome" name="biome_id_text" style="width:33%" class="form-control-sm">
+                        <option></option>
+                    </select>
+                    <select id="functionalGroup" name="functional_group_id_text" style="width:33%" class="form-control-sm">
+                        <option></option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="centro" class="col-form-label-sm">Centroid</label>

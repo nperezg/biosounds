@@ -31,6 +31,8 @@ class CollectionProvider extends BaseProvider
                 ->setDoi($item['doi'])
                 ->setNote($item['note'])
                 ->setProject($item['project_id'])
+                ->setCreationDate($item['creation_date'])
+                ->setPublic($item['public'])
                 ->setView($item['view']);
         }
         return $data;

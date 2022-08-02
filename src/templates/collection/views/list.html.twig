@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-auto mr-auto">
 
-                    {% if item.recording.soundData is not empty  %}
+                    {% if item.recording.soundData is not empty %}
                         <h5>
                             <strong>{{ item.recording.soundData.speciesName }}</strong>
                         </h5>
@@ -34,11 +34,11 @@
                         <small>{{ item.recording.fileTime }}</small>
                     </h6>
                     <h6>User:
-                        <small>{{ item.recording.getUserFullName}}
+                        <small>{{ item.recording.getUserFullName }}
                         </small>
                     </h6>
                     <h6>DOI:
-                        <small>{{ item.recording.doi }}
+                        <small>{{ item.recording.Doi }}
                         </small>
                     </h6>
                     <h6>Site:
@@ -48,20 +48,26 @@
                     <h6>License:
                         <small>{{ item.recording.licenseName }}</small>
                         {% if item.recording.licenseName == 'CC-BY' %}
-                            <a href="https://creativecommons.org/licenses/by/4.0"><img src="{{ licenseImagesUrl }}/ccby.png" alt="cc by"/></a>
+                            <a href="https://creativecommons.org/licenses/by/4.0"><img
+                                        src="{{ licenseImagesUrl }}/ccby.png" alt="cc by"/></a>
                         {% elseif item.recording.licenseName == 'CC-BY-SA' %}
-                            <a href="https://creativecommons.org/licenses/by-sa/4.0"><img src="{{ licenseImagesUrl }}/ccby-sa.png" alt="cc by-sa"/></a>
+                            <a href="https://creativecommons.org/licenses/by-sa/4.0"><img
+                                        src="{{ licenseImagesUrl }}/ccby-sa.png" alt="cc by-sa"/></a>
                         {% elseif item.recording.licenseName == 'CC-BY-NC' %}
-                            <a href="https://creativecommons.org/licenses/by-nc/4.0"><img src="{{ licenseImagesUrl }}/ccby-nc.png" alt="cc by-nc"/></a>
+                            <a href="https://creativecommons.org/licenses/by-nc/4.0"><img
+                                        src="{{ licenseImagesUrl }}/ccby-nc.png" alt="cc by-nc"/></a>
                         {% elseif item.recording.licenseName == 'CC-BY-NC-SA' %}
-                            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0"><img src="{{ licenseImagesUrl }}/ccby-nc-sa.png" alt="cc by-nc-sa"/></a>
+                            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0"><img
+                                        src="{{ licenseImagesUrl }}/ccby-nc-sa.png" alt="cc by-nc-sa"/></a>
                         {% elseif item.recording.licenseName == 'CC-BY-ND' %}
-                            <a href="https://creativecommons.org/licenses/by-nd/4.0"><img src="{{ licenseImagesUrl }}/ccby-nd.png" alt="cc by-nd"/></a>
+                            <a href="https://creativecommons.org/licenses/by-nd/4.0"><img
+                                        src="{{ licenseImagesUrl }}/ccby-nd.png" alt="cc by-nd"/></a>
                         {% elseif item.recording.licenseName == 'CC-BY-NC-ND' %}
-                            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0"><img src="{{ licenseImagesUrl }}/ccby-nc-nd.png" alt="cc by-nc-nd"/></a>
+                            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0"><img
+                                        src="{{ licenseImagesUrl }}/ccby-nc-nd.png" alt="cc by-nc-nd"/></a>
                         {% endif %}
                     </h6>
-                    {% if item.recording.siteData is not empty  %}
+                    {% if item.recording.siteData is not empty %}
                         <h6>Site:
                             <small>{{ item.recording.siteData.name }}</small>
                         </h6>
@@ -72,13 +78,34 @@
                         </h6>
                     {% endif %}
                 </div>
-                <div class="col-2">
+                <div class="col-3">
                     <h6>&nbsp;</h6>
                     <h6>
                         My Label:<small>
-                            {{item.recording.labelName}}
+                            {{ item.recording.labelName }}
                         </small>
                     </h6>
+                    {% if item.recording.realmName is not empty %}
+                        <h6>
+                            Realm:<small>
+                                {{ item.recording.realmName }}
+                            </small>
+                        </h6>
+                    {% endif %}
+                    {% if item.recording.biomeName is not empty %}
+                        <h6>
+                            Biome:<small>
+                                {{ item.recording.biomeName }}
+                            </small>
+                        </h6>
+                    {% endif %}
+                    {% if item.recording.FunctionalGroupName is not empty %}
+                        <h6>
+                            Functional Group:<small>
+                                {{ item.recording.FunctionalGroupName }}
+                            </small>
+                        </h6>
+                    {% endif %}
                 </div>
                 <div class="col-6">
                     <div id="player-cursor" class="small-player-cursor" data-cursor-id="{{ item.recording.id }}"></div>

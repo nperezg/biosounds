@@ -17,6 +17,7 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Collection</th>
+                                <th scope="col">Public</th>
                                 <th scope="col">Access</th>
                                 <th scope="col">View all tags</th>
                                 <th scope="col">Review all tags</th>
@@ -29,7 +30,12 @@
                                         {{ collection.collection_id }}
                                         <input class="js-data-input" type='hidden' data-collection-id="{{ collection.collection_id }}" data-permission-id="{{ collection.permission_id }}">
                                     </td>
-                                    <td>{{ collection.name }}</td>
+                                    <td>{{ collection.name }} </td>
+                                    <td class="text-center">
+                                        {% if collection.public %}
+                                            <input class="js-access-checkbox" type="checkbox" name="public" checked disabled>
+                                        {% endif %}
+                                    </td>
                                     <td class="text-center">
                                         <input class="js-access-checkbox" value="{{ accessId }}" type="checkbox" name="access" data-collection-id="{{ collection.collection_id }}" {{ collection.permission_id == accessId ? "checked"}} {{ collection.permission_id == viewId ? "checked"}} {{ collection.permission_id == reviewId ? "checked"}}>
                                     </td>

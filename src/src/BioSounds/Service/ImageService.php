@@ -27,7 +27,7 @@ class ImageService
      * ImageService constructor.
      * @param int $fftSize
      */
-    public function __construct(int $fftSize = 1014)
+    public function __construct(int $fftSize = 1024)
     {
         $this->spectrogramService = new SpectrogramService();
         $this->fftSize = $fftSize;

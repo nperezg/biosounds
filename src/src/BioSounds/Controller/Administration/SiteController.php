@@ -3,8 +3,9 @@
 namespace BioSounds\Controller\Administration;
 
 use BioSounds\Controller\BaseController;
+use BioSounds\Entity\Explore;
+use BioSounds\Entity\Sensor;
 use BioSounds\Entity\Site;
-use BioSounds\Entity\User;
 use BioSounds\Exception\ForbiddenException;
 use BioSounds\Provider\SiteProvider;
 use BioSounds\Utils\Auth;
@@ -29,8 +30,8 @@ class SiteController extends BaseController
 
         $siteNum = $siteProvider->countSites();
         $pages = $siteNum > 0 ? ceil($siteNum / self::ITEMS_PAGE) : 1;
-
         return $this->twig->render('administration/sites.html.twig', [
+            'explores' => (new Explore())->getAllExplores(),
             'siteList' => $siteProvider->getSitePages(
                 $this::ITEMS_PAGE,
                 $this::ITEMS_PAGE * ($page - 1)
@@ -66,10 +67,10 @@ class SiteController extends BaseController
 
             switch ($key) {
                 case 'longitude':
-                    $data['longitude_WGS84_dd_dddd'] =  filter_var($sitePdoValue, FILTER_SANITIZE_STRING);
+                    $data['longitude_WGS84_dd_dddd'] = filter_var($sitePdoValue, FILTER_SANITIZE_STRING);
                     break;
                 case 'latitude':
-                    $data['latitude_WGS84_dd_dddd'] =  filter_var($sitePdoValue, FILTER_SANITIZE_STRING);
+                    $data['latitude_WGS84_dd_dddd'] = filter_var($sitePdoValue, FILTER_SANITIZE_STRING);
                     break;
                 default:
                     $data[$key] = filter_var($sitePdoValue, FILTER_SANITIZE_STRING);
@@ -84,7 +85,7 @@ class SiteController extends BaseController
             ]);
         } else {
             $data['creation_date_time'] = date('Y-m-d H:i:s', time());
-            $data['user_id'] =  $_SESSION['user_id'];
+            $data['user_id'] = $_SESSION['user_id'];
 
             if ($siteEnt->insert($data) > 0) {
                 return json_encode([
@@ -118,5 +119,11 @@ class SiteController extends BaseController
             'errorCode' => 0,
             'message' => 'Site deleted successfully.',
         ]);
+    }
+
+    public function getExplore(int $pid = 0)
+    {
+        $explores = (new Explore())->getExplores($pid);
+        return json_encode($explores);
     }
 }

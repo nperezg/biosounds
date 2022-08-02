@@ -91,7 +91,7 @@ class RecordingProvider extends BaseProvider
      * @return int
      * @throws \Exception
      */
-    public function countReady(int $colId, array $filter): int
+    public function countReady(int $colId, array $filter, string $sites = null): int
     {
         $values = [':colId' => $colId];
 
@@ -103,7 +103,9 @@ class RecordingProvider extends BaseProvider
         }
         $query .= 'WHERE recording.col_id = :colId '; //\AND type=\'spectrogram-small\'';
         //$query .= 'WHERE recording.col_id = :colId AND type=\'spectrogram-small\'';
-
+        if ($sites) {
+            $query .= " AND recording.site_id in ($sites) ";
+        }
         if (!empty($filter)) {
             foreach ($filter as $key => $value) {
                 $query .= ' AND ' . $key . '= :' . $key;
@@ -154,7 +156,7 @@ class RecordingProvider extends BaseProvider
      * @return Recording[]
      * @throws \Exception
      */
-    public function getListByCollection(int $colId, int $userId, int $limit, int $offSet, array $filter = null): array
+    public function getListByCollection(int $colId, int $userId, int $limit, int $offSet, array $filter = null, string $sites = null): array
     {
         $values = [
             ':colId' => $colId,
@@ -166,7 +168,7 @@ class RecordingProvider extends BaseProvider
 
         $query = 'SELECT recording.recording_id, recording.name, filename, col_id, directory, sensor_id, recording.site_id, recording.user_id, ';
         $query .= 'recording.sound_id, file_size, bitrate, channel_num, duration, site.name as site_name, license.name as license_name, ';
-        $query .= 'lba.label_id, lba.name as label_name,';
+        $query .= 'lba.label_id, lba.name as label_name,e1.`name` as realm,e2.`name` as biome,e3.`name` as functionalGroup,site.longitude_WGS84_dd_dddd AS longitude,site.latitude_WGS84_dd_dddd AS latitude,';
         $query .= 'DATE_FORMAT(file_date, \'%Y-%m-%d\') AS file_date, ';
         $query .= 'DATE_FORMAT(file_time, \'%H:%i:%s\') AS file_time, sampling_rate, recording.doi FROM recording ';
         $query .= 'LEFT JOIN 
@@ -183,12 +185,18 @@ class RecordingProvider extends BaseProvider
                 ( SELECT label.label_id, label.name, label_association.recording_id FROM label LEFT JOIN label_association 
                 ON label.label_id = label_association.label_id WHERE label_association.user_id = :usrId) 
             AS lba ON recording.recording_id = lba.recording_id ';
+        $query .= 'LEFT JOIN explore e1 ON site.realm_id = e1.explore_id
+                   LEFT JOIN explore e2 ON site.biome_id = e2.explore_id
+                   LEFT JOIN explore e3 ON site.functional_group_id = e3.explore_id ';
 
         if (!empty($filter)) {
             $query .= 'LEFT JOIN sound ON recording.sound_id = sound.sound_id ';
         }
 
         $query .= 'WHERE col_id = :colId ';
+        if ($sites) {
+            $query .= " AND site.site_id in ($sites) ";
+        }
 
         if (!empty($filter)) {
             foreach ($filter as $key => $value) {
@@ -203,9 +211,7 @@ class RecordingProvider extends BaseProvider
             //offset start from 0 for filtering
             $values[':offset'] = 0;
         }
-
         $query .= ' ORDER BY recording_id LIMIT :limit OFFSET :offset';
-
         $this->database->prepareQuery($query);
         $result = $this->database->executeSelect($values);
 
@@ -228,6 +234,90 @@ class RecordingProvider extends BaseProvider
         return $data;
     }
 
+    /**
+     * @param int $colId
+     * @param int $steId
+     * @param int $limit
+     * @param int $offSet
+     * @param array|null $filter
+     * @return Recording[]
+     * @throws \Exception
+     */
+    public function getAllListByCollection(int $colId, int $userId, array $filter = null, string $sites = null): array
+    {
+        $values = [
+            ':colId' => $colId,
+            ':usrId' => $userId,
+            ':userId' => $userId,
+        ];
+
+        $query = 'SELECT recording.recording_id, recording.name, filename, col_id, directory, sensor_id, recording.site_id, recording.user_id, ';
+        $query .= 'recording.sound_id, file_size, bitrate, channel_num, duration, site.name as site_name, license.name as license_name, ';
+        $query .= 'lba.label_id, lba.name as label_name,e1.`name` as realm,e2.`name` as biome,e3.`name` as functionalGroup,site.longitude_WGS84_dd_dddd AS longitude,site.latitude_WGS84_dd_dddd AS latitude,';
+        $query .= 'DATE_FORMAT(file_date, \'%Y-%m-%d\') AS file_date, ';
+        $query .= 'DATE_FORMAT(file_time, \'%H:%i:%s\') AS file_time, sampling_rate, recording.doi FROM recording ';
+        $query .= 'LEFT JOIN 
+                ( SELECT up.collection_id 
+                  FROM user_permission up, permission p 
+                  WHERE up.permission_id = p.permission_id 
+                  AND (p.name = "Access" OR p.name = "View" OR p.name = "Review") 
+                  AND up.user_id = :userId ) as coll on recording.col_id = coll.collection_id ';
+
+        //default view for site and license
+        $query .= 'LEFT JOIN site ON ( recording.site_id, recording.user_id ) = ( site.site_id, site.user_id ) ';
+        $query .= 'LEFT JOIN license ON recording.license_id = license.license_id ';
+        $query .= 'LEFT JOIN 
+                ( SELECT label.label_id, label.name, label_association.recording_id FROM label LEFT JOIN label_association 
+                ON label.label_id = label_association.label_id WHERE label_association.user_id = :usrId) 
+            AS lba ON recording.recording_id = lba.recording_id ';
+        $query .= 'LEFT JOIN explore e1 ON site.realm_id = e1.explore_id
+                   LEFT JOIN explore e2 ON site.biome_id = e2.explore_id
+                   LEFT JOIN explore e3 ON site.functional_group_id = e3.explore_id ';
+
+        if (!empty($filter)) {
+            $query .= 'LEFT JOIN sound ON recording.sound_id = sound.sound_id ';
+        }
+
+        $query .= "WHERE col_id = :colId ";
+        if ($sites) {
+            $query .= " AND site.site_id in ($sites) ";
+        }
+        if (!empty($filter)) {
+            foreach ($filter as $key => $value) {
+                //need a clause with table name
+                if ($key == Site::PRIMARY_KEY) {
+                    $query .= ' AND site.' . $key . '= :' . $key;
+                } else {
+                    $query .= ' AND ' . $key . '= :' . $key;
+                }
+                $values[':' . $key] = $value;
+            }
+            //offset start from 0 for filtering
+            $values[':offset'] = 0;
+        }
+
+        $query .= ' ORDER BY recording_id';
+        $this->database->prepareQuery($query);
+        $result = $this->database->executeSelect($values);
+
+        $data = [];
+
+        foreach ($result as $item) {
+
+            $recording = (new Recording())->createFromValues($item);
+            if (!empty($recording->getSound())) {
+                $recording->setSoundData((new SoundProvider())->get($recording->getSound()));
+            }
+
+            if (!empty($recording->getUserId())) {
+                $recording->setUserFullName((new User())->getFullName($recording->getUserId()));
+            }
+
+            $data[] = $recording;
+        }
+
+        return $data;
+    }
     //
     //    /**
     //     * @param int $colId

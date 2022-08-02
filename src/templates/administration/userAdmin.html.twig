@@ -17,9 +17,14 @@
             <div class="col-lg-2">
                 <ul class="nav flex-column nav-pills">
                     <li class="nav-item">
-                        <a class="nav-link">
+                        <a class="nav-link" href="{{ baseUrl }}/admin/selfService">
                             <i class="fas fa-user pr-1"></i>
                             User</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ baseUrl }}/admin/tags">
+                            <i class="fa fa-tag pr-1"></i>
+                            Tags</a>
                     </li>
                 </ul>
             </div>
@@ -29,41 +34,44 @@
                     <div class="card-body">
                         <table class="table table-sm table-hover">
                             <thead class="table-borderless">
-                                <tr>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Username</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Role</th>
-                                    <th scope="col">Password Reset</th>
-                                    <th scope="col">Permissions</th>
-                                    <th scope="col">Color</th>
-                                </tr>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Role</th>
+                                <th scope="col">Password Reset</th>
+                                <th scope="col">Permissions</th>
+                                <th scope="col">Color</th>
+                            </tr>
                             </thead>
                             <tbody class="form-control-sm js-user-self-service">
-                                <tr>
-                                    <td>
-                                        {{ user.username }}
-                                        <input type="hidden" name="itemID" value="{{ user.user_id }}">
-                                    </td>
-                                    <td>{{ user.username }}</td>
-                                    <td>{{ user.email }}</td>
-                                    <td>{{ role.name }}</td>
-                                    <td>
-                                        <a href="{{ baseUrl }}/admin/userMgr/passwordReset" class="js-open-modal" data-id="{{ user.user_id }}" title="Reset Password">
-                                            <i class='fas fa-edit'></i>
-                                        </a>
-                                    </td>
+                            <tr>
+                                <td>
+                                    {{ user.username }}
+                                    <input type="hidden" name="itemID" value="{{ user.user_id }}">
+                                </td>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ role.name }}</td>
+                                <td>
+                                    <a href="{{ baseUrl }}/admin/userMgr/passwordReset" class="js-open-modal"
+                                       data-id="{{ user.user_id }}" title="Reset Password">
+                                        <i class='fas fa-edit'></i>
+                                    </a>
+                                </td>
 
-                                    <td>
-                                        <a href="{{ baseUrl }}/UserPermission/view/{{ user.user_id }}" class="js-open-modal" title="Collection Privileges" $privhidden>
-                                            <i class='fas fa-tasks'></i>
-                                        </a>
-                                    </td>
+                                <td>
+                                    <a href="{{ baseUrl }}/UserPermission/view/{{ user.user_id }}" class="js-open-modal"
+                                       title="Collection Privileges" $privhidden>
+                                        <i class='fas fa-tasks'></i>
+                                    </a>
+                                </td>
 
-                                    <td>
-                                        <input type="color" name="color" alt="Tag color" value="{{ user.color is empty ? default_color : user.color }}">
-                                    </td>
-                                </tr>
+                                <td>
+                                    <input type="color" name="color" alt="Tag color"
+                                           value="{{ user.color is empty ? default_color : user.color }}">
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -104,7 +112,11 @@
                 if (this.checkValidity() === false) {
                     e.stopPropagation();
                 } else {
-                    $.ajax({type: 'POST', url: '{{ baseUrl }}/api/admin/userMgr/resetSave', data: $(this).serialize()}).done(function (response) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ baseUrl }}/api/admin/userMgr/resetSave',
+                        data: $(this).serialize()
+                    }).done(function (response) {
                         showAlert(response.message);
                         $('#modal-div').modal('hide');
                     }).fail(function (response) {

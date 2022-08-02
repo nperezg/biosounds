@@ -419,7 +419,23 @@ class Tag extends BaseProvider
         $this->speciesName = $speciesName;
         return $this;
     }
+    /**
+     * @return string|null
+     */
+    public function getRecordingName(): ?string
+    {
+        return $this->recordingName;
+    }
 
+    /**
+     * @param string|null $recordingName
+     * @return Tag
+     */
+    public function setRecordingName(?string $recordingName): Tag
+    {
+        $this->recordingName = $recordingName;
+        return $this;
+    }
     /**
      * @return string|null
      */
@@ -437,7 +453,57 @@ class Tag extends BaseProvider
         $this->userName = $userName;
         return $this;
     }
+    /**
+     * @return string|null
+     */
+    public function getTime(): ?string
+    {
+        return $this->time;
+    }
 
+    /**
+     * @param string|null $time
+     * @return Tag
+     */
+    public function setTime(?string $time): Tag
+    {
+        $this->time = $time;
+        return $this;
+    }
+    /**
+     * @return string|null
+     */
+    public function getFrequency(): ?string
+    {
+        return $this->frequency;
+    }
+
+    /**
+     * @param string|null $frequency
+     * @return Tag
+     */
+    public function setFrequency(?string $frequency): Tag
+    {
+        $this->frequency = $frequency;
+        return $this;
+    }
+    /**
+     * @return string|null
+     */
+    public function getCreationDate(): ?string
+    {
+        return $this->creationDate;
+    }
+
+    /**
+     * @param string|null $creationDate
+     * @return Tag
+     */
+    public function setCreationDate(?string $creationDate): Tag
+    {
+        $this->creationDate = $creationDate;
+        return $this;
+    }
     /**
      * @param array $values
      * @return $this

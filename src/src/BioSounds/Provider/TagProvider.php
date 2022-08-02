@@ -7,6 +7,7 @@ namespace BioSounds\Provider;
 use BioSounds\Entity\Species;
 use BioSounds\Entity\Tag;
 use BioSounds\Entity\User;
+use BioSounds\Utils\Auth;
 
 class TagProvider extends BaseProvider
 {
@@ -144,5 +145,93 @@ class TagProvider extends BaseProvider
     {
         $this->database->prepareQuery('DELETE FROM tag WHERE tag_id = :tagId');
         return $this->database->executeDelete([':tagId' => $tagId]);
+    }
+
+    public function getTagPages(int $limit, int $offSet): array
+    {
+        $this->database->prepareQuery(
+            "SELECT t.*,s.binomial AS speciesName,r.`name` AS recordingName,u.`name` AS userName,st.`name` AS typeName FROM tag t 
+            INNER JOIN recording r ON r.recording_id = t.recording_id
+            LEFT JOIN species s ON s.species_id = t.species_id
+            LEFT JOIN collection c ON c.collection_id = r.col_id
+            LEFT JOIN user u ON u.user_id = t.user_id
+            LEFT JOIN sound_type st ON st.sound_type_id = t.type
+            WHERE t.user_id = :user_id1 OR c.user_id = :user_id2
+            ORDER BY t.tag_id LIMIT :limit OFFSET :offset"
+        );
+
+        $result = $this->database->executeSelect([
+            ':limit' => $limit,
+            ':offset' => $offSet,
+            ":user_id1" => Auth::getUserLoggedID(),
+            ":user_id2" => Auth::getUserLoggedID()
+        ]);
+
+        $data = [];
+        foreach ($result as $item) {
+            $data[] = (new Tag())
+                ->setId($item['tag_id'])
+                ->setSpeciesName($item['speciesName'])
+                ->setRecordingName($item['recordingName'])
+                ->setUserName($item['userName'])
+                ->setTime($item['min_time'].' - '.$item['max_time'].' sec')
+                ->setFrequency($item['min_freq'].' - '.$item['max_freq'].' Hz')
+                ->setCallDistance($item['call_distance_m'])
+                ->setNumberIndividuals($item['number_of_individuals'])
+                ->setType($item['typeName'])
+                ->setComments($item['comments'])
+                ->setCreationDate($item['creation_date']);
+        }
+        return $data;
+    }
+    /**
+     * @return Tag[]
+     * @throws \Exception
+     */
+    public function getListByTags(): array
+    {
+        $data = [];
+        $this->database->prepareQuery(
+            "SELECT t.*,s.binomial AS speciesName,r.`name` AS recordingName,u.`name` AS userName,st.`name` AS typeName FROM tag t 
+            INNER JOIN recording r ON r.recording_id = t.recording_id
+            LEFT JOIN species s ON s.species_id = t.species_id
+            LEFT JOIN collection c ON c.collection_id = r.col_id
+            LEFT JOIN user u ON u.user_id = t.user_id
+            LEFT JOIN sound_type st ON st.sound_type_id = t.type
+            WHERE t.user_id = :user_id1 OR c.user_id = :user_id2
+            ORDER BY t.tag_id"
+        );
+        $result = $this->database->executeSelect([":user_id1" => Auth::getUserLoggedID(),":user_id2" => Auth::getUserLoggedID()]);
+
+        foreach ($result as $item) {
+            $data[] = (new Tag())
+                ->setId($item['tag_id'])
+                ->setSpeciesName($item['speciesName'])
+                ->setRecordingName($item['recordingName'])
+                ->setUserName($item['userName'])
+                ->setTime($item['min_time'].' - '.$item['max_time'].' sec')
+                ->setFrequency($item['min_freq'].' - '.$item['max_freq'].' Hz')
+                ->setCallDistance($item['call_distance_m'])
+                ->setNumberIndividuals($item['number_of_individuals'])
+                ->setType($item['typeName'])
+                ->setComments($item['comments'])
+                ->setCreationDate($item['creation_date']);
+        }
+
+        return $data;
+    }
+    public function countTags(): int
+    {
+        $this->database->prepareQuery(
+            "SELECT COUNT(*) AS num FROM tag t 
+            INNER JOIN recording r ON t.recording_id = r.recording_id
+            LEFT JOIN collection c ON c.collection_id = r.col_id
+            WHERE t.user_id = :user_id1 OR c.user_id = :user_id2"
+        );
+
+        if (empty($result = $this->database->executeSelect([":user_id1" => Auth::getUserLoggedID(),":user_id2" => Auth::getUserLoggedID()]))) {
+            return 0;
+        }
+        return $result[0]['num'];
     }
 }

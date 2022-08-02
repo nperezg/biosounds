@@ -14,30 +14,43 @@
         <div class="row">
             <div class="col-lg-2">
                 <ul class="nav flex-column nav-pills">
+                    {% if is_admin %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ baseUrl }}/admin/settings">
+                                <i class="fas fa-cog pr-1"></i>
+                                Settings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ baseUrl }}/admin/collections">
+                                <i class="fas fa-music pr-1"></i>
+                                Collections</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ baseUrl }}/admin/users">
+                                <i class="fas fa-user pr-1"></i>
+                                Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ baseUrl }}/admin/recordings">
+                                <i class="fas fa-compact-disc pr-1"></i>
+                                Recordings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ baseUrl }}/admin/sites">
+                                <i class="fa fa-sites pr-1"></i>
+                                Sites</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ baseUrl }}/admin/selfService">
+                                <i class="fas fa-user pr-1"></i>
+                                User</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ baseUrl }}/admin/settings">
-                            <i class="fas fa-cog pr-1"></i>
-                            Settings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ baseUrl }}/admin/collections">
-                            <i class="fas fa-music pr-1"></i>
-                            Collections</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ baseUrl }}/admin/users">
-                            <i class="fas fa-user pr-1"></i>
-                            Users</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ baseUrl }}/admin/recordings">
-                            <i class="fas fa-compact-disc pr-1"></i>
-                            Recordings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ baseUrl }}/admin/sites">
-                            <i class="fa fa-sites pr-1"></i>
-                            Sites</a>
+                        <a class="nav-link" href="{{ baseUrl }}/admin/tags">
+                            <i class="fa fa-tag pr-1"></i>
+                            Tags</a>
                     </li>
                 </ul>
             </div>

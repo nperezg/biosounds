@@ -37,7 +37,7 @@ class UserPermission extends BaseProvider
     public function getColPermissionsByUser(int $userId): array
     {
         $this->database->prepareQuery(
-            'SELECT collection.collection_id, collection.name, user_permission.permission_id ' .
+            'SELECT collection.collection_id, collection.name, user_permission.permission_id,collection.public ' .
             'FROM collection LEFT JOIN user_permission ON user_permission.collection_id = ' .
             Collection::TABLE_NAME . '.' . Collection::PRIMARY_KEY . ' AND user_permission.user_id = :userId ORDER BY ' .
             Collection::TABLE_NAME . '.' . Collection::PRIMARY_KEY

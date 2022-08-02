@@ -1,7 +1,21 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container mt-5">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb bg-white mt-4">
+                <li class="breadcrumb-item" aria-current="page">
+                    <a href="{{ baseUrl }}/collection/index">Collections</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">{{ collection.name }}</li>
+            </ul>
+            {% if leaflet.arr %}
+                <button id="btn_map" class="btn btn-outline-primary btn-sm view mb-3">Hide Map</button>
+            {% endif %}
+        </nav>
+        {% if leaflet.arr %}
+            <div id="map" style="height: 750px;margin-bottom: 30px;"></div>
+        {% endif %}
         <div class="row">
             <div class="col-md-7">
                 <h2>{{ collection.name }}
@@ -10,14 +24,19 @@
                 </h2>
             </div>
             <div class="col-md-5 text-right">
-                <a href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage }}/gallery" type="button" class="btn btn-outline-primary btn-sm view {{ display == 'gallery' ? 'active'}}" aria-pressed="true">
+                <a onclick="col_js({{ collection.id }},{{ currentPage }},'gallery','{{ leaflet.sites }}')" type="button"
+                   class="btn btn-outline-primary btn-sm view {{ display == 'gallery' ? 'active' }}"
+                   aria-pressed="true">
                     <i class="fas fa-th" aria-hidden="true"></i>
                     Gallery View
                 </a>
-                <a href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage }}/list" type="button" class="btn btn-outline-primary btn-sm view {{ display == 'list' ? 'active'}}" aria-pressed="true">
+                <a onclick="col_js({{ collection.id }},{{ currentPage }},'list','{{ leaflet.sites }}')" type="button"
+                   class="btn btn-outline-primary btn-sm view {{ display == 'list' ? 'active' }}" aria-pressed="true">
                     <i class="fas fa-th-list" aria-hidden="true"></i>
                     List View
                 </a>
+                <input id="display_view" value="{{ display }}" type="hidden">
+                <input id="sites" value="{{ leaflet.sites }}" type="hidden">
             </div>
         </div>
 
@@ -25,31 +44,42 @@
             <div class="col-auto mr-auto">
                 {% if collection.note is not empty %}
                     <p>
-                        <strong>Notes:
+                        <strong>Description:
                         </strong>
                         {{ collection.note }}</p>
                 {% endif %}
             </div>
             {% if display == 'list' %}
                 <div class="col-auto">
-                    <form id="search-form" class="form-inline text-right" action="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage }}/{{ display }}" method="post">
+                    <form id="search-form" class="form-inline text-right"
+                          action="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage }}/{{ display }}"
+                          method="post">
                         <div class="form-group mr-3">
                             <label class="col-form-label-sm" for="doi">DOI</label>
-                            <input type="text" class="form-control form-control-sm filter ml-2" id="doi" name="doi" placeholder="DOI" value="" data-type="search">
+                            <input type="text" class="form-control form-control-sm filter ml-2" id="doi" name="doi"
+                                   placeholder="DOI" value="" data-type="search">
                         </div>
                         <div class="form-group mr-3">
                             <label class="col-form-label-sm" for="siteName">Site</label>
-                            <input type="hidden" class="filter js-site-id" name="site" value="{{ filter.site_id }}" data-type="search">
-                            <input type="text" class="form-control form-control-sm filter ml-2 js-site-autocomplete" id="siteName" name="site-name" placeholder="Site" value="{{ filter.siteName }}" data-type="search">
+                            <input type="hidden" class="filter js-site-id" name="site" value="{{ filter.site_id }}"
+                                   data-type="search">
+                            <input type="text" class="form-control form-control-sm filter ml-2 js-site-autocomplete"
+                                   id="siteName" name="site-name" placeholder="Site" value="{{ filter.siteName }}"
+                                   data-type="search">
                         </div>
                         <div class="form-group mr-3">
                             <label class="col-form-label-sm" for="speciesName">Species</label>
-                            <input type="hidden" class="filter js-species-id" name="species" value="{{ filter.species_id }}" data-type="search">
-                            <input type="text" class="form-control form-control-sm filter ml-2 js-species-autocomplete" id="speciesName" name="species-name" placeholder="Species" value="{{ filter.speciesName }}" data-type="search">
+                            <input type="hidden" class="filter js-species-id" name="species"
+                                   value="{{ filter.species_id }}" data-type="search">
+                            <input type="text" class="form-control form-control-sm filter ml-2 js-species-autocomplete"
+                                   id="speciesName" name="species-name" placeholder="Species"
+                                   value="{{ filter.speciesName }}" data-type="search">
                         </div>
                         <div class="form-group mr-3">
                             <label class="col-form-label-sm" for="rating">Rating</label>
-                            <input type="text" class="form-control form-control-sm filter ml-2" id="rating" name="rating" placeholder="A-E" pattern="[A-E]{1}" style="width:60px;" value="{{ filter.rating }}">
+                            <input type="text" class="form-control form-control-sm filter ml-2" id="rating"
+                                   name="rating" placeholder="A-E" pattern="[A-E]{1}" style="width:60px;"
+                                   value="{{ filter.rating }}">
                         </div>
                         <button type="submit" class="btn btn-outline-primary btn-sm mr-2">
                             <i class="fas fa-search" aria-hidden="true"></i>
@@ -71,19 +101,23 @@
                 <ul class="pagination justify-content-center">
                     {% if pageNum > 10 %}
                         <li class="page-item">
-                            <a href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage == 1 ? 1 : currentPage - 1 }}/{{ display }}">
+                            <a onclick="col_js({{ collection.id }},{{ currentPage == 1 ? 1 : currentPage - 1 }},'{{ display }}','{{ leaflet.sites }}')">
                                 <i class="fa fa-angle-left" style="font-size:36px; position:relative; top:4px;"></i>
                             </a>
-                            &nbsp;&nbsp;</li>
+                            &nbsp;&nbsp;
+                        </li>
                         <li class="page-item {{ currentPage == 1 ? 'active' }}">
-                            <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/1/{{ display }}">1</a>
+                            <a class="page-link"
+                               onclick="col_js({{ collection.id }},'1','{{ display }}','{{ leaflet.sites }}')">1</a>
                         </li>
                         {% if currentPage <= 3 %}
                             <li class="page-item  {{ currentPage == 2 ? 'active' }}">
-                                <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/2/{{ display }}">2</a>
+                                <a class="page-link"
+                                   onclick="col_js({{ collection.id }},'2','{{ display }}','{{ leaflet.sites }}')">2</a>
                             </li>
                             <li class="page-item {{ currentPage == 3 ? 'active' }}">
-                                <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/3/{{ display }}">3</a>
+                                <a class="page-link"
+                                   onclick="col_js({{ collection.id }},'3','{{ display }}','{{ leaflet.sites }}')">3</a>
                             </li>
                             <li class="disabled">
                                 <span style="font-size:28px;position:relative;">&nbsp;.</span>
@@ -100,33 +134,42 @@
                             </li>
                             {% if currentPage == 4 %}
                                 <li class="page-item  active">
-                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/4/{{ display }}">4</a>
+                                    <a class="page-link"
+                                       onclick="col_js({{ collection.id }},'4','{{ display }}','{{ leaflet.sites }}')">4</a>
                                 </li>
                                 <li class="page-item">
-                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage + 1 }}/{{ display }}">{{ currentPage + 1}}</a>
+                                    <a class="page-link"
+                                       onclick="col_js({{ collection.id }},{{ currentPage + 1 }},'{{ display }}','{{ leaflet.sites }}')">{{ currentPage + 1 }}</a>
                                 </li>
                                 <li class="page-item">
-                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage + 2 }}/{{ display }}">{{ currentPage + 2}}</a>
+                                    <a class="page-link"
+                                       onclick="col_js({{ collection.id }},{{ currentPage + 2 }},'{{ display }}','{{ leaflet.sites }}')">{{ currentPage + 2 }}</a>
                                 </li>
                             {% elseif currentPage == pageNum - 3 %}
                                 <li class="page-item">
-                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage - 2}}/{{ display }}">{{ currentPage - 2 }}</a>
+                                    <a class="page-link"
+                                       onclick="col_js({{ collection.id }},{{ currentPage -2 }},'{{ display }}','{{ leaflet.sites }}')">{{ currentPage - 2 }}</a>
                                 </li>
                                 <li class="page-item">
-                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage - 1 }}/{{ display }}">{{ currentPage - 1 }}</a>
+                                    <a class="page-link"
+                                       onclick="col_js({{ collection.id }},{{ currentPage - 1 }},'{{ display }}','{{ leaflet.sites }}')">{{ currentPage - 1 }}</a>
                                 </li>
                                 <li class="page-item active">
-                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage}}/{{ display }}">{{ currentPage }}</a>
+                                    <a class="page-link"
+                                       onclick="col_js({{ collection.id }},{{ currentPage }},'{{ display }}','{{ leaflet.sites }}')">{{ currentPage }}</a>
                                 </li>
                             {% else %}
                                 <li class="page-item">
-                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage -1 }}/{{ display }}">{{ currentPage - 1 }}</a>
+                                    <a class="page-link"
+                                       onclick="col_js({{ collection.id }},{{ currentPage - 1 }},'{{ display }}','{{ leaflet.sites }}')">{{ currentPage - 1 }}</a>
                                 </li>
                                 <li class="page-item active">
-                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage }}/{{ display }}">{{ currentPage }}</a>
+                                    <a class="page-link"
+                                       onclick="col_js({{ collection.id }},{{ currentPage }},'{{ display }}','{{ leaflet.sites }}')">{{ currentPage }}</a>
                                 </li>
                                 <li class="page-item">
-                                    <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage + 1 }}/{{ display }}">{{ currentPage + 1 }}</a>
+                                    <a class="page-link"
+                                       onclick="col_js({{ collection.id }},{{ currentPage + 1 }},'{{ display }}','{{ leaflet.sites }}')">{{ currentPage + 1 }}</a>
                                 </li>
                             {% endif %}
                             <li class="disabled">
@@ -142,25 +185,29 @@
                                 <span style="font-size:28px;position:relative;">.</span>
                                 <span style="font-size:28px;position:relative;">.&nbsp;</span>
                             </li>
-                            <li class="page-item  {{ currentPage == pageNum - 2 ? 'active' }}">
-                                <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ pageNum - 2}}/{{ display }}">{{ pageNum - 2 }}</a>
+                            <li class="page-item {{ currentPage == pageNum - 2 ? 'active' }}">
+                                <a class="page-link"
+                                   onclick="col_js({{ collection.id }},{{ pageNum - 2 }},'{{ display }}','{{ leaflet.sites }}')">{{ pageNum - 2 }}</a>
                             </li>
                             <li class="page-item {{ currentPage == pageNum - 1 ? 'active' }}">
-                                <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ pageNum - 1 }}/{{ display }}">{{ pageNum -1 }}</a>
+                                <a class="page-link"
+                                   onclick="col_js({{ collection.id }},{{ pageNum - 1 }},'{{ display }}','{{ leaflet.sites }}')">{{ pageNum -1 }}</a>
                             </li>
                         {% endif %}
                         <li class="page-item {{ currentPage == pageNum ? 'active' }}">
-                            <a class="page-link" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ pageNum }}/{{ display }}">{{ pageNum }}</a>
+                            <a class="page-link"
+                               onclick="col_js({{ collection.id }},{{ pageNum }},'{{ display }}','{{ leaflet.sites }}')">{{ pageNum }}</a>
                         </li>
                         <li class="page-item">&nbsp;&nbsp;
-                            <a href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ currentPage == pageNum ? pageNum : currentPage + 1 }}/{{ display }}">
+                            <a onclick="col_js({{ collection.id }},{{ currentPage == pageNum ? pageNum : currentPage + 1 }},'{{ display }}','{{ leaflet.sites }}')">
                                 <i class="fa fa-angle-right" style="font-size:36px; position:relative; top:4px;"></i>
                             </a>
                         </li>
                     {% else %}
                         {% for page in 1..pageNum %}
                             <li class="page-item {{ page == currentPage ? 'active' }}">
-                                <a class="page-link {{ display == 'list' ? 'page-selector' }}" href="{{ baseUrl }}/collection/show/{{ collection.id }}/{{ page }}/{{ display }}">
+                                <a class="page-link {{ display == 'list' ? 'page-selector' }}"
+                                   onclick="col_js({{ collection.id }},{{ page }},'{{ display }}','{{ leaflet.sites }}')">
                                     {{ page }}
                                 </a>
                             </li>
@@ -178,6 +225,9 @@
 {% block header %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ baseUrl }}/templates/collection/css/smallPlayer.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+          integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+          crossorigin=""/>
 {% endblock %}
 
 
@@ -186,5 +236,89 @@
     <script>
         {% include 'collection/js/collection.js' %}
         {% include 'collection/js/smallPlayer.js' %}
+    </script>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+            integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+            crossorigin=""></script>
+    <script>
+        {% if leaflet.arr %}
+        var map = L.map('map', {scrollWheelZoom: false,}).setView([{{ leaflet.latitude_center }}, {{ leaflet.longitude_center }}], {{ leaflet.scale }});
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            minZoom: {{ leaflet.scale }},
+            maxZoom: 18,
+            attribution: '© OpenStreetMap',
+        }).addTo(map);
+        {% for a in leaflet.arr %}
+        var marker = L.marker([{{ a[2] }}, {{ a[3] }}], {id: '{{ a[0] }}'}).addTo(map);
+        marker.bindPopup('<input type="hidden" value="{{ a[0] }}site_id"><b>{{ a[1] }}</b><br>{{ a[4] }}'.replaceAll('!br!', '<br>'));
+        {% endfor %}
+        NorthEastLat = map.getBounds().getNorthEast().lat
+        NorthEastLng = map.getBounds().getNorthEast().lng
+        SouthWestLat = map.getBounds().getSouthWest().lat
+        SouthWestLng = map.getBounds().getSouthWest().lng
+        map.setMaxBounds([
+            [NorthEastLat > 0 ? Math.ceil(NorthEastLat) : Math.floor(NorthEastLat), NorthEastLng > 0 ? Math.ceil(NorthEastLng) : Math.floor(NorthEastLng)],
+            [SouthWestLat > 0 ? Math.ceil(SouthWestLat) : Math.floor(SouthWestLat), SouthWestLng > 0 ? Math.ceil(SouthWestLng) : Math.floor(SouthWestLng)],
+        ])
+        map.on('popupopen', function (e) {
+            site = e.popup._content.split('value="')[1].split('site_id">')[0]
+            col_js({{ collection.id }}, 1, $("#display_view").val(), site)
+        })
+        map.on('popupclose', function (e) {
+            site = e.popup._content.split('value="')[1].split('site_id">')[0]
+            col_js({{ collection.id }}, 1, $("#display_view").val(), '{{ leaflet.sites }}')
+        })
+        map.on('moveend', function () {
+            site = null
+            North = map.getBounds().getNorth()
+            South = map.getBounds().getSouth()
+            East = map.getBounds().getEast()
+            West = map.getBounds().getWest()
+            {% for a in leaflet.arr %}
+            if (North >={{ a[2] }}&& South <= {{ a[2] }} && East >= {{ a[3] }}&& West <= {{ a[3] }}) {
+                if (site) {
+                    site = site + ',' +{{ a[0] }}
+                } else {
+                    site ={{ a[0] }}
+                }
+            }
+            {% endfor %}
+            if (site != $("#sites")) {
+                col_js({{ collection.id }}, 1, $("#display_view").val(), site)
+            }
+        })
+        map.on('zoomend', function () {
+            site = null
+            North = map.getBounds().getNorth()
+            South = map.getBounds().getSouth()
+            East = map.getBounds().getEast()
+            West = map.getBounds().getWest()
+            {% for a in leaflet.arr %}
+            if (North >={{ a[2] }}&& South <= {{ a[2] }} && East >= {{ a[3] }}&& West <= {{ a[3] }}) {
+                if (site) {
+                    site = site + ',' +{{ a[0] }}
+                } else {
+                    site ={{ a[0] }}
+                }
+            }
+            {% endfor %}
+            if (site != $("#sites")) {
+                col_js({{ collection.id }}, 1, $("#display_view").val(), site)
+            }
+        })
+        {% endif %}
+        function col_js(id, page, view, site) {
+            url = "{{ baseUrl }}/collection/showjs/" + id + '/' + page + '/' + view + '/' + site
+            $.ajax({
+                url: url,
+                success: function (data) {
+                    if (data) {
+                        $("#map").nextAll().remove()
+                        $("#display_view").val(view)
+                        $("#map").after(data)
+                    }
+                },
+            })
+        }
     </script>
 {% endblock %}

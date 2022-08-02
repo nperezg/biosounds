@@ -168,7 +168,40 @@ class Collection extends BaseProvider
         $this->view = $view;
         return $this;
     }
+    /**
+     * @return string
+     */
+    public function getCreationDate(): string
+    {
+        return $this->creationDate;
+    }
 
+    /**
+     * @param string $creationDate
+     * @return Collection
+     */
+    public function setCreationDate(string $creationDate): Collection
+    {
+        $this->creationDate = $creationDate;
+        return $this;
+    }
+    /**
+     * @return bool
+     */
+    public function getPublic(): bool
+    {
+        return $this->public;
+    }
+
+    /**
+     * @param bool $public
+     * @return Collection
+     */
+    public function setPublic(bool $public): Collection
+    {
+        $this->public = $public;
+        return $this;
+    }
     /**
      * @param int $id
      * @return Collection

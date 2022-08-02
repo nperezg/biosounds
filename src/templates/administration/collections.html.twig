@@ -14,39 +14,45 @@
         <div class="card card-body scrollable">
             <table id="collTable" class="table-sm table-hover">
                 <thead class="table-borderless">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Author</th>
-                        <th scope="col">DOI</th>
-                        <th scope="col">Note</th>
-                        <th scope="col">View</th>
-                    </tr>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">DOI</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">CreationDate</th>
+                    <th scope="col">View</th>
+                    <th scope="col">Public</th>
+                </tr>
                 </thead>
                 <tbody class="form-control-sm js-coll-list">
-                    {% for collection in collections %}
-                        <tr>
-                            <td scope='row'>{{ collection.id }}
-                                <input type="hidden" name="collId" value="{{ collection.id }}">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control form-control-sm" name="name" value="{{ collection.name }}">
-                            </td>
-                            <td>{{ collection.author }}</td>
-                            <td>
-                                <input type="text" class="form-control form-control-sm" name="doi" value="{{ collection.doi }}">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control form-control-sm" name="note" value="{{ collection.note }}">
-                            </td>
-                            <td>
-                                <select id="view" name="view" class="form-control form-control-sm" required>
-                                    <option value="gallery" {{ collection.view == 'gallery' ? 'selected' }}>gallery</option>
-                                    <option value="list" {{ collection.view == 'list' ? 'selected' }}>list</option>
-                                </select>
-                            </td>
-                        </tr>
-                    {% endfor %}
+                {% for collection in collections %}
+                    <tr>
+                        <td scope='row'>{{ collection.id }}
+                            <input type="hidden" name="collId" value="{{ collection.id }}">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control form-control-sm" name="name" value="{{ collection.name }}">
+                        </td>
+                        <td>{{ collection.author }}</td>
+                        <td>
+                            <input type="text" class="form-control form-control-sm" name="doi" value="{{ collection.doi }}">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control form-control-sm" name="note" value="{{ collection.note }}">
+                        </td>
+                        <td>{{ collection.creationDate }}</td>
+                        <td>
+                            <select id="view" name="view" class="form-control form-control-sm" required>
+                                <option value="gallery" {{ collection.view == 'gallery' ? 'selected' }}>gallery</option>
+                                <option value="list" {{ collection.view == 'list' ? 'selected' }}>list</option>
+                            </select>
+                        </td>
+                        <td class="text-center">
+                            <input name="public" type="checkbox" {{ collection.public ? 'checked' }}>
+                        </td>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>

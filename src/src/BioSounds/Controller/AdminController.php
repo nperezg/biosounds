@@ -9,6 +9,7 @@ use BioSounds\Controller\Administration\CollectionController as CollectionContro
 use BioSounds\Controller\Administration\SettingController as SettingController;
 use BioSounds\Controller\Administration\RecordingController as RecordingController;
 use BioSounds\Controller\Administration\SiteController as SiteController;
+use BioSounds\Controller\Administration\TagController as TagController;
 
 class AdminController extends BaseController
 {
@@ -124,5 +125,43 @@ class AdminController extends BaseController
     public function siteManager(string $action, int $id = null)
     {
         return (new SiteController($this->twig))->$action($id);
+    }
+
+    /**
+     * @return false|string
+     * @throws \Exception
+     */
+    public function getExplore(int $id = 0)
+    {
+        return (new SiteController($this->twig))->getExplore($id);
+    }
+
+    /**
+     * @param string|null $action
+     * @return false|string
+     * @throws \Exception
+     */
+    public function tags(int $pageId = 1)
+    {
+        return (new TagController($this->twig))->show();
+    }
+
+    /**
+     * @param string $action
+     * @param int|null $id
+     * @return mixed
+     */
+    public function siteTag(string $action, int $id = null)
+    {
+        return (new TagController($this->twig))->$action($id);
+    }
+    /**
+     * @param string $action
+     * @param int|null $id
+     * @return mixed
+     */
+    public function tagMgr(string $action, int $id = null)
+    {
+        return (new TagController($this->twig))->$action($id);
     }
 }
