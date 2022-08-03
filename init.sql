@@ -7,11 +7,9 @@
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.3.29
 
-SET
-SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET
-time_zone = "+00:00";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -39,7 +37,10 @@ CREATE TABLE `collection`
     `user_id`       int(11) NOT NULL,
     `doi`           varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Citation in cientific format or full URL',
     `note`          text COLLATE utf8_unicode_ci         DEFAULT NULL,
-    `view`          enum('gallery','list') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'gallery'
+    `view`          enum('gallery','list') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'gallery',
+	`creation_date` timestamp                            NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp (),
+    `public`        tinyint(1)                           DEFAULT NULL
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --

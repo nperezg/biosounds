@@ -206,7 +206,7 @@ class Collection extends BaseProvider
      * @param int $id
      * @return Collection
      */
-    public function setProject(int $id): Collection
+    public function setProject(bool $id): Collection
     {
         $this->project = $id;
         return $this;
