@@ -22,10 +22,8 @@ time_zone = "+00:00";
 --
 -- Database: `biosounds`
 --
-CREATE
-DATABASE IF NOT EXISTS `biosounds` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-USE
-`biosounds`;
+CREATE DATABASE IF NOT EXISTS `biosounds` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE `biosounds`;
 
 -- --------------------------------------------------------
 
