@@ -3,7 +3,7 @@
     <div class='row'>
         {% for item in list %}
             <div class="col-lg-4 sound-list-item">
-                <a href="{{ baseUrl }}/recording/show/{{ item.recording.id }}/{{ page }}" title="BioSounds player">
+                <a href="{{ baseUrl }}/recording/show/{{ item.recording.id }}/{{ pageNum }}" title="BioSounds player">
                     <img src="{{ baseUrl }}/{{ item.smallImage }}">
                 </a>
                 <span>
