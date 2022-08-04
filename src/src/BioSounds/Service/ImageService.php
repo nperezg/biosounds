@@ -27,10 +27,13 @@ class ImageService
      * ImageService constructor.
      * @param int $fftSize
      */
-    public function __construct()
+    public function __construct(int $fftSize = 1024)
     {
         $this->spectrogramService = new SpectrogramService();
-        $this->fftSize = Utils::getSetting('fft');
+        if (Utils::getSetting('fft')) {
+            $fftSize = Utils::getSetting('fft');
+        }
+        $this->fftSize = $fftSize;
     }
 
     /**
@@ -107,9 +110,10 @@ class ImageService
     public function generateThumbnailImage(
         string $destinationFilePath,
         string $originalWavFilePath,
-        int $maxFrequency,
-        bool $stereo
-    ) {
+        int    $maxFrequency,
+        bool   $stereo
+    )
+    {
         if ($stereo) {
             //Left channel
             (new Process(ABSOLUTE_DIR . 'bin/svt.py -c 1 -s ' . TMP_DIR . '/sl.png -w 300 -h 75 -m '
@@ -150,10 +154,11 @@ class ImageService
     public function generatePlayerImage(
         string $destinationFilePath,
         string $wavFilePath,
-        int $maxFrequency,
-        int $channel = 0,
-        int $minFrequency = 1
-    ) {
+        int    $maxFrequency,
+        int    $channel = 0,
+        int    $minFrequency = 1
+    )
+    {
         $command = ABSOLUTE_DIR . 'bin/svt.py ';
         if ($channel > 0) {
             $command .= "-c $channel ";
@@ -188,7 +193,8 @@ class ImageService
         $channel,
         $duration,
         $destinationDirectory
-    ) {
+    )
+    {
         $spectrogramWidth = WINDOW_WIDTH - (SPECTROGRAM_LEFT + SPECTROGRAM_RIGHT);
         $viewPortHeight = round((SPECTROGRAM_HEIGHT / $spectrogramWidth) * $this::VIEWPORT_WIDTH);
         $nyQuist = round($samplingRate / 2);
@@ -199,19 +205,19 @@ class ImageService
         $selectionRectangleLeft = round(($timeMin / $duration) * $this::VIEWPORT_WIDTH);
         $selectionRectangleRight = round(($timeMax / $duration) * $this::VIEWPORT_WIDTH);
 
-       // $fileName = explode(".", substr($wavFilePath, strrpos($wavFilePath, "/") + 1, strlen($wavFilePath)));
+        // $fileName = explode(".", substr($wavFilePath, strrpos($wavFilePath, "/") + 1, strlen($wavFilePath)));
         $viewPortFilePath = $destinationDirectory . pathinfo($wavFilePath)['filename'] . "_" . $selectionRectangleLow;
         $viewPortFilePath .= '_' . $selectionRectangleHigh . "_" . $selectionRectangleLeft . "_";
         $viewPortFilePath .= $selectionRectangleRight . "_" . $channel . ".png";
 
         if (!file_exists($viewPortFilePath)) {
-            $command = 'bin/svt.py -s ' . $viewPortFilePath. ' -w ' . $this::VIEWPORT_WIDTH;
+            $command = 'bin/svt.py -s ' . $viewPortFilePath . ' -w ' . $this::VIEWPORT_WIDTH;
             $command .= ' -h ' . $viewPortHeight . ' -m ' . $nyQuist . ' -f ' . $this->fftSize;
             $command .= ' -c ' . $channel . ' ' . $wavFilePath;
             Utils::executeCommand($command);
 
             $command = 'convert -stroke red -fill none -draw "rectangle ' . $selectionRectangleLeft . ',';
-            $command .= $selectionRectangleHigh. ' ' . $selectionRectangleRight . ',' . $selectionRectangleLow . '" ';
+            $command .= $selectionRectangleHigh . ' ' . $selectionRectangleRight . ',' . $selectionRectangleLow . '" ';
             $command .= $viewPortFilePath . ' ' . $viewPortFilePath;
             Utils::executeCommand($command);
         }
