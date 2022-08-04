@@ -35,11 +35,12 @@ CREATE TABLE `collection`
     `project_id`    int(11) NOT NULL DEFAULT 101,
     `name`          varchar(100) COLLATE utf8_unicode_ci NOT NULL,
     `user_id`       int(11) NOT NULL,
-    `doi`           varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Citation in cientific format or full URL',
-    `note`          text COLLATE utf8_unicode_ci         DEFAULT NULL,
+    `doi`           varchar(255) COLLATE utf8_unicode_ci          DEFAULT NULL COMMENT 'Citation in cientific format or full URL',
+    `note`          text COLLATE utf8_unicode_ci                  DEFAULT NULL,
     `view`          enum('gallery','list') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'gallery',
-	`creation_date` timestamp                            NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp (),
-    `public`        tinyint(1)                           DEFAULT NULL
+    `public`        tinyint(1) NOT NULL,
+    `creation_date` timestamp                            NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp ()
+
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -47,8 +48,8 @@ CREATE TABLE `collection`
 -- Dumping data for table `collection`
 --
 
-INSERT INTO `collection` (`collection_id`, `project_id`, `name`, `user_id`, `doi`, `note`, `view`)
-VALUES (1, 101, 'Demo collection', 100, '', 'open access', 'gallery');
+INSERT INTO `collection` (`collection_id`, `project_id`, `name`, `user_id`, `doi`, `note`, `view`, `public`)
+VALUES (1, 101, 'Demo collection', 100, '', 'open access', 'gallery', '1');
 
 -- --------------------------------------------------------
 
