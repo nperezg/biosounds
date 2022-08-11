@@ -66,6 +66,15 @@ class SiteController extends BaseController
             }
 
             switch ($key) {
+                case 'realm_id':
+                    $data['realm_id'] = $sitePdoValue == '' ? 0 : $sitePdoValue;
+                    break;
+                case 'biome_id':
+                    $data['biome_id'] = $sitePdoValue == '' ? 0 : $sitePdoValue;
+                    break;
+                case 'functional_group_id':
+                    $data['functional_group_id'] = $sitePdoValue == '' ? 0 : $sitePdoValue;
+                    break;
                 case 'longitude':
                     $data['longitude_WGS84_dd_dddd'] = filter_var($sitePdoValue, FILTER_SANITIZE_STRING);
                     break;

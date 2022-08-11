@@ -4,6 +4,7 @@ namespace BioSounds\Provider;
 
 use BioSounds\Entity\Collection;
 use BioSounds\Exception\Database\NotFoundException;
+use BioSounds\Utils\Auth;
 
 class CollectionProvider extends BaseProvider
 {
@@ -16,6 +17,38 @@ class CollectionProvider extends BaseProvider
         $this->database->prepareQuery(
             "SELECT * FROM collection ORDER BY collection_id LIMIT :limit OFFSET :offset"
         );
+
+        $result = $this->database->executeSelect([
+            ':limit' => $limit,
+            ':offset' => $offSet,
+        ]);
+
+        $data = [];
+        foreach ($result as $item) {
+            $data[] = (new Collection())
+                ->setId($item['collection_id'])
+                ->setName($item['name'])
+                ->setUserId($item['user_id'])
+                ->setDoi($item['doi'])
+                ->setNote($item['note'])
+                ->setProject($item['project_id'])
+                ->setCreationDate($item['creation_date'])
+                ->setPublic($item['public'])
+                ->setView($item['view']);
+        }
+        return $data;
+    }
+
+    public function getCollectionPagesByPermission(int $limit, int $offSet): array
+    {
+        $sql = "SELECT c.* FROM collection c ";
+        if (!Auth::isUserLogged()) {
+            $sql = $sql . 'WHERE c.public = 1 ';
+        } elseif (!Auth::isUserAdmin()) {
+            $sql = $sql . 'WHERE c.public = 1 OR c.collection_id IN (SELECT up.collection_id FROM user_permission up, permission p WHERE up.permission_id = p.permission_id AND (p.name = "Access" OR p.name = "View" OR p.name = "Review") AND up.user_id = ' . Auth::getUserID() . ') ';
+        }
+        $sql = $sql . 'ORDER BY c.collection_id LIMIT :limit OFFSET :offset';
+        $this->database->prepareQuery($sql);
 
         $result = $this->database->executeSelect([
             ':limit' => $limit,
@@ -58,6 +91,8 @@ class CollectionProvider extends BaseProvider
                 ->setDoi($item['doi'])
                 ->setNote($item['note'])
                 ->setProject($item['project_id'])
+                ->setCreationDate($item['creation_date'])
+                ->setPublic($item['public'])
                 ->setView($item['view']);
         }
 
@@ -69,6 +104,22 @@ class CollectionProvider extends BaseProvider
         $this->database->prepareQuery(
             "SELECT count(collection_id) AS num FROM collection"
         );
+
+        if (empty($result = $this->database->executeSelect())) {
+            return 0;
+        }
+        return $result[0]['num'];
+    }
+
+    public function countCollectionsByPermission(): int
+    {
+        $sql = "SELECT count(c.collection_id) AS num FROM collection c ";
+        if (!Auth::isUserLogged()) {
+            $sql = $sql . 'WHERE c.public = 1 ';
+        } elseif (!Auth::isUserAdmin()) {
+            $sql = $sql . 'WHERE c.public = 1 OR c.collection_id IN (SELECT up.collection_id FROM user_permission up, permission p WHERE up.permission_id = p.permission_id AND (p.name = "Access" OR p.name = "View" OR p.name = "Review") AND up.user_id = ' . Auth::getUserID() . ') ';
+        }
+        $this->database->prepareQuery($sql);
 
         if (empty($result = $this->database->executeSelect())) {
             return 0;
@@ -97,6 +148,9 @@ class CollectionProvider extends BaseProvider
             ->setUserId($result['user_id'])
             ->setDoi($result['doi'])
             ->setNote($result['note'])
+            ->setProject($result['project_id'])
+            ->setCreationDate($result['creation_date'])
+            ->setPublic($result['public'])
             ->setView($result['view']);
     }
 
@@ -120,7 +174,10 @@ class CollectionProvider extends BaseProvider
                 ->setUserId($item['user_id'])
                 ->setDoi($item['doi'])
                 ->setNote($item['note'])
-                ->setProject($item['project_id']);
+                ->setProject($item['project_id'])
+                ->setCreationDate($item['creation_date'])
+                ->setPublic($item['public'])
+                ->setView($item['view']);
         }
 
         return $data;
