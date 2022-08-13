@@ -58,7 +58,7 @@ class CollectionController extends BaseController
      * @return string
      * @throws \Exception
      */
-    public function show(int $id, int $page = 1, string $view = null)
+    public function show(int $id, int $page = 1, string $view = null, string $sites = null)
     {
         $this->colId = $id;
 
@@ -107,15 +107,16 @@ class CollectionController extends BaseController
             (Auth::getUserID() == null) ? 0 : Auth::getUserID(),
             self::ITEMS_PAGE,
             self::ITEMS_PAGE * ($this->page - 1),
-            $this->filter
+            $this->filter,
+            $sites
         );
         $allRecordings = (new RecordingService())->getAllListWithImages(
             $this->colId,
             (Auth::getUserID() == null) ? 0 : Auth::getUserID(),
-            $this->filter
+            $this->filter,
+            $sites
         );
         $this->leaflet = $this->getLeaflet($allRecordings);
-
         if (isset($_POST['site-name'])) {
             $this->filter['siteName'] = filter_var($_POST['site-name'], FILTER_SANITIZE_STRING);
         }
@@ -124,7 +125,7 @@ class CollectionController extends BaseController
             $this->filter['speciesName'] = filter_var($_POST['species-name'], FILTER_SANITIZE_STRING);
         }
 
-        if ($isAccessed||$this->collection->getPublic()) {
+        if ($isAccessed || $this->collection->getPublic()) {
             return $this->twig->render('collection/collection.html.twig', [
                 'collection' => $this->collection,
                 'pageNum' => $this->pageNum,
@@ -317,7 +318,7 @@ class CollectionController extends BaseController
             $this->filter['speciesName'] = filter_var($_POST['species-name'], FILTER_SANITIZE_STRING);
         }
 
-        if ($isAccessed) {
+        if ($isAccessed|| $this->collection->getPublic()) {
             return $this->twig->render('collection/collectionjs.html.twig', [
                 'collection' => $this->collection,
                 'pageNum' => $this->pageNum,
@@ -330,7 +331,9 @@ class CollectionController extends BaseController
                 'leaflet' => $this->leaflet
             ]);
         } else {
-            return "No results";
+            return '<input id="display_view" value="' . $display . '" type="hidden">
+                    <input id="sites" value="'.$this->leaflet['sites'] .'" type="hidden">
+                    <div>No results</div>';
         }
     }
 }
