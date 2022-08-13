@@ -283,7 +283,7 @@
                 }
             }
             {% endfor %}
-            if (site != $("#sites")) {
+            if (site != $("#sites" )) {
                 col_js({{ collection.id }}, 1, $("#display_view").val(), site)
             }
         })
@@ -308,17 +308,19 @@
         })
         {% endif %}
         function col_js(id, page, view, site) {
-            url = "{{ baseUrl }}/collection/showjs/" + id + '/' + page + '/' + view + '/' + site
-            $.ajax({
-                url: url,
-                success: function (data) {
-                    if (data) {
-                        $("#map").nextAll().remove()
-                        $("#display_view").val(view)
-                        $("#map").after(data)
-                    }
-                },
-            })
+            if(site!=''){
+                url = "{{ baseUrl }}/collection/showjs/" + id + '/' + page + '/' + view + '/' + site
+                $.ajax({
+                    url: url,
+                    success: function (data) {
+                        if (data) {
+                            $("#map").nextAll().remove()
+                            $("#display_view").val(view)
+                            $("#map").after(data)
+                        }
+                    },
+                })
+            }
         }
     </script>
 {% endblock %}
