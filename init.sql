@@ -38,7 +38,7 @@ CREATE TABLE `collection`
     `doi`           varchar(255) COLLATE utf8_unicode_ci          DEFAULT NULL COMMENT 'Citation in cientific format or full URL',
     `note`          text COLLATE utf8_unicode_ci                  DEFAULT NULL,
     `view`          enum('gallery','list') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'gallery',
-    `public`        tinyint(1) NOT NULL,
+    `public`        tinyint(1) NOT NULL DEFAULT 0,
     `creation_date` timestamp                            NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp ()
 
 
@@ -204,7 +204,6 @@ CREATE TABLE `recording`
     `channel_num`   int(1) NOT NULL DEFAULT 1,
     `duration`      float                                NOT NULL,
     `note`          varchar(250) COLLATE utf8_unicode_ci          DEFAULT NULL,
-    `public`        tinyint(1) NOT NULL,
     `creation_date` timestamp                            NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

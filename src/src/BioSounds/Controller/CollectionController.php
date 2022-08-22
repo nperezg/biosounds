@@ -62,11 +62,6 @@ class CollectionController extends BaseController
     {
         $this->colId = $id;
 
-        //TODO: Set open collections in administration (not hard-coded)
-        if ($id == 1 || $id == 3 || $id == 18 || $id == 31 || $id == 19 || $id == 39) {
-            $this->openCollection = true;
-        }
-
         $isAccessed = $this->checkPermissions();
 
         $isAccessed &= $this->isAccessible();
@@ -124,7 +119,7 @@ class CollectionController extends BaseController
             $this->filter['speciesName'] = filter_var($_POST['species-name'], FILTER_SANITIZE_STRING);
         }
 
-        if ($isAccessed) {
+        if ($isAccessed || $this->collection->getPublic()) {
             return $this->twig->render('collection/collection.html.twig', [
                 'collection' => $this->collection,
                 'pageNum' => $this->pageNum,
@@ -227,19 +222,15 @@ class CollectionController extends BaseController
             if ($j == 1) {
                 $arr['longitude_center'] = $arr['longitude_center'] + 180;
                 foreach ($array as $key => $value) {
-                    if (abs($value[2] - $arr['longitude_center']) > 180) {
-                        $array[$key][2] = $array[$key][2] + 360;
+                    if (abs($value[3] - $arr['longitude_center']) > 180) {
+                        $array[$key][3] = $array[$key][3] + 360;
                     }
                 }
             }
             $arr['latitude_center'] = (max($latitude) + min($latitude)) / 2;
-            if (max($latitude) - min($latitude) == 0) {
-                $arr['scale'] = 3;
-            } else {
-                $arr['scale'] = explode('.', (1620 / (360 - $minus) < 270 / (max($latitude) - min($latitude))) ? (1620 / (360 - $minus)) : (270 / (max($latitude) - min($latitude))))[0];
-            }
             $arr['arr'] = $array;
             $arr['sites'] = $sites;
+            $arr['count'] = count($array);
         }
         return $arr;
     }
@@ -317,7 +308,7 @@ class CollectionController extends BaseController
             $this->filter['speciesName'] = filter_var($_POST['species-name'], FILTER_SANITIZE_STRING);
         }
 
-        if ($isAccessed) {
+        if ($isAccessed || $this->collection->getPublic()) {
             return $this->twig->render('collection/collectionjs.html.twig', [
                 'collection' => $this->collection,
                 'pageNum' => $this->pageNum,
