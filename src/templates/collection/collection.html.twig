@@ -259,23 +259,7 @@
         {% endfor %}
         var group = L.featureGroup(markerArray);
         map.fitBounds(group.getBounds());
-        {% if leaflet.count ==1 %}
-        NorthEastLat = {{ leaflet.latitude_center }}+1
-        NorthEastLng = {{ leaflet.longitude_center }}+1
-        SouthWestLat = {{ leaflet.latitude_center }}-1
-        SouthWestLng = {{ leaflet.longitude_center }}-1
-        map.setView([{{ leaflet.latitude_center }}, {{ leaflet.longitude_center }}], 10);
-        {% else %}
-        NorthEastLat = group.getBounds().getNorthEast().lat
-        NorthEastLng = group.getBounds().getNorthEast().lng
-        SouthWestLat = group.getBounds().getSouthWest().lat
-        SouthWestLng = group.getBounds().getSouthWest().lng
-        {% endif %}
 
-        map.setMaxBounds([
-            [NorthEastLat * 1.1 - {{ leaflet.latitude_center }} * 0.1, NorthEastLng * 1.1 - {{ leaflet.longitude_center }} * 0.1],
-            [SouthWestLat * 1.1 - {{ leaflet.latitude_center }} * 0.1, SouthWestLng * 1.1 - {{ leaflet.longitude_center }} * 0.1],
-        ])
         map.on('popupopen', function (e) {
             site = e.popup._content.split('value="')[1].split('site_id">')[0]
             col_js({{ collection.id }}, 1, $("#display_view").val(), site)
