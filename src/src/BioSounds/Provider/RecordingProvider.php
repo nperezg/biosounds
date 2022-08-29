@@ -179,7 +179,7 @@ class RecordingProvider extends BaseProvider
                   AND up.user_id = :userId ) as coll on recording.col_id = coll.collection_id ';
 
         //default view for site and license
-        $query .= 'LEFT JOIN site ON ( recording.site_id, recording.user_id ) = ( site.site_id, site.user_id ) ';
+        $query .= 'LEFT JOIN site ON ( recording.site_id) = ( site.site_id) ';
         $query .= 'LEFT JOIN license ON recording.license_id = license.license_id ';
         $query .= 'LEFT JOIN 
                 ( SELECT label.label_id, label.name, label_association.recording_id FROM label LEFT JOIN label_association 
@@ -264,7 +264,7 @@ class RecordingProvider extends BaseProvider
                   AND up.user_id = :userId ) as coll on recording.col_id = coll.collection_id ';
 
         //default view for site and license
-        $query .= 'LEFT JOIN site ON ( recording.site_id, recording.user_id ) = ( site.site_id, site.user_id ) ';
+        $query .= 'LEFT JOIN site ON ( recording.site_id ) = ( site.site_id) ';
         $query .= 'LEFT JOIN license ON recording.license_id = license.license_id ';
         $query .= 'LEFT JOIN 
                 ( SELECT label.label_id, label.name, label_association.recording_id FROM label LEFT JOIN label_association 
@@ -278,9 +278,9 @@ class RecordingProvider extends BaseProvider
             $query .= 'LEFT JOIN sound ON recording.sound_id = sound.sound_id ';
         }
 
-        $query .= "WHERE col_id = :colId ";
+        $query .= "WHERE col_id = :colId AND recording.site_id IS NOT NULL ";
         if ($sites) {
-            $query .= " AND site.site_id in ($sites) ";
+            $query .= "AND site.site_id in ($sites) ";
         }
         if (!empty($filter)) {
             foreach ($filter as $key => $value) {
@@ -296,7 +296,7 @@ class RecordingProvider extends BaseProvider
             $values[':offset'] = 0;
         }
 
-        $query .= ' ORDER BY recording_id';
+        $query .= ' ORDER BY recording_id';;
         $this->database->prepareQuery($query);
         $result = $this->database->executeSelect($values);
 

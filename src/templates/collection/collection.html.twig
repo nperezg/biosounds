@@ -243,39 +243,38 @@
     <script>
         {% if leaflet.arr %}
         var markerArray = []
-        var map = L.map('map', {
-            zoomSnap: 0.25,
-            zoomDelta: 0.25
-        }).setView([{{ leaflet.latitude_center }}, {{ leaflet.longitude_center }}],  {{ leaflet.count==1?10:5 }});
+        var map = L.map('map').setView([{{ leaflet.latitude_center }}, {{ leaflet.longitude_center }}],  {{ leaflet.count==1?10:5 }});
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             minZoom: 1,
             maxZoom: 18,
-            attribution: '© OpenStreetMap',
         }).addTo(map);
         {% for a in leaflet.arr %}
-        var marker = L.marker([{{ a[2] }}, {{ a[3] }}], {id: '{{ a[0] }}'}).addTo(map);
+        var marker = L.marker([{{ a[2] }}, {{ a[3] }}], {id: '{{ a[0] }}'});
+        marker.bindPopup('<input type="hidden" value="{{ a[0] }}site_id"><b>{{ a[1] }}</b><br>{{ a[4] }}'.replaceAll('!br!', '<br>'), {
+            closeOnClick: false,
+            maxHeight: 140,
+            maxWidth:99999
+        });
         markerArray.push(marker)
-        marker.bindPopup('<input type="hidden" value="{{ a[0] }}site_id"><b>{{ a[1] }}</b><br>{{ a[4] }}'.replaceAll('!br!', '<br>'));
         {% endfor %}
         var group = L.featureGroup(markerArray);
+        group.addTo(map)
         map.fitBounds(group.getBounds());
-
         map.on('popupopen', function (e) {
             site = e.popup._content.split('value="')[1].split('site_id">')[0]
             col_js({{ collection.id }}, 1, $("#display_view").val(), site)
         })
-        map.on('popupclose', function (e) {
-            site = e.popup._content.split('value="')[1].split('site_id">')[0]
-            col_js({{ collection.id }}, 1, $("#display_view").val(), '{{ leaflet.sites }}')
-        })
-        map.on('moveend', function () {
+        map.on('moveend zoomend', function () {
+            if ($(".leaflet-popup-close-button").length > 0) {
+                $(".leaflet-popup-close-button")[0].click()
+            }
             site = null
             North = map.getBounds().getNorth()
             South = map.getBounds().getSouth()
             East = map.getBounds().getEast()
             West = map.getBounds().getWest()
             {% for a in leaflet.arr %}
-            if (North >={{ a[2] }}&& South <= {{ a[2] }} && East >= {{ a[3] }}&& West <= {{ a[3] }}) {
+            if (North >={{ a[2] }} && South <= {{ a[2] }} && East >= {{ a[3] }} && West <= {{ a[3] }}) {
                 if (site) {
                     site = site + ',' +{{ a[0] }}
                 } else {
@@ -287,14 +286,14 @@
                 col_js({{ collection.id }}, 1, $("#display_view").val(), site)
             }
         })
-        map.on('zoomend', function () {
+        $(".leaflet-popup-close-button").click(function () {
             site = null
             North = map.getBounds().getNorth()
             South = map.getBounds().getSouth()
             East = map.getBounds().getEast()
             West = map.getBounds().getWest()
             {% for a in leaflet.arr %}
-            if (North >={{ a[2] }}&& South <= {{ a[2] }} && East >= {{ a[3] }}&& West <= {{ a[3] }}) {
+            if (North >={{ a[2] }} && South <= {{ a[2] }} && East >= {{ a[3] }} && West <= {{ a[3] }}) {
                 if (site) {
                     site = site + ',' +{{ a[0] }}
                 } else {
@@ -307,6 +306,7 @@
             }
         })
         {% endif %}
+
         function col_js(id, page, view, site) {
             if (site != '') {
                 url = "{{ baseUrl }}/collection/showjs/" + id + '/' + page + '/' + view + '/' + site
@@ -322,8 +322,5 @@
                 })
             }
         }
-        map.on('drag', function() {
-            map.panInsideBounds(bounds, { animate: false });
-        });
     </script>
 {% endblock %}
