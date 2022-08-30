@@ -38,11 +38,11 @@ class CollectionController extends BaseController
     {
         $collProvider = new CollectionProvider();
 
-        $collNum = $collProvider->countCollections();
+        $collNum = $collProvider->countCollectionsByPermission();
         $pages = $collNum > 0 ? ceil($collNum / self::ITEMS_PAGE) : 1;
 
         return $this->twig->render('collection/collections.html.twig', [
-            'collections' => $collProvider->getCollectionPages(
+            'collections' => $collProvider->getCollectionPagesByPermission(
                 $this::ITEMS_PAGE,
                 $this::ITEMS_PAGE * ($page - 1)
             ),

@@ -71,10 +71,6 @@ class RecordingController extends BaseController
 
         $collectionId = $recordingData[Recording::COL_ID];
 
-        if (!Auth::isUserLogged()) {
-            throw new NotAuthenticatedException();
-        }
-
         //TODO: Remove when recording is an Entity. Add to it.
         $recordingData['collection'] = (new CollectionProvider())->get($recordingData[Recording::COL_ID]);
 
@@ -100,8 +96,8 @@ class RecordingController extends BaseController
             'frequency_data' => $this->recordingPresenter->getFrequencyScaleData(),
             'collection_page' => $this->collectionPage,
             'title' => sprintf(self::PAGE_TITLE, $recordingData[Recording::NAME]),
-            'labels' => (new LabelProvider())->getBasicList(Auth::getUserLoggedID()),
-            'myLabel' => (new LabelAssociationProvider())->getUserLabel($id, Auth::getUserLoggedID()),
+            'labels' => Auth::isUserLogged() ? (new LabelProvider())->getBasicList(Auth::getUserLoggedID()) : '',
+            'myLabel' => Auth::isUserLogged() ? (new LabelAssociationProvider())->getUserLabel($id, Auth::getUserLoggedID()) : '',
         ]);
     }
 
@@ -214,7 +210,7 @@ class RecordingController extends BaseController
 
         $spectrogramImagePath = 'tmp/' . $randomID . '/' . $selectedFileName . '.png';
         //$soundFileView =  'tmp/' . $randomID .'/'. $selectedFileName . '.mp3';
-        $zoomedFilePlayer =  'tmp/' . $randomID . '/' . $selectedFileName . '.ogg';
+        $zoomedFilePlayer = 'tmp/' . $randomID . '/' . $selectedFileName . '.ogg';
         $zoomedFilePath = 'tmp/' . $randomID . '/' . $selectedFileName . '.' . $fileName[1];
 
         /* If spectrogram doesn't exist, generate */
@@ -305,7 +301,7 @@ class RecordingController extends BaseController
         $freqMaxHeight = SPECTROGRAM_HEIGHT * ((($maxFrequency - $freqMid2) / $range) / 2);
         $freqMid2Height = $freqMaxHeight / 2 + SPECTROGRAM_HEIGHT * ((($freqMid2 - $freqMid1) / $range) / 2);
         $freqMid1Height = $freqMid2Height / 2 + SPECTROGRAM_HEIGHT * ((($freqMid1 - $minFrequency) / $range) / 2);
-        $freqMinHeight =  $freqMid1Height / 2 + SPECTROGRAM_HEIGHT * ((($freqMid1 - $minFrequency) / $range) / 2);
+        $freqMinHeight = $freqMid1Height / 2 + SPECTROGRAM_HEIGHT * ((($freqMid1 - $minFrequency) / $range) / 2);
 
         $this->recordingPresenter->setFrequencyScaleData(
             (new FrequencyScalePresenter())
@@ -356,7 +352,8 @@ class RecordingController extends BaseController
         float $viewFreqMin,
         float $viewFreqMax,
         float $specWidth
-    ) {
+    )
+    {
         $tagProvider = new TagProvider();
         $viewPermission = false;
         $reviewPermission = false;

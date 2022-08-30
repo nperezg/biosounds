@@ -43,6 +43,7 @@
         <div class="row mb-5">
             <div class="col-auto ml-auto mr-5 text-center recording-navigation">
                 <ul class="nav flex-column nav-pills nav-fill">
+                    {% if isUserLogged %}
                     <li class="nav-item">
                         <a class="nav-link js-new-tag" href="{{ baseUrl }}/api/tag/create" title="New tag">
                             <i class="fas fa-tag"></i>
@@ -57,6 +58,7 @@
                             {% endif %}
                         </a>
                     </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link readingMode" href="{{ baseUrl }}/recording/show/{{ player.recording.recording_id }}" title="Reading mode">
                             <i class="fas fa-compact-disc"></i>
