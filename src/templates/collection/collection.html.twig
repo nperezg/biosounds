@@ -13,9 +13,7 @@
                 <button id="btn_map" class="btn btn-outline-primary btn-sm view mb-3">Hide Map</button>
             {% endif %}
         </nav>
-        {% if leaflet.arr %}
-            <div id="map" style="height: 750px;margin-bottom: 30px;"></div>
-        {% endif %}
+        <div id="map" {% if leaflet.arr %} style="height: 750px;margin-bottom: 30px;" {% endif %}></div>
         <div class="row">
             <div class="col-md-7">
                 <h2>{{ collection.name }}
@@ -253,7 +251,7 @@
         marker.bindPopup('<input type="hidden" value="{{ a[0] }}site_id"><b>{{ a[1] }}</b><br>{{ a[4] }}'.replaceAll('!br!', '<br>'), {
             closeOnClick: false,
             maxHeight: 140,
-            maxWidth:99999
+            maxWidth: 99999
         });
         markerArray.push(marker)
         {% endfor %}
@@ -308,19 +306,20 @@
         {% endif %}
 
         function col_js(id, page, view, site) {
+            url = "{{ baseUrl }}/collection/showjs/" + id + '/' + page + '/' + view
             if (site != '') {
-                url = "{{ baseUrl }}/collection/showjs/" + id + '/' + page + '/' + view + '/' + site
-                $.ajax({
-                    url: url,
-                    success: function (data) {
-                        if (data) {
-                            $("#map").nextAll().remove()
-                            $("#display_view").val(view)
-                            $("#map").after(data)
-                        }
-                    },
-                })
+                url = url + '/' + site
             }
+            $.ajax({
+                url: url,
+                success: function (data) {
+                    if (data) {
+                        $("#map").nextAll().remove()
+                        $("#display_view").val(view)
+                        $("#map").after(data)
+                    }
+                },
+            })
         }
     </script>
 {% endblock %}
