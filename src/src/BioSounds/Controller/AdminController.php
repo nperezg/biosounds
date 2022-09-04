@@ -2,6 +2,7 @@
 
 namespace BioSounds\Controller;
 
+use BioSounds\Controller\Administration\IndexLogController;
 use BioSounds\Controller\Administration\UserController;
 use BioSounds\Exception\ForbiddenException;
 use BioSounds\Utils\Auth;
@@ -143,18 +144,9 @@ class AdminController extends BaseController
      */
     public function tags(int $pageId = 1)
     {
-        return (new TagController($this->twig))->show();
+        return (new TagController($this->twig))->show($pageId);
     }
 
-    /**
-     * @param string $action
-     * @param int|null $id
-     * @return mixed
-     */
-    public function siteTag(string $action, int $id = null)
-    {
-        return (new TagController($this->twig))->$action($id);
-    }
     /**
      * @param string $action
      * @param int|null $id
@@ -163,5 +155,25 @@ class AdminController extends BaseController
     public function tagMgr(string $action, int $id = null)
     {
         return (new TagController($this->twig))->$action($id);
+    }
+
+    /**
+     * @param string|null $action
+     * @return false|string
+     * @throws \Exception
+     */
+    public function indexLogs(int $pageId = 1)
+    {
+        return (new IndexLogController($this->twig))->show($pageId);
+    }
+
+    /**
+     * @param string $action
+     * @param int|null $id
+     * @return mixed
+     */
+    public function indexLogMgr(string $action, int $id = null)
+    {
+        return (new IndexLogController($this->twig))->$action($id);
     }
 }

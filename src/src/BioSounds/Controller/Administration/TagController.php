@@ -3,6 +3,7 @@
 namespace BioSounds\Controller\Administration;
 
 use BioSounds\Controller\BaseController;
+use BioSounds\Exception\ForbiddenException;
 use BioSounds\Provider\TagProvider;
 use BioSounds\Utils\Auth;
 
