@@ -1,55 +1,32 @@
 {% extends 'administration/admin.html.twig' %}
 
 {% block admin_content %}
-
-    <div class="card mb-3" id="tagsList">
+    <div class="card mb-3" id="indexLogsList">
         <div class="card-body scrollable">
-            <table id="userTable" class="table table-sm table-hover">
+            <table id="indexLogsTable" class="table table-sm table-hover">
                 <thead class="table-borderless">
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Species</th>
                     <th scope="col">Recording</th>
                     <th scope="col">Creation User</th>
-                    <th scope="col">Time Start</th>
-                    <th scope="col">Time End</th>
-                    <th scope="col">Min Frequency</th>
-                    <th scope="col">Max Frequency</th>
-                    <th scope="col">Uncertain</th>
-                    <th scope="col">Call Distance</th>
-                    <th scope="col">Distance Not Estimable</th>
-                    <th scope="col">Number of Individuals</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Reference Call</th>
-                    <th scope="col">Comments</th>
-                    <th scope="col">Creation Date(UTC)</th>
+                    <th scope="col">Index</th>
+                    <th scope="col">Coordinates</th>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Result</th>
+                    <th scope="col">Creation Date (UTC)</th>
                 </tr>
                 </thead>
                 <tbody class="form-control-sm js-user-list">
-                {% for tag in tags %}
+                {% for indexLog in indexLogs %}
                     <tr>
-                        <td scope='row'>{{ tag.Id }}</td>
-                        <td>{{ tag.speciesName }}</td>
-                        <td>{{ tag.recordingName }}</td>
-                        <td>{{ tag.userName }}</td>
-                        <td>{{ tag.minTime }}</td>
-                        <td>{{ tag.maxTime }}</td>
-                        <td>{{ tag.minFrequency }}</td>
-                        <td>{{ tag.maxFrequency }}</td>
-                        <td class="text-center">
-                            <input name="uncertain" type="checkbox" {{ tag.uncertain ? 'checked' }} disabled>
-                        </td>
-                        <td>{{ tag.callDistance }}</td>
-                        <td class="text-center">
-                            <input name="distanceNotEstimable" type="checkbox" {{ tag.distanceNotEstimable ? 'checked' }} disabled>
-                        </td>
-                        <td>{{ tag.numberIndividuals }}</td>
-                        <td>{{ tag.type }}</td>
-                        <td class="text-center">
-                            <input name="referenceCall" type="checkbox" {{ tag.referenceCall ? 'checked' }} disabled>
-                        </td>
-                        <td>{{ tag.comments }}</td>
-                        <td>{{ tag.creationDate }}</td>
+                        <td scope='row'>{{ indexLog.logId }}</td>
+                        <td>{{ indexLog.recordingName }}</td>
+                        <td>{{ indexLog.userName }}</td>
+                        <td>{{ indexLog.indexName }}</td>
+                        <td>{{ indexLog.coordinates }}</td>
+                        <td>{{ indexLog.param|replace({'?':': ','@':'; '}) }}</td>
+                        <td>{% for v in indexLog.value|split('!') %}{{ v|split('?')[0] }}: {{ v|split('?')[1]|number_format(2,'.',',') }}; {% endfor %}</td>
+                        <td>{{ indexLog.date }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -61,19 +38,19 @@
                     <ul class="pagination justify-content-center mt-3">
                         {% if pages > 10 %}
                             <li class="page-item">
-                                <a href="{{ baseUrl }}/admin/tags/{{ currentPage == 1 ? 1 : currentPage - 1 }}">
+                                <a href="{{ baseUrl }}/admin/indexLogs/{{ currentPage == 1 ? 1 : currentPage - 1 }}">
                                     <i class="fa fa-angle-left" style="font-size:36px; position:relative; top:4px;"></i>
                                 </a>&nbsp;&nbsp;
                             </li>
                             <li class="page-item {{ currentPage == 1 ? 'active' }}">
-                                <a class="page-link" href="{{ baseUrl }}/admin/tags/1">1</a>
+                                <a class="page-link" href="{{ baseUrl }}/admin/indexLogs/1">1</a>
                             </li>
                             {% if currentPage <= 3 %}
                                 <li class="page-item  {{ currentPage == 2 ? 'active' }}">
-                                    <a class="page-link" href="{{ baseUrl }}/admin/tags/2">2</a>
+                                    <a class="page-link" href="{{ baseUrl }}/admin/indexLogs/2">2</a>
                                 </li>
                                 <li class="page-item {{ currentPage == 3 ? 'active' }}">
-                                    <a class="page-link" href="{{ baseUrl }}/admin/tags/3">3</a>
+                                    <a class="page-link" href="{{ baseUrl }}/admin/indexLogs/3">3</a>
                                 </li>
                                 <li class="disabled">
                                     <span style="font-size:28px;position:relative;">&nbsp;.</span>
@@ -90,41 +67,41 @@
                                 </li>
                                 {% if currentPage == 4 %}
                                     <li class="page-item  active">
-                                        <a class="page-link" href="{{ baseUrl }}/admin/tags/4">4</a>
+                                        <a class="page-link" href="{{ baseUrl }}/admin/indexLogs/4">4</a>
                                     </li>
                                     <li class="page-item">
                                         <a class="page-link"
-                                           href="{{ baseUrl }}/admin/tags/{{ currentPage + 1 }}">{{ currentPage + 1 }}</a>
+                                           href="{{ baseUrl }}/admin/indexLogs/{{ currentPage + 1 }}">{{ currentPage + 1 }}</a>
                                     </li>
                                     <li class="page-item">
                                         <a class="page-link"
-                                           href="{{ baseUrl }}/admin/tags/{{ currentPage + 2 }}">{{ currentPage + 2 }}</a>
+                                           href="{{ baseUrl }}/admin/indexLogs/{{ currentPage + 2 }}">{{ currentPage + 2 }}</a>
                                     </li>
                                 {% elseif currentPage == pages - 3 %}
                                     <li class="page-item">
                                         <a class="page-link"
-                                           href="{{ baseUrl }}/admin/tags/{{ currentPage - 2 }}">{{ currentPage - 2 }}</a>
+                                           href="{{ baseUrl }}/admin/indexLogs/{{ currentPage - 2 }}">{{ currentPage - 2 }}</a>
                                     </li>
                                     <li class="page-item">
                                         <a class="page-link"
-                                           href="{{ baseUrl }}/admin/tags/{{ currentPage - 1 }}">{{ currentPage - 1 }}</a>
+                                           href="{{ baseUrl }}/admin/indexLogs/{{ currentPage - 1 }}">{{ currentPage - 1 }}</a>
                                     </li>
                                     <li class="page-item active">
                                         <a class="page-link"
-                                           href="{{ baseUrl }}/admin/tags/{{ currentPage }}">{{ currentPage }}</a>
+                                           href="{{ baseUrl }}/admin/indexLogs/{{ currentPage }}">{{ currentPage }}</a>
                                     </li>
                                 {% else %}
                                     <li class="page-item">
                                         <a class="page-link"
-                                           href="{{ baseUrl }}/admin/tags/{{ currentPage -1 }}">{{ currentPage - 1 }}</a>
+                                           href="{{ baseUrl }}/admin/indexLogs/{{ currentPage -1 }}">{{ currentPage - 1 }}</a>
                                     </li>
                                     <li class="page-item active">
                                         <a class="page-link"
-                                           href="{{ baseUrl }}/admin/tags/{{ currentPage }}">{{ currentPage }}</a>
+                                           href="{{ baseUrl }}/admin/indexLogs/{{ currentPage }}">{{ currentPage }}</a>
                                     </li>
                                     <li class="page-item">
                                         <a class="page-link"
-                                           href="{{ baseUrl }}/admin/tags/{{ currentPage + 1 }}">{{ currentPage + 1 }}</a>
+                                           href="{{ baseUrl }}/admin/indexLogs/{{ currentPage + 1 }}">{{ currentPage + 1 }}</a>
                                     </li>
                                 {% endif %}
                                 <li class="disabled">
@@ -142,18 +119,18 @@
                                 </li>
                                 <li class="page-item  {{ currentPage == pages - 2 ? 'active' }}">
                                     <a class="page-link"
-                                       href="{{ baseUrl }}/admin/tags/{{ pages - 2 }}">{{ pages - 2 }}</a>
+                                       href="{{ baseUrl }}/admin/indexLogs/{{ pages - 2 }}">{{ pages - 2 }}</a>
                                 </li>
                                 <li class="page-item {{ currentPage == pages - 1 ? 'active' }}">
                                     <a class="page-link"
-                                       href="{{ baseUrl }}/admin/tags/{{ pages - 1 }}">{{ pages -1 }}</a>
+                                       href="{{ baseUrl }}/admin/indexLogs/{{ pages - 1 }}">{{ pages -1 }}</a>
                                 </li>
                             {% endif %}
                             <li class="page-item {{ currentPage == pages ? 'active' }}">
-                                <a class="page-link" href="{{ baseUrl }}/admin/tags/{{ pages }}">{{ pages }}</a>
+                                <a class="page-link" href="{{ baseUrl }}/admin/indexLogs/{{ pages }}">{{ pages }}</a>
                             </li>
                             <li class="page-item">&nbsp;&nbsp;
-                                <a href="{{ baseUrl }}/admin/tags/{{ currentPage == pages ? pages : currentPage + 1 }}">
+                                <a href="{{ baseUrl }}/admin/indexLogs/{{ currentPage == pages ? pages : currentPage + 1 }}">
                                     <i class="fa fa-angle-right"
                                        style="font-size:36px; position:relative; top:4px;"></i>
                                 </a>
@@ -161,7 +138,7 @@
                         {% else %}
                             {% for page in range(1, pages) %}
                                 <li class="page-item {{ currentPage == page ? 'active' }}">
-                                    <a class="page-link" href="{{ baseUrl }}/admin/tags/{{ page }}">
+                                    <a class="page-link" href="{{ baseUrl }}/admin/indexLogs/{{ page }}">
                                         {{ page }}
                                     </a>
                                 </li>
@@ -172,10 +149,10 @@
             </div>
         </div>
         <div class="text-right">
-            <button id="tagsExport" class="btn btn-outline-primary btn-sm mt-2" type="button"
-                    data-target="#tagsExport" aria-expanded="false" aria-controls="tagsExport">
+            <button id="indexLogsExport" class="btn btn-outline-primary btn-sm mt-2" type="button"
+                    data-target="#indexLogsExport" aria-expanded="false" aria-controls="indexLogsExport">
                 <i class="fas"></i>
-                Tag Export
+                Index Log Export
             </button>
         </div>
     </div>
@@ -185,8 +162,8 @@
     <script>
         $(function () {
             'use strict';
-            $(document).on('click', '#tagsExport', function () {
-                window.location.href = '{{ baseUrl }}/api/admin/tagMgr/export';
+            $(document).on('click', '#indexLogsExport', function () {
+                window.location.href = '{{ baseUrl }}/api/admin/indexLogMgr/export';
             });
         });
     </script>

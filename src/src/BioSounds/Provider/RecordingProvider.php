@@ -278,7 +278,7 @@ class RecordingProvider extends BaseProvider
             $query .= 'LEFT JOIN sound ON recording.sound_id = sound.sound_id ';
         }
 
-        $query .= "WHERE col_id = :colId AND recording.site_id IS NOT NULL AND site.longitude_WGS84_dd_dddd IS NOT NULL AND site.latitude_WGS84_dd_dddd IS NOT NULL";
+        $query .= "WHERE col_id = :colId AND recording.site_id IS NOT NULL AND site.longitude_WGS84_dd_dddd IS NOT NULL AND site.latitude_WGS84_dd_dddd IS NOT NULL ";
         if ($sites) {
             $query .= "AND site.site_id in ($sites) ";
         }

@@ -26,6 +26,50 @@ USE `biosounds`;
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `index_log`
+--
+
+CREATE TABLE `index_log`
+(
+    `log_id`       int(11) NOT NULL,
+    `recording_id` int(11) NOT NULL,
+    `user_id`      int(11) NOT NULL,
+    `index_id`     int(11) NOT NULL,
+    `coordinates`  varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+    `value`        varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+    `param`        varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+    `creation_date` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+--
+-- Indexes for table `index_log`
+--
+ALTER TABLE `index_log`
+    ADD PRIMARY KEY (`log_id`);
+
+--
+-- Table structure for table `index_type`
+--
+
+CREATE TABLE `index_type`
+(
+    `index_id`    int(11) NOT NULL,
+    `name`        varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+    `param`       varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+    `description` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+    `URL`         varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+--
+-- Indexes for table `index_type`
+--
+ALTER TABLE `index_type`
+    ADD PRIMARY KEY (`index_id`);
+--
+-- Dumping data for table `index_type`
+--
+INSERT INTO `index_type` (`index_id`, `name`, `param`, `description`, `URL`)
+VALUES ('1','acoustic_complexity_index', 'Sxx', 'Not filled', 'https://scikit-maad.github.io/generated/maad.features.acoustic_complexity_index.html'),
+       ('2','soundscape_index', 'Sxx_power,fn,flim_bioPh,flim_antroPh,R_compatible', 'Not filled', 'https://scikit-maad.github.io/generated/maad.features.soundscape_index.html');
+--
 -- Table structure for table `collection`
 --
 
@@ -39,9 +83,7 @@ CREATE TABLE `collection`
     `note`          text COLLATE utf8_unicode_ci                  DEFAULT NULL,
     `view`          enum('gallery','list') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'gallery',
     `public`        tinyint(1) NOT NULL DEFAULT 0,
-    `creation_date` timestamp                            NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp ()
-
-
+    `creation_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --

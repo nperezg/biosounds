@@ -90,7 +90,7 @@
                                         <option value="social (bat)" {{ tag.type == "social (bat)" ? "selected" }}>Social (bat)</option>
                                      #}
                                         {% for soundType in soundTypes %}
-                                            <option value="{{ soundType.soundTypeId }}" {{ tag.type == soundType.soundTypeId ? "selected" }}">{{ soundType.name }}</option>
+                                            <option value="{{ soundType.soundTypeId }}" {{ tag.type == soundType.soundTypeId ? "selected" }}>{{ soundType.name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>

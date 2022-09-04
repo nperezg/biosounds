@@ -25,9 +25,9 @@ document.addEventListener("DOMContentLoaded", function() {
 			data = {'id': this.dataset.id};
 		}
 		requestModal(this.href, data);
-		e.preventDefault();		
-	});	
-	
+		e.preventDefault();
+	});
+
 	$("[data-hide]").on("click", function(){
 		$(this).closest("." + $(this).attr("data-hide")).hide();
 	});
@@ -35,13 +35,13 @@ document.addEventListener("DOMContentLoaded", function() {
 	$(".log").click(function(){
 		$("#alertBox").removeClass('show');
 	});
-	
+
 	$(".user").click(function(){
 		$("#alertBox").removeClass('show');
 	});
 
 	toggleLoading();
-	 
+
 	 $.fn.toggleDisabled = function(){
         return this.each(function(){
             this.disabled = !this.disabled;
@@ -154,9 +154,9 @@ function toggleLoading() {
 	$('.loading').toggle();
 }
 
-function requestModal(href, data = [])
+function requestModal(href, data = [],showLoading = false)
 {
-	postRequest(href, data, false, false, function (response) {
+	postRequest(href, data, false, showLoading, function (response) {
 		$('#modalWindows').html(response.data);
 		$("#modal-div").modal('show');
 	});
@@ -243,7 +243,7 @@ function saveFormList(element, url)
 		} else if(item.type === "checkbox" && !item.checked) {
 			value = 0;
 		}
-		
+
 		values[item.name+"_"+item.type] = value;
 	});
 

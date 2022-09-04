@@ -2,17 +2,18 @@
 
 namespace BioSounds\Controller;
 
-use BioSounds\Entity\LabelAssociation;
+use BioSounds\Entity\IndexLog;
 use BioSounds\Entity\Recording;
 use BioSounds\Entity\UserPermission;
 use BioSounds\Entity\Permission;
 use BioSounds\Entity\User;
-use BioSounds\Exception\ForbiddenException;
+use BioSounds\Exception\InvalidParameterException;
 use BioSounds\Exception\NotAuthenticatedException;
 use BioSounds\Presenter\FrequencyScalePresenter;
 use BioSounds\Presenter\RecordingPresenter;
 use BioSounds\Presenter\TagPresenter;
 use BioSounds\Provider\CollectionProvider;
+use BioSounds\Provider\IndexTypeProvider;
 use BioSounds\Provider\LabelAssociationProvider;
 use BioSounds\Provider\LabelProvider;
 use BioSounds\Provider\RecordingProvider;
@@ -21,6 +22,7 @@ use BioSounds\Service\RecordingService;
 use BioSounds\Utils\Auth;
 use BioSounds\Utils\Utils;
 use Twig\Environment;
+use Symfony\Component\Process\Process;
 
 class RecordingController extends BaseController
 {
@@ -98,6 +100,7 @@ class RecordingController extends BaseController
             'title' => sprintf(self::PAGE_TITLE, $recordingData[Recording::NAME]),
             'labels' => Auth::isUserLogged() ? (new LabelProvider())->getBasicList(Auth::getUserLoggedID()) : '',
             'myLabel' => Auth::isUserLogged() ? (new LabelAssociationProvider())->getUserLabel($id, Auth::getUserLoggedID()) : '',
+            'indexs' => Auth::isUserLogged() ? (new IndexTypeProvider())->getList() : '',
         ]);
     }
 
@@ -470,8 +473,73 @@ class RecordingController extends BaseController
     {
         return json_encode([
             'errorCode' => 0,
-            'data' => $this->twig->render('recording/player/newLabel.html.twig'),
+            'data' => $this->twig->render('recording/player/newLabel.html.twig')
         ]);
+    }
+
+    public function getMaadlabel(int $id)
+    {
+        return $this->twig->render('recording/player/maadLabel.html.twig', [
+            'index' => (new IndexTypeProvider())->get($id),
+        ]);
+    }
+
+    public function maad()
+    {
+        if (!Auth::isUserLogged()) {
+            throw new NotAuthenticatedException();
+        }
+        foreach ($_POST as $key => $value) {
+            $data[$key] = $value;
+        }
+        $str = 'python3 ' . ABSOLUTE_DIR . 'bin/getMaad.py' .
+            ' -p ' . ABSOLUTE_DIR . 'sounds/sounds/' . $_POST['collection_id'] . '/' . $_POST['recording_directory'] . '/' .
+            ' -f ' . explode('.', $_POST['recording_name'])[0] .
+            ' --ff ' . explode('.', $_POST['recording_name'])[1] .
+            ' --it ' . $_POST['index'] .
+            ' -ch ' . ($_POST['channel'] == 2 ? 'right' : 'left') .
+            ' --mint ' . $_POST['minTime'] .
+            ' --maxt ' . $_POST['maxTime'] .
+            ' --minf ' . $_POST['minFrequency'] .
+            ' --maxf ' . $_POST['maxFrequency'];
+        if ($data['param'] != '') {
+            $str = $str . ' --pa ' . substr($_POST['param'], 0, -1);
+        }
+        if (substr($data['recording_name'], -3) != 'wav') {
+            $str = $str . " -c " . $data['channel_num'];
+        }
+        exec($str . " 2>&1", $out, $status);
+        if ($status == 0) {
+            $result = $out[count($out) - 1];
+        }
+        if (substr($result, 0, 3) == 'ACI' || substr($result, 0, 3) == 'NDS') {
+            if ($data['channel_num'] == 1) {
+                $channel = 'Mono';
+            } elseif ($data['channel'] == 2) {
+                $channel = 'Right';
+            } else {
+                $channel = 'Left';
+            }
+            return json_encode([
+                'errorCode' => 0,
+                'data' => $this->twig->render('recording/player/maadResult.html.twig', [
+                    'title' => $data['index'],
+                    'result' => $result,
+                    'recording_id' => $data['recording_id'],
+                    'index_id' => $data['index_id'],
+                    'coordinates' => $data['minTime'] . ',' . $data['maxTime'] . ',' . $data['minFrequency'] . ',' . $data['maxFrequency'],
+                    'param' => substr('channel?' . $channel . '@' . $_POST['param'], 0, -1),
+                ])
+            ]);
+        } else {
+            return json_encode([
+                'errorCode' => 0,
+                'data' => $this->twig->render('recording/player/maadResult.html.twig', [
+                    'title' => 'Invalid Parameter',
+                    'result' => '',
+                ])
+            ]);
+        }
     }
 
     public function saveLabel()
@@ -496,6 +564,25 @@ class RecordingController extends BaseController
         return json_encode([
             'errorCode' => 0,
             'message' => 'Recording Label created successfully.'
+        ]);
+    }
+
+    public function saveMaadResult()
+    {
+        if (!Auth::isUserLogged()) {
+            throw new NotAuthenticatedException();
+        }
+
+        $data = [];
+        $data['user_id'] = Auth::getUserLoggedID();
+
+        foreach ($_POST as $key => $value) {
+            $data[$key] = $value;
+        }
+        (new IndexLog())->insert($data);
+        return json_encode([
+            'errorCode' => 0,
+            'message' => 'Index saved successfully.'
         ]);
     }
 }
