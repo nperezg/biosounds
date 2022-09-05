@@ -10,22 +10,38 @@
         {% include 'scripts.html.twig' %}
     {% endblock %}
 </head>
+{{ _SESSION['regenerate_timeout'] }}
 <body class="d-flex flex-column">
-    {% block navbar %}{% include 'navigationBar.html.twig' %}{% endblock %}
+{% block navbar %}{% include 'navigationBar.html.twig' %}{% endblock %}
 
-    {% block body %}{% endblock %}
+{% block body %}{% endblock %}
 
-    <div id="modalWindows"></div>
+<div id="modalWindows"></div>
 
-    {% block footer %}{% include 'footer.html.twig' %}{% endblock %}
+{% block footer %}{% include 'footer.html.twig' %}{% endblock %}
+<div class="modal fade" id="modal-time" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">No activity in the past 30 minutes, refresh.</h5>
+            </div>
+        </div>
+    </div>
+</div>
+{% block scripts %}
+    <script>
+        const baseUrl = '{{ baseUrl }}';
+        const error = '{{ error }}';
+        const regenerate_timeout = '{{ regenerate_timeout }}';
+        var t = window.setInterval(function () {
+            if (Date.parse(new Date()) / 1000 > parseInt(regenerate_timeout) + 1790) {
+                $("#modal-time").modal({backdrop: 'static', keyboard: false}, 'show');
+                window.clearInterval(t)
+            }
+        }, 2000)
+    </script>
+{% endblock %}
 
-    {% block scripts %}
-        <script>
-            const baseUrl = '{{ baseUrl }}';
-            const error = '{{ error }}'
-        </script>
-    {% endblock %}
-
-    {% include 'loading.html.twig' %}
+{% include 'loading.html.twig' %}
 </body>
 </html>

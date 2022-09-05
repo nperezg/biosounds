@@ -94,7 +94,7 @@ class SiteController extends BaseController
             ]);
         } else {
             $data['creation_date_time'] = date('Y-m-d H:i:s', time());
-            $data['user_id'] = $_SESSION['user_id'];
+            $data['user_id'] = Auth::getUserID();
 
             if ($siteEnt->insert($data) > 0) {
                 return json_encode([
